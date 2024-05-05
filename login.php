@@ -1,12 +1,12 @@
 <?php
-
+session_start();
 function redirect($DoDie = true) {
     header('location:index.php');
     if ($DoDie)
         die();
 }
 
-session_start();
+
 if (isset($_SESSION['login'])) {
     redirect();
 }
@@ -25,6 +25,12 @@ if (isset($_SESSION['erro']) and $_SESSION['erro']) {
     <title>Login</title>
     <link rel="icon" href="https://static.thenounproject.com/png/122214-200.png">
     <head>
+        <style>
+            .form-control:focus {
+          border: 1px solid grey;
+  box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);
+}
+        </style>
     </head>
     <body style="background-color:#242629">
         <nav class="navbar navbar-expand-sm" style="background-color:darkslategrey; z-index:2;">

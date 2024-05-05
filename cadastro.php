@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 function redirect($DoDie = true) {
     header('location:index.php');
@@ -6,7 +7,6 @@ function redirect($DoDie = true) {
         die();
 }
 
-session_start();
 if (isset($_SESSION['login'])) {
     redirect();
 }
@@ -16,7 +16,6 @@ if (isset($_SESSION['erro1']) and $_SESSION['erro1']) {
 } else {
     $erro = "";
 }
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -26,6 +25,14 @@ if (isset($_SESSION['erro1']) and $_SESSION['erro1']) {
     <title>Cadastro</title>
     <link rel="icon" href="https://static.thenounproject.com/png/122214-200.png">
     <head>
+        <style>
+            .form-control:focus {
+          border: 1px solid grey;
+  box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);
+}
+        </style>
+        
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     </head>
     <body style="background-color:#242629; overflow: hidden;">
@@ -71,24 +78,24 @@ if (isset($_SESSION['erro1']) and $_SESSION['erro1']) {
                     <form action="cadastro_inserir.php" method="POST">
                         <div class="mb-3">
                             <label for="nome" class="form-label">Nome Usuario (Nickname)</label>
-                            <input type="text" class="form-control" name="nomecad" placeholder="Digite seu nome de usuario" required>
+                            <input id="nome" type="text" class="form-control" name="nomecad" placeholder="Digite seu nome de usuario" required>
                             <div id="name-error"></div>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" name="emailcad" placeholder="Digite seu email" required>
-                        <div id="email-error"></div>
+                            <input id ="email" type="email" class="form-control" name="emailcad" placeholder="Digite seu email" required>
+                            <div id="email-error"></div>
                         </div>
                         <div class="mb-3">
                             <label for="senha" class="form-label">Senha</label>
-                            <input type="password" class="form-control" name="senhacad" placeholder="Digite sua senha" required>
+                            <input id ="senha" type="password" class="form-control" name="senhacad" placeholder="Digite sua senha" required>
                             <div id="password-error"></div>
                         </div>
-                        <?php
-                        echo $erro;
-                        session_unset();
-                        session_destroy();
-                        ?>
+<?php
+echo $erro;
+session_unset();
+session_destroy();
+?>
                         <div class="mb-3">
                             <button type="submit" class="btn btn-primary w-100 value=submit">Cadastrar</button>
                         </div>
@@ -100,47 +107,85 @@ if (isset($_SESSION['erro1']) and $_SESSION['erro1']) {
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-       <script>
-    $(document).ready(function() {
-        $('form').submit(function(event) {
-            // Prevent the form from submitting normally
-            event.preventDefault();
+        <script>
+        $(document).ready(function () {
+        $('input[type="text"], input[type="email"], input[type="password"]').on('input', function () {
+            var minLength = 4; // Minimum length required for input fields
+            var $input = $(this);
 
-            // Get the password, name, and email values
-            var password = $('input[name="senhacad"]').val();
-            var nome = $('input[name="nomecad"]').val();
-            var email = $('input[name="emailcad"]').val();
-            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            var ok = true; // Variável para controlar se o formulário pode ser enviado
-
-            // Check password length
-            if (password.length < 8) {
-                $('#password-error').html('<div class="alert alert-danger" style="border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px;" role="alert">Senha muito pequena, mínimo de 8 caracteres!</div>');
-                ok = false; // Define ok como false se houver um erro
+            // Check input length and apply invalid-input class if necessary
+            if ($input.val().length < minLength) {
+                $input.addClass('invalid-input');
+                $input.removeClass('valid-input');
+            } else {
+                $input.removeClass('invalid-input');
+                $input.addClass('valid-input');
             }
 
-            // Check name length
-            if (nome.length < 4) {
-                $('#name-error').html('<div class="alert alert-danger" style="border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px;" role="alert">Nome muito pequeno, mínimo de 4 caracteres!</div>');
-                ok = false;
-            } else if (nome.length > 20) {
-                $('#name-error').html('<div class="alert alert-danger" style="border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px;" role="alert">Nome muito grande, máximo de 20 caracteres!</div>');
-                ok = false;
+            // Check if the input is the password field and apply additional validation
+            if ($input.attr('name') === 'senhacad') {
+                if ($input.val().length < 8) {
+                    $input.addClass('invalid-input');
+                    $input.removeClass('valid-input');
+                } else {
+                    $input.removeClass('invalid-input');
+                    $input.addClass('valid-input');
+                }
             }
-
-            // Check email
-            if (!emailRegex.test(email)) {
-                $('#email-error').html('<div class="alert alert-danger" style="border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px;" role="alert">Email inválido!</div>');
-                ok = false;
-            }
-
-            // Submit the form if ok is still true
-            if (ok) {
-                $(this).off('submit').submit();
+             if ($input.attr('name') === 'emailcad') {
+                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (emailRegex.test($input.val())) {
+                    $input.addClass('valid-input');
+                    $input.removeClass('invalid-input');
+                } else {
+                    $input.removeClass('valid-input');
+                    $input.addClass('invalid-input');
+                }
             }
         });
-    });
-</script>
+        
+                $('form').submit(function (event) {
+                    // Prevent the form from submitting normally
+                    event.preventDefault();
+
+                    var input_pass = document.getElementById("senha");
+                    var input_nome = document.getElementById("nome");
+                    var input_email = document.getElementById("email");
+                    var password = $('input[name="senhacad"]').val();
+                    var nome = $('input[name="nomecad"]').val();
+                    var email = $('input[name="emailcad"]').val();
+                    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    var ok = true; // Variável para controlar se o formulário pode ser enviado
+
+                    // Check password length
+                    if (password.length < 8) {
+                        $('#password-error').html('<div class="alert alert-danger" style="border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px;" role="alert">Senha muito pequena, mínimo de 8 caracteres!</div>');
+                        
+                        ok = false; // Define ok como false se houver um erro
+                    }
+
+                    // Check name length
+                    if (nome.length < 4) {
+                        $('#name-error').html('<div class="alert alert-danger" style="border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px;" role="alert">Nome muito pequeno, mínimo de 4 caracteres!</div>');
+                        ok = false;
+                    } else if (nome.length > 20) {
+                        $('#name-error').html('<div class="alert alert-danger" style="border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px;" role="alert">Nome muito grande, máximo de 20 caracteres!</div>');
+                        ok = false;
+                    }
+
+                    // Check email
+                    if (!emailRegex.test(email)) {
+                        $('#email-error').html('<div class="alert alert-danger" style="border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px;" role="alert">Email inválido!</div>');
+                        ok = false;
+                    }
+
+                    // Submit the form if ok is still true
+                    if (ok) {
+                        $(this).off('submit').submit();
+                    }
+                });
+            });
+        </script>
 
 
 

@@ -19,35 +19,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
         $generos = $_POST['generos'];
         $desc_jogo = $_POST['desc_jogo'];
         $img_jogo = $_FILES['imagem'];
-        $nome_servidor = "localhost";
-        $nome_usuario = "root";
-        $senhabanco = "";
-        $banco = "db_review";
-
-        function conectarBanco($nome_servidor, $nome_usuario, $senhabanco, $banco) {
-            $conecta = new mysqli($nome_servidor, $nome_usuario, $senhabanco, $banco);
-            if ($conecta->connect_error) {
-                die("Conexão falhou: " . $conecta->connect_error . "<br>");
-            }
-        }
-
-        conectarBanco($nome_servidor, $nome_usuario, $senhabanco, $banco);
+        require ('conecta.php');
 
         function adicionarJogo($nome_jogo, $publisher, $dev, $data_jogo, $generos, $desc_jogo, $img_jogo) {
 
             if (isset($nome_jogo) and isset($publisher) and isset($dev) and
                     isset($data_jogo) and !empty($generos) and
                     isset($desc_jogo)) {
-                $nome_servidor = "localhost";
-                $nome_usuario = "root";
-                $senhabanco = "";
-                $banco = "db_review";
-                $conecta = new mysqli($nome_servidor, $nome_usuario, $senhabanco, $banco);
-                if ($conecta->connect_error) {
-                    die("Conexão falhou: " . $conecta->connect_error . "<br>");
-                } else {
-                    
-                }
+                require ('conecta.php');
                 $jogo_minusculo = strtolower($nome_jogo);
                 $tenta_achar = "SELECT * FROM games WHERE LOWER(nome_jogo)='$jogo_minusculo'";
                 $resultado = $conecta->query($tenta_achar);

@@ -1,34 +1,13 @@
-
 <?php
-
 session_start();
-
 $email = $_POST['nome'];
 $senhalogin = $_POST['senha'];
 $nome = $_POST['nome'];
 $senha = $_POST['senha'];
-$nome_servidor = "localhost";
-$nome_usuario = "root";
-$senhabanco = "";
-$banco = "db_review";
-$conecta = new mysqli($nome_servidor, $nome_usuario, $senhabanco, $banco);
-if ($conecta->connect_error) {
-    die("Conexão falhou: " . $conecta->connect_error . "<br>");
-} else {
-    
-}
+require ('conecta.php');
 
 function verificarDados($email, $senhalogin) {
-    $nome_servidor = "localhost";
-    $nome_usuario = "root";
-    $senhabanco = "";
-    $banco = "db_review";
-    $conecta = new mysqli($nome_servidor, $nome_usuario, $senhabanco, $banco);
-    if ($conecta->connect_error) {
-        die("Conexão falhou: " . $conecta->connect_error . "<br>");
-    } else {
-        
-    }
+    require ('conecta.php');
     $tenta_achar = "SELECT * FROM usuario WHERE email='$email' AND senha='" . md5($senhalogin) . "'";
     $resultado = $conecta->query($tenta_achar);
     if (isset($email) and isset($senhalogin)) {

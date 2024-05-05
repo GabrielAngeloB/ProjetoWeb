@@ -14,32 +14,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
         $nomecad = isset($_POST['nomecad']) ? $_POST['nomecad'] : '';
         $senhacad = ($_POST['senhacad']);
         $emailcad = $_POST['emailcad'];
-        $nome_servidor = "localhost";
-        $nome_usuario = "root";
-        $senhabanco = "";
-        $banco = "db_review";
-
-        $conecta = new mysqli($nome_servidor, $nome_usuario, $senhabanco, $banco);
-        if ($conecta->connect_error) {
-            die("Conexão falhou: " . $conecta->connect_error . "<br>");
-        } else {
-            
-        }
+        require ('conecta.php');
 
         function inserirDados($nomecad, $emailcad, $senhacad) {
 
             $ok = true;
             $erro1 = false;
-            $nome_servidor = "localhost";
-            $nome_usuario = "root";
-            $senhabanco = "";
-            $banco = "db_review";
-            $conecta = new mysqli($nome_servidor, $nome_usuario, $senhabanco, $banco);
-            if ($conecta->connect_error) {
-                die("Conexão falhou: " . $conecta->connect_error . "<br>");
-            } else {
-                
-            }
+            require ('conecta.php');
             $tenta_achar = "SELECT * FROM usuario WHERE email='$emailcad' OR nome_usuario='$nomecad'";
             $resultado = $conecta->query($tenta_achar);
             if ($resultado->num_rows > 0) {
@@ -53,7 +34,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
                 if (!filter_var($emailcad, FILTER_VALIDATE_EMAIL)) {
                     $ok = false;
                 }
-                if ((!isset($nomecad) or empty($nomecad)) or strlen($nomecad) <=3 or strlen($nomecad) >20) {
+                if ((!isset($nomecad) or empty($nomecad))) {
                     
                     
                     echo "<script> 
@@ -63,7 +44,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
                 if (!isset($emailcad) or empty($emailcad)) {
                     $ok = false;
                 }
-                if (!isset($senhacad) or empty($senhacad) or strlen($senhacad) <= 8) {
+                if (!isset($senhacad) or empty($senhacad) or strlen($senhacad) < 8) {
  
                     echo "<script> 
                 window.location.href = 'cadastro.php';

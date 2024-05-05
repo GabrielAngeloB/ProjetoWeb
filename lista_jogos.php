@@ -6,6 +6,11 @@
     <title>Lista de Jogos</title>
     <link rel="icon" href="https://static.thenounproject.com/png/122214-200.png">
     <head>
+        <style>
+            .card:hover {
+    box-shadow: 0 0px 12px 0 black;
+}
+            </style>
     </head>
     <body style="background-color:#242629">
         <?php
