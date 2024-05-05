@@ -10,6 +10,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
     </head>
     <body>
         <?php
+        session_start();
         $nome_jogo = $_POST['nome_jogo'];
         $publisher = $_POST['publisher'];
         $dev = $_POST['dev'];
@@ -69,29 +70,26 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                     }
 
                     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === 0) {
-
-
                         $tipoArquivo = $_FILES['imagem']['type'];
                         if (!in_array($tipoArquivo, ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'])) {
                             echo "Erro: Tipo de arquivo inválido.";
                             exit;
                         }
 
-
-                        $nomeArquivo = basename($_FILES['imagem']['name']);
+                        $nomeArquivo = $_FILES['imagem']['name'];
+                        // Substituir espaços por sublinhado
+                        $nomeArquivo = str_replace(' ', '_', $nomeArquivo);
                         $diretorio = "imagens/";
                         move_uploaded_file($_FILES['imagem']['tmp_name'], $diretorio . $nomeArquivo);
 
-                        session_start();
                         $linkImagem = $diretorio . $nomeArquivo;
-                        $_SESSION['link'] = $linkImagem;
                     } else {
                         echo "Erro no upload da imagem.";
                     }
                     date_default_timezone_set('America/Sao_Paulo');
                     $tempo = time();
 
-// You can optionally convert the timestamp to a human-readable format
+
                     $horarioatual = date("Y-m-d H:i:s", $tempo);
 
                     $sql = "INSERT INTO games (desenvolvedor, publisher, data_lancamento, nome_jogo, desc_jogo, img_jogo, generos, horario_postado)

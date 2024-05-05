@@ -2,10 +2,15 @@
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css2/estilos.css">
-    <title></title>
+    <title>Jogos Recentes</title>
+    <link rel="icon" href="https://static.thenounproject.com/png/122214-200.png">
     <head>
+        
+</script>
+
     </head>
     <body style="background-color:#242629">
+        
         <?php
         session_start();
 
@@ -32,8 +37,8 @@
         $nomejogo = array();
         $id_jogo = array();
         $cont = 0;
-        $por_pagina = 3; // Quantidade de jogos por página
-        $pagina = isset($_GET['pagina']) ? $_GET['pagina'] : 1; // Página atual, padrão é a primeira página
+        $por_pagina = 10; 
+        $pagina = isset($_GET['pagina']) ? $_GET['pagina'] : 1; 
         $inicio = ($pagina - 1) * $por_pagina;
         if ($resultado->num_rows > 0) {
             while (($linha = $resultado->fetch_assoc())) {
@@ -64,7 +69,7 @@
         }
 
         for ($h = 0; $h < sizeOf($id_jogo); $h++) {
-            // 1. Fetch and convert posted time to timestamp
+            
             $sql2 = "SELECT horario_postado FROM games WHERE id_jogo = '$id_jogo[$h]'";
             $result = $conecta->query($sql2);
             if ($result->num_rows > 0) {
@@ -75,26 +80,26 @@
                 
             }
 
-            // 2. Get current timestamp
+            
             $currentTimeUnix = time();
 
-            // 3. Calculate time difference in seconds
+            
             $timeDiffSeconds[$h] = $currentTimeUnix - $postedTimeUnix[$h];
 
-            // 4. Convert time difference to appropriate units (seconds, minutes, hours, days)
+            
             $minutos[$h] = floor($timeDiffSeconds[$h] / 60);
             $horas[$h] = floor($minutos[$h] / 60);
             $dias[$h] = floor($horas[$h] / 24);
 
-            // 5. Construct the time-ago message
+            
             if ($minutos[$h] < 1) {
                 $mensagem[$h] = "agora!";
             } else if ($minutos[$h] < 60) {
-                $mensagem[$h] = "$minutos[$h] minutos atrás!";
+                $mensagem[$h] = "$minutos[$h] minuto(s) atrás!";
             } else if ($horas[$h] < 24) {
-                $mensagem[$h] = "$horas[$h] horas atrás!";
+                $mensagem[$h] = "$horas[$h] hora(s) atrás!";
             } else {
-                $mensagem[$h] = "$dias[$h] dias atrás!";
+                $mensagem[$h] = "$dias[$h] dia(s) atrás!";
             }
         }
 
@@ -102,11 +107,14 @@
         $total_paginas = ceil($total_jogos / $por_pagina);
 
         for ($i = 0; $i < sizeOf($id_jogo); $i++) {
+            ($i % 2 == 0) ? ($fade = "fadeInFromRight") : ($fade = "fadeInFromLeft");
             if ($i == 0) {
                 $jogo_recente[$i] = "
-    <div class='card mb-3 mx-auto responsivo' style='margin-top:40px;'>
+    <div class='card mb-3 mx-auto responsivo $fade' style='margin-top:40px;'>
         <div class='row g-0'>
-            <div class='col-md-4'><img src='$link[$i]' class='img-fluid imagem1' style='width:100%; height:100%; max-height:220px; object-fit: fill;'alt='...'>
+            <div class='col-md-4'>
+            <a href='jogo_mostrar.php?id_jogo1=$id_jogo[$i]'>"
+                    . "<img src='$link[$i]' class='img-fluid imagem1' style='width:100%; height:100%; max-height:220px; object-fit: fill;'alt='...'>
                 </a>
             </div>
             <div class='col-md-8 d-flex'>
@@ -125,8 +133,9 @@
     </div>";
             } else {
         $jogo_recente[$i] = "
-<div class='card mb-3 mx-auto responsivo' style='margin-top:40px;'>
+<div class='card mb-3 mx-auto responsivo $fade' style='margin-top:40px;'>
     <div class='row g-0'>
+    <a href='jogo_mostrar.php?id_jogo1=$id_jogo[$i]'>
         <div class='col-md-4'><img src='$link[$i]' class='img-fluid imagem1' style='width:100%; height:100%; max-height:220px; object-fit: fill;'alt='...'>
             </a>
         </div>
@@ -147,7 +156,18 @@
     }
 }
 
-// Renderização dos jogos
+ require ('conecta.php');
+        if (isset($_SESSION['id_usuario'])) {
+            $id_usuario = $_SESSION['id_usuario'];
+        }
+
+        $sql = "SELECT img_perfil from usuario where id_usuario = $id_usuario";
+        $resultado = $conecta->query($sql);
+        if ($resultado->num_rows > 0) {
+            while ($linha = $resultado->fetch_assoc()) {
+                $img_perfil = $linha['img_perfil'];
+            }
+        }
 
 ?>
         <nav class="navbar navbar-expand-sm" style="background-color:darkslategrey; z-index:2;">
@@ -180,12 +200,12 @@
 
                 <ul class="navbar-nav ms-auto">  <li class="nav-item">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://static.vecteezy.com/system/resources/previews/019/879/186/non_2x/user-icon-on-transparent-background-free-png.png" style="width:80px; height:50px; text-align:right">
+                            <img class="thumbnail" src="<?php echo $img_perfil; ?>" style="width:50px; height:50px; text-align:right; border-radius:50%; margin-right:7px; border: 2px solid black;">
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-end position-absolute" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item dropdown" href="#"> Ver perfil</a>
-                            <a class="dropdown-item" href="#"> Editar perfil</a>
+                            <a class="dropdown-item" href="pagina_usuario.php?id_usuario=<?php echo $id_usuario; ?>">Ver perfil</a>
+                            <a class="dropdown-item" href="editar_usuario.php"> Editar perfil</a>
                             <?php echo $adicionar ?>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
@@ -200,15 +220,41 @@
     echo $jogo_recente[$i];
 }
 
-if($total_paginas == 1) {
-                
-            }else {
-echo "<ul class='pagination justify-content-center'>";
-for ($i = 1; $i <= $total_paginas; $i++) {
-    echo "<li class='page-item'><a style='font-size:30px; background-color:white; border: 2px solid black; color:black; border-radius:20px; margin-left:5px; padding-right:3px; padding-left:3px;' class='page-link'href='jogos_recentes.php?pagina=$i'>$i</a></li>";
-}
-echo "</ul>";
-            }
+if (isset($total_paginas) && $total_paginas > 1) {
+    echo "<ul class='pagination justify-content-center'>";
+    $pagina_atual = isset($_GET['pagina']) ? $_GET['pagina'] : 1;
+
+    
+    $inicio = max(1, $pagina_atual - 8);
+
+    
+    $fim = min($total_paginas, $inicio + 9);
+
+    
+    if ($fim == $total_paginas && $total_paginas > 9) {
+        $inicio = max(1, $fim - 9);
+    }
+
+    
+    if ($inicio > 1) {
+        echo "<li class='page-item style='height:40px;'><a class='custom-page-link1' style='color: white; bottom:1%;' href='jogos_recentes.php?pagina=" . ($inicio - 1) . "'>&laquo;</a></li>";
+    }
+
+    
+    for ($i = $inicio; $i <= $fim; $i++) {
+        $class = ($i == $pagina_atual) ? 'page-item active' : 'page-item';
+        $style = ($i == $pagina_atual) ? 'background-color: grey;' : '';
+        echo "<li class='$class'><a style='font-size:30px; border: 2px solid black; color:black; border-radius:20px; margin-left:5px; padding-right:3px; padding-left:3px; $style' class='page-link' href='jogos_recentes.php?pagina=$i'>$i</a></li>";
+    }
+
+    
+    if ($fim < $total_paginas) {
+        echo "<li class='page-item style='height:40px;'><a class='custom-page-link2' style='color: white; bottom:1%;' href='jogos_recentes.php?pagina=" . ($fim + 1) . "'>&raquo;</a></li>";
+    }
+
+    echo "</ul>";
+} 
+
         ?>
 
         <br>

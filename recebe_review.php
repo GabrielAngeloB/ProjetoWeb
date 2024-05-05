@@ -30,7 +30,7 @@ if ($naotem) {
     date_default_timezone_set('America/Sao_Paulo');
     $tempo = time();
 
-// You can optionally convert the timestamp to a human-readable format
+
     $horarioatual = date("Y-m-d H:i:s", $tempo);
 
     $sql = "INSERT INTO reviews (texto_review, id_jogo, id_usuario, horario_review) VALUES ('$review', '$id_jogo', '$id_usuario', '$horarioatual') ";
@@ -119,7 +119,7 @@ if ($naotem) {
         header('Location:jogo_mostrar.php?id_jogo1=' . $id_jogo);
     }
 }
-// Get the current timestamp using time() function
+
 
 
 

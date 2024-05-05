@@ -14,16 +14,25 @@ if ($_SESSION['login'] == 'gabridestiny@hotmail.com') {
     $adicionar = "<a class='dropdown-item' href='adicionar_jogos.php'>Adicionar Jogo</a>";
 }
 
-require('conecta.php');
-if (isset($_SESSION['id_usuario'])) {
-    $id_usuario = $_SESSION['id_usuario'];
-}
+ require ('conecta.php');
+        if (isset($_SESSION['id_usuario'])) {
+            $id_usuario = $_SESSION['id_usuario'];
+        }
+
+        $sql = "SELECT img_perfil from usuario where id_usuario = $id_usuario";
+        $resultado = $conecta->query($sql);
+        if ($resultado->num_rows > 0) {
+            while ($linha = $resultado->fetch_assoc()) {
+                $img_perfil = $linha['img_perfil'];
+            }
+        }
 ?>
 <html>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css2/estilos.css">
-    <title></title>
+    <title>Minhas Reviews</title>
+    <link rel="icon" href="https://static.thenounproject.com/png/122214-200.png">
     <head>
     </head>
     <body style="background-color:#242629">
@@ -63,12 +72,12 @@ if (isset($_SESSION['id_usuario'])) {
 
                 <ul class="navbar-nav ms-auto">  <li class="nav-item">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://static.vecteezy.com/system/resources/previews/019/879/186/non_2x/user-icon-on-transparent-background-free-png.png" style="width:80px; height:50px; text-align:right">
+                            <img class="thumbnail" src="<?php echo $img_perfil; ?>" style="width:50px; height:50px; text-align:right; border-radius:50%; margin-right:7px; border: 2px solid black;">
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-end position-absolute" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item dropdown" href="#"> Ver perfil</a>
-                            <a class="dropdown-item" href="#"> Editar perfil</a>
+                            <a class="dropdown-item" href="pagina_usuario.php?id_usuario=<?php echo $id_usuario; ?>">Ver perfil</a>
+                            <a class="dropdown-item" href="editar_usuario.php"> Editar perfil</a>
                             <?php echo $adicionar ?>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
@@ -93,14 +102,14 @@ if (isset($_SESSION['id_usuario'])) {
 
         $total_rows = mysqli_num_rows($result);
 
-// get the required number of pages
+
 
         $total_pages = ceil($total_rows / $limit);
         $getQuery = "SELECT * FROM reviews where id_usuario=$id_usuario ORDER BY total_reviews DESC LIMIT " . $initial_page . ',' . $limit;
 
         $result = mysqli_query($conecta, $getQuery);
 
-//display the retrieved result on the webpage  
+
         echo "<p style='margin-top:50px;'></p>";
         $cont = 0;
         if ($result->num_rows > 0) {
@@ -134,7 +143,7 @@ if (isset($_SESSION['id_usuario'])) {
                 
                
                 for ($h = 0; $h < sizeOf($id_jogo); $h++) {
-                    // 1. Fetch and convert posted time to timestamp
+                    
                     $sql2 = "SELECT horario_review FROM reviews WHERE id_usuario = '$id_usuario' and id_jogo='$id_jogo[$h]'";
                     $resultado = $conecta->query($sql2);
                     if ($resultado->num_rows > 0) {
@@ -145,45 +154,46 @@ if (isset($_SESSION['id_usuario'])) {
                         
                     }
 
-                    // 2. Get current timestamp
+                    
 
                     $currentTimeUnix = time();
 
-                    // 3. Calculate time difference in seconds
+                    
                     $timeDiffSeconds[$h] = $currentTimeUnix - $postedTimeUnix[$h];
 
-                    // 4. Convert time difference to appropriate units (seconds, minutes, hours, days)
+                    
                     $minutos[$h] = floor($timeDiffSeconds[$h] / 60);
                     $horas[$h] = floor($minutos[$h] / 60);
                     $dias[$h] = floor($horas[$h] / 24);
 
-                    // 5. Construct the time-ago message
+                    
                     if ($minutos[$h] < 1) {
                         $mensagem[$h] = "agora!";
                     } else if ($minutos[$h] < 60) {
-                        $mensagem[$h] = "$minutos[$h] minutos atrás!";
+                        $mensagem[$h] = "$minutos[$h] minuto(s) atrás!";
                     } else if ($horas[$h] < 24) {
-                        $mensagem[$h] = "$horas[$h] horas atrás!";
+                        $mensagem[$h] = "$horas[$h] hora(s) atrás!";
                     } else {
-                        $mensagem[$h] = "$dias[$h] dias atrás!";
+                        $mensagem[$h] = "$dias[$h] dia(s) atrás!";
                     }
                 }
                 
 
 
-echo "<div class='card mx-auto text-center balala2' style='margin-bottom:30px; background-color:#151922; '>
+echo "<div class='card mx-auto text-center balala2 fadeInFromBottom' style='margin-bottom:30px; background-color:#151922; '>
   <div class='card-header' style='font-size:26px; color:white; font-weight:bold; text-decoration:underline; text-shadow: 0px 0px 5px black, 0px 0px 8px black;  '>
     " . $nome_jogo[$cont] . "
   </div>
   
   <div class='card-body cardBackground2' style='text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white; background-image: url(".$link[$cont]."'>
     <h5 class='card-title' style='font-weight:bold;'>Review " . "$review" . " | Nota: <span style='border:1px solid black; padding-left:3px; color:white; background-color:#1B1212; padding-right:3px; text-decoration:underline; border-radius:4px; text-shadow: none; '>" . $avaliacao_usuario[$cont] . "</span> </h5><p></p>
-    <p class='card-text text-center' style='text-align:justify; margin-bottom:18px; font-size:18px; opacity:1; '>''" . '' . $texto_review[$cont] . "''</p>
+    <p class='card-text text-center' style='text-align:justify; margin-bottom:18px; font-size:18px; opacity:1; font-style:italic; '>''" . '' . $texto_review[$cont] . "''</p>
       <p class='card-text text-center' style='text-align:justify; margin-bottom:10px;'><span style='font-weight:bold;  font-size:17px;' </span>Postado há: " . '' . $mensagem[$cont] . "</p>
     <div style='display:flex; justify-content: center; position:relative; top:5px; '>  <a href=jogo_mostrar.php?id_jogo1=" . $id_jogo[$cont] . " class='btn btn-primary' style='margin-right:10px; margin-bottom:16px;'><span style='text-shadow: 2px 2px black; font-weight:bold; font-size:17px;'>Ir para o jogo</a></span>
-      <form action='deletar_comentario.php' onsubmit='return confirm('Are you sure?');' method='post' style=''>
+      <form action='deletar_comentario.php' onsubmit='return confirm('Are you sure?');' method='POST' style=''>
               <input type='hidden' name='id_review' value='$id_review[$cont]'>
               <input type='hidden' name='jogo_excluir' value='$id_jogo[$cont]'>
+               <input type='hidden' name='validar' value='validar'>
               <button style='margin-top:3px;'Onclick='return ConfirmDelete();' type='submit' name='delete' class='btn btn-danger btn-sm' style='font-size:10px; max-height:90px;'  '><span style='text-shadow: 2px 2px black; font-weight:bold; font-size:17px;'>Excluir</a></span>
               
             </form>
@@ -204,7 +214,7 @@ echo "<div class='card mx-auto text-center balala2' style='margin-bottom:30px; b
                     $url = "reviews_usuario.php?page=" . $page_number;
                     echo "<a $link_style href='$url'>$page_number</a>";
                     if ($page_number < $total_pages) {
-                        echo " "; // Add a space between page numbers
+                        echo " "; 
                     }
                 }
                 echo '</div>';
@@ -218,14 +228,14 @@ echo "<div class='card mx-auto text-center balala2' style='margin-bottom:30px; b
                         
                     }
                 } else {
-                    echo "<div class='card mx-auto balala' style='height:30%; margin-top:60px; border:4px solid black; border-radius:10'>
+                    echo "<div class='card mx-auto balala' style='max-height:80%; margin-top:60px; border:4px solid black; border-radius:10; object-fit:fill;'>
       <div class='card-body cardBackground d-flex flex-column justify-content-center align-items-center'>
         <h2 class='card-title text-center' style='color:white; text-shadow: 1px 1px black; font-weight:bold;'>Você não possui reviews!</h2>
         <p class='copy card-text text-center' style='color:white; text-shadow: 1px 1px black; font-size:18px; text-decoration:underline;'>Clique abaixo para ver os jogos cadastrados!</p>
         <div class='d-flex justify-content-between'>
         
-          <a href='jogos_recentes.php' class='btn btn-dark' style='margin: 0 auto; color:white; margin-right:15px; text-shadow: 1px 1px black; max-width:60%; max-height:100%;'>Jogos Recentes</a>
-            <a href='melhores_review.php' class='btn btn-dark' style='margin: 0 auto; color:white; margin-left:15px; text-shadow: 1px 1px black; max-width:60%; max-height:100%;'>Melhores Avaliados</a>
+          <a href='jogos_recentes.php' class='btn btn-dark' style='margin: 0 auto; color:white; margin-right:15px; text-shadow: 1px 1px black; max-width:60%; max-height:100%; font-weight:bold;'>Jogos Recentes</a>
+            <a href='melhores_review.php' class='btn btn-dark' style='margin: 0 auto; color:white; margin-left:15px; text-shadow: 1px 1px black; max-width:60%; max-height:100%; font-weight:bold;'>Melhores Avaliados</a>
 
 </div>
       </div>

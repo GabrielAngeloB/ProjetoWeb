@@ -16,20 +16,17 @@ if (isset($_SESSION['erro1']) and $_SESSION['erro1']) {
 } else {
     $erro = "";
 }
-if (isset($_SESSION['erro2'])) {
-    $erro1 = "<div class='alert alert-danger' role='alert' style=' border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px;'> Senha muito pequena, minímo 9 caracteres!
-                            </div>";
-} else {
-    $erro1 = "";
-}
+
 ?>
 <!DOCTYPE html>
 <html>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="css2/estilos.css">
-    <title></title>
+    <title>Cadastro</title>
+    <link rel="icon" href="https://static.thenounproject.com/png/122214-200.png">
     <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     </head>
     <body style="background-color:#242629; overflow: hidden;">
         <nav class="navbar navbar-expand-sm" style="background-color:darkslategrey; z-index:2;">
@@ -74,20 +71,24 @@ if (isset($_SESSION['erro2'])) {
                     <form action="cadastro_inserir.php" method="POST">
                         <div class="mb-3">
                             <label for="nome" class="form-label">Nome Usuario (Nickname)</label>
-                            <input type="text" class="form-control" name="nomecad" placeholder="Digite seu nome de usuario" maxlength="25" required>
+                            <input type="text" class="form-control" name="nomecad" placeholder="Digite seu nome de usuario" required>
+                            <div id="name-error"></div>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" name="emailcad" placeholder="Digite seu email" maxlength="100" required>
+                            <input type="email" class="form-control" name="emailcad" placeholder="Digite seu email" required>
+                        <div id="email-error"></div>
                         </div>
                         <div class="mb-3">
                             <label for="senha" class="form-label">Senha</label>
                             <input type="password" class="form-control" name="senhacad" placeholder="Digite sua senha" required>
+                            <div id="password-error"></div>
                         </div>
-<?php echo $erro1; ?>
-<?php echo $erro;
-session_unset();
-session_destroy(); ?>
+                        <?php
+                        echo $erro;
+                        session_unset();
+                        session_destroy();
+                        ?>
                         <div class="mb-3">
                             <button type="submit" class="btn btn-primary w-100 value=submit">Cadastrar</button>
                         </div>
@@ -99,6 +100,49 @@ session_destroy(); ?>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+       <script>
+    $(document).ready(function() {
+        $('form').submit(function(event) {
+            // Prevent the form from submitting normally
+            event.preventDefault();
+
+            // Get the password, name, and email values
+            var password = $('input[name="senhacad"]').val();
+            var nome = $('input[name="nomecad"]').val();
+            var email = $('input[name="emailcad"]').val();
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            var ok = true; // Variável para controlar se o formulário pode ser enviado
+
+            // Check password length
+            if (password.length < 8) {
+                $('#password-error').html('<div class="alert alert-danger" style="border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px;" role="alert">Senha muito pequena, mínimo de 8 caracteres!</div>');
+                ok = false; // Define ok como false se houver um erro
+            }
+
+            // Check name length
+            if (nome.length < 4) {
+                $('#name-error').html('<div class="alert alert-danger" style="border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px;" role="alert">Nome muito pequeno, mínimo de 4 caracteres!</div>');
+                ok = false;
+            } else if (nome.length > 20) {
+                $('#name-error').html('<div class="alert alert-danger" style="border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px;" role="alert">Nome muito grande, máximo de 20 caracteres!</div>');
+                ok = false;
+            }
+
+            // Check email
+            if (!emailRegex.test(email)) {
+                $('#email-error').html('<div class="alert alert-danger" style="border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px;" role="alert">Email inválido!</div>');
+                ok = false;
+            }
+
+            // Submit the form if ok is still true
+            if (ok) {
+                $(this).off('submit').submit();
+            }
+        });
+    });
+</script>
+
+
 
 
 
