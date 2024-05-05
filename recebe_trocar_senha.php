@@ -14,8 +14,17 @@ if($senha_nova == $confirmar_senha_nova) {
     $ok = false;
     echo "<script>
                 alert('Alguma das senhas não coincidem!');
-                window.location.href = 'editar_usuario.php';
+                window.location.href = 'trocar_senha.php';
                 </script>";
+}
+if (strlen($senha_atual) < 8 && strlen($senha_nova)< 8 && strlen($confirmar_senha_nova)) {
+    $ok = false;
+    echo "<script>
+                alert('Mínimo de 8 caracteres!');
+                window.location.href = 'trocar_senha.php';
+                </script>";
+}else {
+    
 }
 if($ok) {
 $sql = "SELECT * from usuario WHERE id_usuario=$id_usuario and senha='".md5($senha_atual)."'";
@@ -27,7 +36,7 @@ if ($resultado->num_rows > 0) {
 }else {
     echo "<script>
                 alert('Alguma das senhas não coincidem!');
-                window.location.href = 'editar_usuario.php';
+                window.location.href = 'trocar_senha.php';
                 </script>";
 }
 }

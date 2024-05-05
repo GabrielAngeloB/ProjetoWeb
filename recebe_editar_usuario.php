@@ -100,6 +100,7 @@ if ($conecta->query($sql2) === TRUE) {
 }
 
     }
+    if (strlen($nome) > 4 and strlen($nome)< 20) {
     $sql2 = "UPDATE usuario SET email ='$email', nome_usuario = '$nome' WHERE id_usuario = $id_usuario";
 
 // Executa a consulta SQL para atualizar o registro no banco de dados
@@ -109,5 +110,8 @@ if ($conecta->query($sql2) === TRUE) {
 } else {
     echo "Erro na atualização do registro: " . $conecta->error . "<br>";
 }
+    }else {
+        header('Location: editar_usuario.php');
+    }
     }
             

@@ -27,11 +27,11 @@ if (isset($_SESSION['erro1']) and $_SESSION['erro1']) {
     <head>
         <style>
             .form-control:focus {
-          border: 1px solid grey;
-  box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);
-}
+                border: 1px solid grey;
+                box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);
+            }
         </style>
-        
+
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     </head>
@@ -91,11 +91,11 @@ if (isset($_SESSION['erro1']) and $_SESSION['erro1']) {
                             <input id ="senha" type="password" class="form-control" name="senhacad" placeholder="Digite sua senha" required>
                             <div id="password-error"></div>
                         </div>
-<?php
-echo $erro;
-session_unset();
-session_destroy();
-?>
+                        <?php
+                        echo $erro;
+                        session_unset();
+                        session_destroy();
+                        ?>
                         <div class="mb-3">
                             <button type="submit" class="btn btn-primary w-100 value=submit">Cadastrar</button>
                         </div>
@@ -108,42 +108,42 @@ session_destroy();
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
         <script>
-        $(document).ready(function () {
-        $('input[type="text"], input[type="email"], input[type="password"]').on('input', function () {
-            var minLength = 4; // Minimum length required for input fields
-            var $input = $(this);
+            $(document).ready(function () {
+                $('input[type="text"], input[type="email"], input[type="password"]').on('input', function () {
+                    var minLength = 4; // Minimum length required for input fields
+                    var $input = $(this);
 
-            // Check input length and apply invalid-input class if necessary
-            if ($input.val().length < minLength) {
-                $input.addClass('invalid-input');
-                $input.removeClass('valid-input');
-            } else {
-                $input.removeClass('invalid-input');
-                $input.addClass('valid-input');
-            }
+                    // Check input length and apply invalid-input class if necessary
+                    if ($input.val().length < minLength) {
+                        $input.addClass('invalid-input');
+                        $input.removeClass('valid-input');
+                    } else {
+                        $input.removeClass('invalid-input');
+                        $input.addClass('valid-input');
+                    }
 
-            // Check if the input is the password field and apply additional validation
-            if ($input.attr('name') === 'senhacad') {
-                if ($input.val().length < 8) {
-                    $input.addClass('invalid-input');
-                    $input.removeClass('valid-input');
-                } else {
-                    $input.removeClass('invalid-input');
-                    $input.addClass('valid-input');
-                }
-            }
-             if ($input.attr('name') === 'emailcad') {
-                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (emailRegex.test($input.val())) {
-                    $input.addClass('valid-input');
-                    $input.removeClass('invalid-input');
-                } else {
-                    $input.removeClass('valid-input');
-                    $input.addClass('invalid-input');
-                }
-            }
-        });
-        
+                    // Check if the input is the password field and apply additional validation
+                    if ($input.attr('name') === 'senhacad') {
+                        if ($input.val().length < 8) {
+                            $input.addClass('invalid-input');
+                            $input.removeClass('valid-input');
+                        } else {
+                            $input.removeClass('invalid-input');
+                            $input.addClass('valid-input');
+                        }
+                    }
+                    if ($input.attr('name') === 'emailcad') {
+                        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (emailRegex.test($input.val())) {
+                            $input.addClass('valid-input');
+                            $input.removeClass('invalid-input');
+                        } else {
+                            $input.removeClass('valid-input');
+                            $input.addClass('invalid-input');
+                        }
+                    }
+                });
+
                 $('form').submit(function (event) {
                     // Prevent the form from submitting normally
                     event.preventDefault();
@@ -157,10 +157,14 @@ session_destroy();
                     var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     var ok = true; // Variável para controlar se o formulário pode ser enviado
 
+                    // Limpa mensagens de erro anteriores
+                    $('#password-error').empty();
+                    $('#name-error').empty();
+                    $('#email-error').empty();
+
                     // Check password length
                     if (password.length < 8) {
                         $('#password-error').html('<div class="alert alert-danger" style="border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px;" role="alert">Senha muito pequena, mínimo de 8 caracteres!</div>');
-                        
                         ok = false; // Define ok como false se houver um erro
                     }
 
@@ -179,9 +183,42 @@ session_destroy();
                         ok = false;
                     }
 
-                    // Submit the form if ok is still true
+                    // Se todos os campos estiverem corretos, envie o formulário
                     if (ok) {
                         $(this).off('submit').submit();
+                    }
+                });
+
+// Monitora mudanças nos campos de entrada para validar continuamente o número de caracteres
+                $('input[name="senhacad"]').on('input', function () {
+                    var password = $(this).val();
+                    if (password.length >= 8) {
+                        $('#password-error').empty();
+                    } else {
+                        $('#password-error').html('<div class="alert alert-danger" style="border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px;" role="alert">Senha muito pequena, mínimo de 8 caracteres!</div>');
+                    }
+                });
+
+                $('input[name="nomecad"]').on('input', function () {
+                    var nome = $(this).val();
+                    if (nome.length >= 4 && nome.length <= 20) {
+                        $('#name-error').empty();
+                    } else {
+                        if (nome.length < 4) {
+                            $('#name-error').html('<div class="alert alert-danger" style="border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px;" role="alert">Nome muito pequeno, mínimo de 4 caracteres!</div>');
+                        } else {
+                            $('#name-error').html('<div class="alert alert-danger" style="border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px;" role="alert">Nome muito grande, máximo de 20 caracteres!</div>');
+                        }
+                    }
+                });
+
+                $('input[name="emailcad"]').on('input', function () {
+                    var email = $(this).val();
+                    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (emailRegex.test(email)) {
+                        $('#email-error').empty();
+                    } else {
+                        $('#email-error').html('<div class="alert alert-danger" style="border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px;" role="alert">Email inválido!</div>');
                     }
                 });
             });

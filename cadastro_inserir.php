@@ -1,14 +1,3 @@
-<!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edit this template
--->
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title></title>
-    </head>
-    <body>
         <?php
         session_start();
         $nomecad = isset($_POST['nomecad']) ? $_POST['nomecad'] : '';
@@ -75,6 +64,3 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
 
         inserirDados($nomecad, $emailcad, $senhacad);
         ?>
-    </body>
-
-</html>

@@ -1,155 +1,149 @@
-<html>
-    <?php
-    session_start();
-    require('conecta.php');
+<?php
+session_start();
+require('conecta.php');
 
-    $comentariosPorPagina = 10;
-    $nome_usuario1 = array();
+$comentariosPorPagina = 10;
+$nome_usuario1 = array();
 
-    if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {
-        session_unset();
-        echo "<script>
+if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {
+    session_unset();
+    echo "<script>
         alert('Esta página só pode ser acessada por usuário logado');
         window.location.href = 'login.php';
         </script>";
-    }
-    $adicionar = '';
-        if ($_SESSION['login'] == 'gabridestiny@hotmail.com') {
-            $adicionar = "<a class='dropdown-item' href='adicionar_jogos.php'>Adicionar Jogo</a>";
-        }
+}
+$adicionar = '';
+if ($_SESSION['login'] == 'gabridestiny@hotmail.com') {
+    $adicionar = "<a class='dropdown-item' href='adicionar_jogos.php'>Adicionar Jogo</a>";
+}
 
-    if (isset($_GET['id_jogo1'])) {
-        $id_jogo1 = $_GET['id_jogo1'];
-        $sql = "SELECT * FROM games WHERE id_jogo = $id_jogo1";
-        $resultado = $conecta->query($sql);
+if (isset($_GET['id_jogo1'])) {
+    $id_jogo1 = $_GET['id_jogo1'];
+    $sql = "SELECT * FROM games WHERE id_jogo = $id_jogo1";
+    $resultado = $conecta->query($sql);
 
-        if ($resultado->num_rows == 1) {
-            $linha = $resultado->fetch_assoc();
-        } else {
-            echo "<script> window.location.href = 'pagina_nao_encontrada.php';</script>";
-            exit; 
-        }
+    if ($resultado->num_rows == 1) {
+        $linha = $resultado->fetch_assoc();
     } else {
-        header('Location:pagina_nao_encontrada.php');
-        exit; 
+        echo "<script> window.location.href = 'pagina_nao_encontrada.php';</script>";
+        exit;
     }
+} else {
+    header('Location:pagina_nao_encontrada.php');
+    exit;
+}
 
-    $sql2 = "SELECT * FROM reviews WHERE id_jogo= $id_jogo1 ORDER BY total_reviews DESC";
-    $resultado = $conecta->query($sql2);
+$sql2 = "SELECT * FROM reviews WHERE id_jogo= $id_jogo1 ORDER BY total_reviews DESC";
+$resultado = $conecta->query($sql2);
 
+$totalComentarios = $resultado->num_rows;
 
-    $totalComentarios = $resultado->num_rows;
+if ($totalComentarios == 0) {
+    $totalComentarios = 1;
+}
 
+$totalPaginas = ceil($totalComentarios / $comentariosPorPagina);
+$paginaAtual = isset($_GET['pagina']) ? $_GET['pagina'] : 1;
 
-    if ($totalComentarios == 0) {
-        $totalComentarios = 1;
+if ($paginaAtual > $totalPaginas || $paginaAtual <= 0) {
+    header('Location:pagina_nao_encontrada.php');
+    exit;
+}
+$id_usuario = array();
+$txtreview = array();
+if ($resultado->num_rows > 0) {
+    while ($linha = $resultado->fetch_assoc()) {
+        if ($linha != null) {
+            $id_usuario[] = $linha['id_usuario'];
+            $txtreview[] = $linha['texto_review'];
+            $id_review[] = $linha['id_review'];
+        }
     }
+}
 
-    $totalPaginas = ceil($totalComentarios / $comentariosPorPagina);
-    $paginaAtual = isset($_GET['pagina']) ? $_GET['pagina'] : 1;
-
-    if ($paginaAtual > $totalPaginas || $paginaAtual <= 0) {
-        header('Location:pagina_nao_encontrada.php');
-        exit; 
-    }
-    $id_usuario = array();
-    $txtreview = array();
+for ($l = 0; $l < sizeOf($id_usuario); $l++) {
+    $sql3 = "SELECT avaliacao_total FROM avaliacao WHERE id_usuario='$id_usuario[$l]' and id_jogo='$id_jogo1'";
+    $resultado = $conecta->query($sql3);
     if ($resultado->num_rows > 0) {
         while ($linha = $resultado->fetch_assoc()) {
             if ($linha != null) {
-                $id_usuario[] = $linha['id_usuario'];
-                $txtreview[] = $linha['texto_review'];
-                $id_review[] = $linha['id_review'];
+                $nota_review[$l] = $linha['avaliacao_total'];
             }
         }
     }
-
-    for ($l = 0; $l < sizeOf($id_usuario); $l++) {
-        $sql3 = "SELECT avaliacao_total FROM avaliacao WHERE id_usuario='$id_usuario[$l]' and id_jogo='$id_jogo1'";
-        $resultado = $conecta->query($sql3);
-        if ($resultado->num_rows > 0) {
-            while ($linha = $resultado->fetch_assoc()) {
-                if ($linha != null) {
-                    $nota_review[$l] = $linha['avaliacao_total'];
-                }
-            }
-        }
-    }
-    $comentario = array();
-    for ($i = 0; $i < sizeOf($id_usuario); $i++) {
-        $sql3 = "SELECT img_perfil, nome_usuario FROM usuario WHERE id_usuario='$id_usuario[$i]'";
-        $resultado = $conecta->query($sql3);
-        if ($resultado->num_rows > 0) {
-            while ($linha = $resultado->fetch_assoc()) {
-                if ($linha != null) {
-                    $nome_usuario1[$i] = $linha['nome_usuario'];
-                    $img_perfil [$i] = $linha['img_perfil'];
-                }
-            }
-        }
-    }
-    if (sizeOf($txtreview) > 0) {
-        for ($h = 0; $h < sizeOf($txtreview); $h++) {
-            $sql2 = "SELECT horario_review FROM reviews WHERE id_usuario = '$id_usuario[$h]' and id_jogo='$id_jogo1'";
-            $resultado = $conecta->query($sql2);
-            if ($resultado->num_rows > 0) {
-                date_default_timezone_set('America/Sao_Paulo');
-                $row = $resultado->fetch_assoc();
-                $postedTimeUnix[$h] = strtotime($row['horario_review']);
-            } else {
-                
-            }
-
-           
-
-            $currentTimeUnix = time();
-
-          
-            $timeDiffSeconds[$h] = $currentTimeUnix - $postedTimeUnix[$h];
-
-           
-            $minutos[$h] = floor($timeDiffSeconds[$h] / 60);
-            $horas[$h] = floor($minutos[$h] / 60);
-            $dias[$h] = floor($horas[$h] / 24);
-
-            
-            if ($minutos[$h] < 1) {
-                $mensagem[$h] = "agora!";
-            } else if ($minutos[$h] < 60) {
-                $mensagem[$h] = "$minutos[$h] minuto(s) atrás!";
-            } else if ($horas[$h] < 24) {
-                $mensagem[$h] = "$horas[$h] hora(s) atrás!";
-            } else {
-                $mensagem[$h] = "$dias[$h] dia(s) atrás!";
-            }
-        }
-    } else {
-        $mensagem[] = '';
-    }
-    $sql = "SELECT MAX(total_reviews) as total_review FROM reviews";
-    $resultado = $conecta->query($sql);
-
+}
+$comentario = array();
+for ($i = 0; $i < sizeOf($id_usuario); $i++) {
+    $sql3 = "SELECT img_perfil, nome_usuario FROM usuario WHERE id_usuario='$id_usuario[$i]'";
+    $resultado = $conecta->query($sql3);
     if ($resultado->num_rows > 0) {
         while ($linha = $resultado->fetch_assoc()) {
-            $total_reviews = $linha['total_review'];
+            if ($linha != null) {
+                $nome_usuario1[$i] = $linha['nome_usuario'];
+                $img_perfil [$i] = $linha['img_perfil'];
+            }
+        }
+    }
+}
+if (sizeOf($txtreview) > 0) {
+    for ($h = 0; $h < sizeOf($txtreview); $h++) {
+        $sql2 = "SELECT horario_review FROM reviews WHERE id_usuario = '$id_usuario[$h]' and id_jogo='$id_jogo1'";
+        $resultado = $conecta->query($sql2);
+        if ($resultado->num_rows > 0) {
+            date_default_timezone_set('America/Sao_Paulo');
+            $row = $resultado->fetch_assoc();
+            $postedTimeUnix[$h] = strtotime($row['horario_review']);
+        } else {
+            
         }
 
 
-        $cont = 1;
 
-        $userIDs = array_keys($id_usuario); 
-        $commentIDs = array_keys($txtreview); 
-        $currentUserId = $_SESSION['id_usuario'];
-        $currentUserEmail = $_SESSION['login'];
-        $contador = 0;
+        $currentTimeUnix = time();
 
-        foreach ($userIDs as $index => $userID) {
-            
+        $timeDiffSeconds[$h] = $currentTimeUnix - $postedTimeUnix[$h];
 
-            ($contador == 0) ? ($tamanho = "comentarioreview3") : ($tamanho = "comentarioreview");
-            $contador = 3;
+        $minutos[$h] = floor($timeDiffSeconds[$h] / 60);
+        $horas[$h] = floor($minutos[$h] / 60);
+        $dias[$h] = floor($horas[$h] / 24);
 
-            $comentario[$index] = "<div class='card mb-3 $tamanho' style='background-color:darkgrey; background: #D8D8D8; border:5px solid;
+        if ($minutos[$h] < 1) {
+            $mensagem[$h] = "agora!";
+        } else if ($minutos[$h] < 60) {
+            $mensagem[$h] = "$minutos[$h] minuto(s) atrás!";
+        } else if ($horas[$h] < 24) {
+            $mensagem[$h] = "$horas[$h] hora(s) atrás!";
+        } else {
+            $mensagem[$h] = "$dias[$h] dia(s) atrás!";
+        }
+    }
+} else {
+    $mensagem[] = '';
+}
+$sql = "SELECT MAX(total_reviews) as total_review FROM reviews";
+$resultado = $conecta->query($sql);
+
+if ($resultado->num_rows > 0) {
+    while ($linha = $resultado->fetch_assoc()) {
+        $total_reviews = $linha['total_review'];
+    }
+
+
+    $cont = 1;
+
+    $userIDs = array_keys($id_usuario);
+    $commentIDs = array_keys($txtreview);
+    $currentUserId = $_SESSION['id_usuario'];
+    $currentUserEmail = $_SESSION['login'];
+    $contador = 0;
+
+    foreach ($userIDs as $index => $userID) {
+
+
+        ($contador == 0) ? ($tamanho = "comentarioreview3") : ($tamanho = "comentarioreview");
+        $contador = 3;
+
+        $comentario[$index] = "<div class='card mb-3 $tamanho' style='background-color:darkgrey; background: #D8D8D8; border:5px solid;
                                 border-image-slice: 1;
                                 border-width:5px;
                                 border-image-source: linear-gradient(to left, darkslategrey, black);'>
@@ -170,8 +164,8 @@ word-break: break-word; padding-right:15px;'>" . $txtreview[$index] . "</small><
 
   <div class='action d-flex justify-content-between mt-2 align-items-center'>";
 
-            if (($currentUserId === $id_usuario[$commentIDs[$index]]) || ($currentUserEmail === "gabridestiny@hotmail.com")) {
-                $comentario[$index] .= "<form action='deletar_comentario.php' onsubmit='return confirm('Are you sure?');' method='post' style='display: inline-block;'>
+        if (($currentUserId === $id_usuario[$commentIDs[$index]]) || ($currentUserEmail === "gabridestiny@hotmail.com")) {
+            $comentario[$index] .= "<form action='deletar_comentario.php' onsubmit='return confirm('Are you sure?');' method='post' style='display: inline-block;'>
               <input type='hidden' name='id_review' value='" . $id_review[$commentIDs[$index]] . "'>
               <button Onclick='return ConfirmDelete();' type='submit' name='delete' class='btn btn-danger btn-sm' style='font-size: 12px;'>Excluir</button>
             </form>
@@ -180,101 +174,94 @@ word-break: break-word; padding-right:15px;'>" . $txtreview[$index] . "</small><
         </div>
             </div>
                 </div>";
-            } else {
-                $comentario[$index] .= " 
+        } else {
+            $comentario[$index] .= " 
     <div class='icons align-items-center' style='text-align:right; margin-left:auto; position:relative; bottom:3px;'>
       <p style='text-align:left;'><span style='font-weight:bold; '> Postado há</span>: $mensagem[$index]</p> 
     </div>
   </div>
 </div>";
-              
-            }
-
-
         }
     }
+}
 
 
 
-    $sql = "SELECT * FROM games WHERE id_jogo= $id_jogo1";
-    $resultado = $conecta->query($sql);
-    if ($resultado->num_rows > 0) {
-        while ($linha = $resultado->fetch_assoc()) {
-            if ($linha != null) {
-                $link = $linha["img_jogo"];
-                $generos = $linha["generos"];
-                $desc = $linha["desc_jogo"];
-                $nomejogo = $linha["nome_jogo"];
-                $id_jogo = $linha["id_jogo"];
-                $data = $linha["data_lancamento"];
-                $data = date("d/m/Y", strtotime($data));
-                $dev = $linha["desenvolvedor"];
-                $publisher = $linha["publisher"];
-                $_SESSION['id_jogo'] = $linha["id_jogo"];
-            } else {
-                
-            }
-        }
-    }
-
-    $sql = "SELECT  AVG(avaliacao_total) FROM avaliacao WHERE id_jogo = '$id_jogo'";
-    $result = $conecta->query($sql);
-    while ($row = mysqli_fetch_array($result)) {
-        $media = (int) $row['AVG(avaliacao_total)'];
-    }
-    if ($media == NULL) {
-        $media = 0;
-    }
-    for ($h = 0; $h < 1; $h++) {
-
-        $sql2 = "SELECT horario_postado FROM games WHERE id_jogo = '$id_jogo'";
-        $result = $conecta->query($sql2);
-        if ($result->num_rows > 0) {
-            date_default_timezone_set('America/Sao_Paulo');
-            $row = $result->fetch_assoc();
-            $postedTimeUnix[$h] = strtotime($row['horario_postado']);
+$sql = "SELECT * FROM games WHERE id_jogo= $id_jogo1";
+$resultado = $conecta->query($sql);
+if ($resultado->num_rows > 0) {
+    while ($linha = $resultado->fetch_assoc()) {
+        if ($linha != null) {
+            $link = $linha["img_jogo"];
+            $generos = $linha["generos"];
+            $desc = $linha["desc_jogo"];
+            $nomejogo = $linha["nome_jogo"];
+            $id_jogo = $linha["id_jogo"];
+            $data = $linha["data_lancamento"];
+            $data = date("d/m/Y", strtotime($data));
+            $dev = $linha["desenvolvedor"];
+            $publisher = $linha["publisher"];
+            $_SESSION['id_jogo'] = $linha["id_jogo"];
         } else {
             
         }
-
-        $currentTimeUnix = time();
-
-
-        $timeDiffSeconds[$h] = $currentTimeUnix - $postedTimeUnix[$h];
-
-
-        $minutos[$h] = floor($timeDiffSeconds[$h] / 60);
-        $horas[$h] = floor($minutos[$h] / 60);
-        $dias[$h] = floor($horas[$h] / 24);
-
-
-        if ($minutos[$h] < 1) {
-            $mensagem[$h] = "Agora!";
-        } else if ($minutos[$h] < 60) {
-            $mensagem[$h] = "$minutos[$h] minuto(s) atrás!";
-        } else if ($horas[$h] < 24) {
-            $mensagem[$h] = "$horas[$h] hora(s) atrás!";
-        } else {
-            $mensagem[$h] = "$dias[$h] dia(s) atrás!";
-        }
     }
-    $indiceInicial = ($paginaAtual - 1) * $comentariosPorPagina;
-    $indiceFinal = min($indiceInicial + $comentariosPorPagina - 1, $totalComentarios - 1);
+}
 
-    if (isset($_SESSION['id_usuario'])) {
-        $id_usuario = $_SESSION['id_usuario'];
+$sql = "SELECT  AVG(avaliacao_total) FROM avaliacao WHERE id_jogo = '$id_jogo'";
+$result = $conecta->query($sql);
+while ($row = mysqli_fetch_array($result)) {
+    $media = (int) $row['AVG(avaliacao_total)'];
+}
+if ($media == NULL) {
+    $media = 0;
+}
+for ($h = 0; $h < 1; $h++) {
+
+    $sql2 = "SELECT horario_postado FROM games WHERE id_jogo = '$id_jogo'";
+    $result = $conecta->query($sql2);
+    if ($result->num_rows > 0) {
+        date_default_timezone_set('America/Sao_Paulo');
+        $row = $result->fetch_assoc();
+        $postedTimeUnix[$h] = strtotime($row['horario_postado']);
+    } else {
+        
     }
 
-    $sql = "SELECT img_perfil from usuario where id_usuario = $id_usuario";
-    $resultado = $conecta->query($sql);
-    if ($resultado->num_rows > 0) {
-        while ($linha = $resultado->fetch_assoc()) {
-            $img_perfil = $linha['img_perfil'];
-        }
+    $currentTimeUnix = time();
+
+    $timeDiffSeconds[$h] = $currentTimeUnix - $postedTimeUnix[$h];
+
+    $minutos[$h] = floor($timeDiffSeconds[$h] / 60);
+    $horas[$h] = floor($minutos[$h] / 60);
+    $dias[$h] = floor($horas[$h] / 24);
+
+    if ($minutos[$h] < 1) {
+        $mensagem[$h] = "Agora!";
+    } else if ($minutos[$h] < 60) {
+        $mensagem[$h] = "$minutos[$h] minuto(s) atrás!";
+    } else if ($horas[$h] < 24) {
+        $mensagem[$h] = "$horas[$h] hora(s) atrás!";
+    } else {
+        $mensagem[$h] = "$dias[$h] dia(s) atrás!";
     }
+}
+$indiceInicial = ($paginaAtual - 1) * $comentariosPorPagina;
+$indiceFinal = min($indiceInicial + $comentariosPorPagina - 1, $totalComentarios - 1);
 
+if (isset($_SESSION['id_usuario'])) {
+    $id_usuario = $_SESSION['id_usuario'];
+}
 
-    ?>
+$sql = "SELECT img_perfil from usuario where id_usuario = $id_usuario";
+$resultado = $conecta->query($sql);
+if ($resultado->num_rows > 0) {
+    while ($linha = $resultado->fetch_assoc()) {
+        $img_perfil = $linha['img_perfil'];
+    }
+}
+?>
+    <html>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css2/estilos.css">
@@ -371,9 +358,8 @@ word-break: break-word; padding-right:15px;'>" . $txtreview[$index] . "</small><
                             </div>
 
 <?php
-
 for ($i = $indiceInicial; $i <= $indiceFinal; $i++) {
-        if (isset($comentario[$i]) and $i < $totalComentarios) {
+    if (isset($comentario[$i]) and $i < $totalComentarios) {
         echo $comentario[$i];
     } else {
         echo '<div class="cartao-review" style=" display: flex; justify-content: center; align-items: center; height: 150px; background-color: #333; color: white; border-radius: 10px; ">
@@ -393,7 +379,6 @@ if ($totalComentarios > $comentariosPorPagina) {
 
     $paginaAtual = isset($_GET['pagina']) ? $_GET['pagina'] : 1;
 
-   
     if ($totalPaginas <= 7) {
         $inicio = 1;
     } else {

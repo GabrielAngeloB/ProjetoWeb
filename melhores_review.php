@@ -1,114 +1,95 @@
-<html>
-    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="css2/estilos.css">
-    <title>Melhores Avaliados</title>
-    <link rel="icon" href="https://static.thenounproject.com/png/122214-200.png">
-    <head>
-    </head>
-    <body style="background-color:#242629">
-        <?php
-        session_start();
-
-        if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {
-            session_unset();
-            echo "<script>
+<?php
+session_start();
+if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {
+    session_unset();
+    echo "<script>
         alert('Esta página só pode ser acessada por usuário logado');
         window.location.href = 'login.php';
         </script>";
-        }
+}
 
-        $adicionar = '';
-        if ($_SESSION['login'] == 'gabridestiny@hotmail.com') {
-            $adicionar = "<a class='dropdown-item' href='adicionar_jogos.php'>Adicionar Jogo</a>";
-        }
+$adicionar = '';
+if ($_SESSION['login'] == 'gabridestiny@hotmail.com') {
+    $adicionar = "<a class='dropdown-item' href='adicionar_jogos.php'>Adicionar Jogo</a>";
+}
 
-        $logado = $_SESSION['login'];
-        require('conecta.php');
+$logado = $_SESSION['login'];
+require('conecta.php');
 
-        $limit = 10  ; 
+$limit = 10;
 
-        $sql = "SELECT * FROM games ORDER By avaliacao_media DESC";
-        $resultado = $conecta->query($sql);
+$sql = "SELECT * FROM games ORDER By avaliacao_media DESC";
+$resultado = $conecta->query($sql);
 
+$total_jogos = $resultado->num_rows;
 
-        $total_jogos = $resultado->num_rows;
+$total_paginas = ceil($total_jogos / $limit);
 
+$pagina = isset($_GET['pagina']) ? $_GET['pagina'] : 1;
+$inicio = ($pagina - 1) * $limit;
 
-        $total_paginas = ceil($total_jogos / $limit);
+$resultado = $conecta->query($sql);
 
-        $pagina = isset($_GET['pagina']) ? $_GET['pagina'] : 1; 
-        $inicio = ($pagina - 1) * $limit;
+$link = array();
+$generos = array();
+$desc = array();
+$nomejogo = array();
+$id_jogo = array();
+$media = array();
+$mensagem = array();
 
-         
-
-        $resultado = $conecta->query($sql);
-
-
-        $link = array();
-        $generos = array();
-        $desc = array();
-        $nomejogo = array();
-        $id_jogo = array();
-        $media = array();
-        $mensagem = array();
-
-
-        if ($resultado->num_rows > 0) {
-            $cont = 0;
-            while ($linha = $resultado->fetch_assoc()) {
-                $link[$cont] = $linha["img_jogo"];
-                $generos[$cont] = $linha["generos"];
-                $desc[$cont] = $linha["desc_jogo"];
-                $nomejogo[$cont] = $linha["nome_jogo"];
-                $id_jogo[$cont] = $linha["id_jogo"];
-                $horario_jogo = $linha["horario_postado"];
-                $media[$cont] = $linha['avaliacao_media'];
-                $cont++;
-            }
-        }
+if ($resultado->num_rows > 0) {
+    $cont = 0;
+    while ($linha = $resultado->fetch_assoc()) {
+        $link[$cont] = $linha["img_jogo"];
+        $generos[$cont] = $linha["generos"];
+        $desc[$cont] = $linha["desc_jogo"];
+        $nomejogo[$cont] = $linha["nome_jogo"];
+        $id_jogo[$cont] = $linha["id_jogo"];
+        $horario_jogo = $linha["horario_postado"];
+        $media[$cont] = $linha['avaliacao_media'];
+        $cont++;
+    }
+}
 
 
-       for ($h = 0; $h < sizeOf($id_jogo); $h++) {
-            
-            $sql2 = "SELECT horario_postado FROM games WHERE id_jogo = '$id_jogo[$h]'";
-            $result = $conecta->query($sql2);
-            if ($result->num_rows > 0) {
-                date_default_timezone_set('America/Sao_Paulo');
-                $row = $result->fetch_assoc();
-                $postedTimeUnix[$h] = strtotime($row['horario_postado']);
-            } else {
-                
-            }
+for ($h = 0; $h < sizeOf($id_jogo); $h++) {
 
-            
-            $currentTimeUnix = time();
-
-            
-            $timeDiffSeconds[$h] = $currentTimeUnix - $postedTimeUnix[$h];
-
-            
-            $minutos[$h] = floor($timeDiffSeconds[$h] / 60);
-            $horas[$h] = floor($minutos[$h] / 60);
-            $dias[$h] = floor($horas[$h] / 24);
-
-            
-            if ($minutos[$h] < 1) {
-                $mensagem[$h] = "agora!";
-            } else if ($minutos[$h] < 60) {
-                $mensagem[$h] = "$minutos[$h] minuto(s) atrás!";
-            } else if ($horas[$h] < 24) {
-                $mensagem[$h] = "$horas[$h] hora(s) atrás!";
-            } else {
-                $mensagem[$h] = "$dias[$h] dia(s) atrás!";
-            }
-        }
+    $sql2 = "SELECT horario_postado FROM games WHERE id_jogo = '$id_jogo[$h]'";
+    $result = $conecta->query($sql2);
+    if ($result->num_rows > 0) {
+        date_default_timezone_set('America/Sao_Paulo');
+        $row = $result->fetch_assoc();
+        $postedTimeUnix[$h] = strtotime($row['horario_postado']);
+    } else {
+        
+    }
 
 
-        for ($i = 0; $i < $cont; $i++) {
-            ($i % 2 == 0) ? ($fade = "fadeInFromLeft") : ($fade = "fadeInFromRight");
-            if ($i == 0) {
-                $melhor1[$i] = "<div class='card mb-3 mx-auto responsivo $fade' style='margin-top:50px;'>
+    $currentTimeUnix = time();
+
+    $timeDiffSeconds[$h] = $currentTimeUnix - $postedTimeUnix[$h];
+
+    $minutos[$h] = floor($timeDiffSeconds[$h] / 60);
+    $horas[$h] = floor($minutos[$h] / 60);
+    $dias[$h] = floor($horas[$h] / 24);
+
+    if ($minutos[$h] < 1) {
+        $mensagem[$h] = "agora!";
+    } else if ($minutos[$h] < 60) {
+        $mensagem[$h] = "$minutos[$h] minuto(s) atrás!";
+    } else if ($horas[$h] < 24) {
+        $mensagem[$h] = "$horas[$h] hora(s) atrás!";
+    } else {
+        $mensagem[$h] = "$dias[$h] dia(s) atrás!";
+    }
+}
+
+
+for ($i = 0; $i < $cont; $i++) {
+    ($i % 2 == 0) ? ($fade = "fadeInFromLeft") : ($fade = "fadeInFromRight");
+    if ($i == 0) {
+        $melhor1[$i] = "<div class='card mb-3 mx-auto responsivo $fade' style='margin-top:50px;'>
             <div class='row g-0'>
                 <div class='col-md-4'>
                     <a href='jogo_mostrar.php?id_jogo1=$id_jogo[$i]'>
@@ -130,8 +111,8 @@
                 </div>
             </div>
         </div>";
-            } else {
-                $melhor1[$i] = "<div class='card mb-3 mx-auto responsivo $fade' style='margin-top:50px;'>
+    } else {
+        $melhor1[$i] = "<div class='card mb-3 mx-auto responsivo $fade' style='margin-top:50px;'>
             <div class='row g-0'>
                 <div class='col-md-4'>
                     <a href='jogo_mostrar.php?id_jogo1=$id_jogo[$i]'>
@@ -153,23 +134,32 @@
                 </div>
             </div>
         </div>";
-            }
-        }
+    }
+}
 
-       
- require ('conecta.php');
-        if (isset($_SESSION['id_usuario'])) {
-            $id_usuario = $_SESSION['id_usuario'];
-        }
 
-        $sql = "SELECT img_perfil from usuario where id_usuario = $id_usuario";
-        $resultado = $conecta->query($sql);
-        if ($resultado->num_rows > 0) {
-            while ($linha = $resultado->fetch_assoc()) {
-                $img_perfil = $linha['img_perfil'];
-            }
-        }
-        ?>
+require ('conecta.php');
+if (isset($_SESSION['id_usuario'])) {
+    $id_usuario = $_SESSION['id_usuario'];
+}
+
+$sql = "SELECT img_perfil from usuario where id_usuario = $id_usuario";
+$resultado = $conecta->query($sql);
+if ($resultado->num_rows > 0) {
+    while ($linha = $resultado->fetch_assoc()) {
+        $img_perfil = $linha['img_perfil'];
+    }
+}
+?>
+<html>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css2/estilos.css">
+    <title>Melhores Avaliados</title>
+    <link rel="icon" href="https://static.thenounproject.com/png/122214-200.png">
+    <head>
+    </head>
+    <body style="background-color:#242629">
         <nav class="navbar navbar-expand-sm" style="background-color:darkslategrey; z-index:2;">
             <div class="container-fluid">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="float:left">
@@ -204,9 +194,9 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-end position-absolute" aria-labelledby="navbarDropdown">
-                           <a class="dropdown-item" href="pagina_usuario.php?id_usuario=<?php echo $id_usuario; ?>">Ver perfil</a>
+                            <a class="dropdown-item" href="pagina_usuario.php?id_usuario=<?php echo $id_usuario; ?>">Ver perfil</a>
                             <a class="dropdown-item" href="editar_usuario.php"> Editar perfil</a>
-                            <?php echo $adicionar ?>
+<?php echo $adicionar ?>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
                     </li>
@@ -214,46 +204,43 @@
             </div>
         </nav>
         <h1 class="mx-auto letra" style="color:white; margin-top:100px; text-align:center; "><span style="background-color:#343434; padding-left:30px; padding-right:30px; border-radius:10px;  ">⧙ Melhores avaliados ⧘</span></h1> 
-        <?php
-         for ($i = ($pagina - 1) * $limit; $i < min($pagina * $limit, $total_jogos); $i++) {
+<?php
+for ($i = ($pagina - 1) * $limit; $i < min($pagina * $limit, $total_jogos); $i++) {
     echo $melhor1[$i];
 }
-        
+
 if (isset($total_paginas) && $total_paginas > 1) {
     echo "<ul class='pagination justify-content-center'>";
     $pagina_atual = isset($_GET['pagina']) ? $_GET['pagina'] : 1;
 
-    
     $inicio = max(1, $pagina_atual - 8);
 
-    
     $fim = min($total_paginas, $inicio + 9);
 
-    
     if ($fim == $total_paginas && $total_paginas > 9) {
         $inicio = max(1, $fim - 9);
     }
 
-    
+
     if ($inicio > 1) {
         echo "<li class='page-item style='height:40px;'><a class='custom-page-link1' style='color: white; bottom:1%;' href='melhores_review.php?pagina=" . ($inicio - 1) . "'>&laquo;</a></li>";
     }
 
-    
+
     for ($i = $inicio; $i <= $fim; $i++) {
         $class = ($i == $pagina_atual) ? 'page-item active' : 'page-item';
         $style = ($i == $pagina_atual) ? 'background-color: grey;' : '';
         echo "<li class='$class'><a style='font-size:30px; border: 2px solid black; color:black; border-radius:20px; margin-left:5px; padding-right:3px; padding-left:3px; $style' class='page-link' href='melhores_review.php?pagina=$i'>$i</a></li>";
     }
 
-    
+
     if ($fim < $total_paginas) {
         echo "<li class='page-item style='height:40px;'><a class='custom-page-link2' style='color: white; bottom:1%;' href='melhores_review.php?pagina=" . ($fim + 1) . "'>&raquo;</a></li>";
     }
 
     echo "</ul>";
-} 
-        ?>
+}
+?>
 
 
         <br>
@@ -263,6 +250,6 @@ if (isset($total_paginas) && $total_paginas > 1) {
         <script src="javascriptsite.js"></script> 
     </body>
 </html>
-<?php
-$conecta->close();
-?>
+        <?php
+        $conecta->close();
+        ?>

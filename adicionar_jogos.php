@@ -1,3 +1,34 @@
+<?php
+session_start();
+if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {
+    session_unset();
+    echo "<script>
+                alert('Esta página só pode ser acessada por usuário logado');
+                window.location.href = 'login.php';
+                </script>";
+}
+
+$logado = $_SESSION['login'];
+if ($_SESSION['login'] !== 'gabridestiny@hotmail.com') {
+    header("Location:index.php");
+}
+$adicionar = '';
+if ($_SESSION['login'] == 'gabridestiny@hotmail.com') {
+    $adicionar = "<a class='dropdown-item' href='adicionar_jogos.php'>Adicionar Jogo</a>";
+}
+require ('conecta.php');
+if (isset($_SESSION['id_usuario'])) {
+    $id_usuario = $_SESSION['id_usuario'];
+}
+
+$sql = "SELECT img_perfil from usuario where id_usuario = $id_usuario";
+$resultado = $conecta->query($sql);
+if ($resultado->num_rows > 0) {
+    while ($linha = $resultado->fetch_assoc()) {
+        $img_perfil = $linha['img_perfil'];
+    }
+}
+?>
 <html>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -7,40 +38,7 @@
     <head>
     </head>
     <body style="background-color:#242629">
-        <?php
-        session_start(); 
-
-
-
-        if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {
-            session_unset(); 
-            echo "<script>
-                alert('Esta página só pode ser acessada por usuário logado');
-                window.location.href = 'login.php';
-                </script>";
-        }
         
-        $logado = $_SESSION['login'];
-        if ($_SESSION['login'] !== 'gabridestiny@hotmail.com') {
-            header("Location:index.php");
-        }
-        $adicionar = '';
-        if ($_SESSION['login'] == 'gabridestiny@hotmail.com') {
-            $adicionar = "<a class='dropdown-item' href='adicionar_jogos.php'>Adicionar Jogo</a>";
-        }
-         require ('conecta.php');
-        if (isset($_SESSION['id_usuario'])) {
-            $id_usuario = $_SESSION['id_usuario'];
-        }
-
-        $sql = "SELECT img_perfil from usuario where id_usuario = $id_usuario";
-        $resultado = $conecta->query($sql);
-        if ($resultado->num_rows > 0) {
-            while ($linha = $resultado->fetch_assoc()) {
-                $img_perfil = $linha['img_perfil'];
-            }
-        }
-        ?>
         <nav class="navbar navbar-expand-sm" style="background-color:darkslategrey; z-index:2;">
             <div class="container-fluid">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="float:left">
@@ -84,7 +82,7 @@
                 </ul>
             </div>
         </nav>
-        
+
         <br>
         <form  class="mx-auto adicjogos" action="recebe_jogos.php" enctype="multipart/form-data" method="POST">
             <div class="form-group">

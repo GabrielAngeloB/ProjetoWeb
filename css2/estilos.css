@@ -1194,6 +1194,19 @@ html {
 }
 
 .imagem1:hover {
-    filter: drop-shadow(0 0 0.2rem black);
+    filter: drop-shadow(0 0 0.1rem black);
 }
-
+.invalid-input {
+        border: 2px solid red !important; /* Important to override existing styles */
+    }
+    .form-control:focus {
+        
+    }
+    
+    .valid-input {
+        border: 2px solid lightgreen !important; /* Important to override existing styles */
+    }
+    .form-control:focus {
+          box-shadow: inset 0 0px 4px rgba(0, 0, 0, 0.8);
+        border: 1px solid #ccc; /* Adiciona uma borda cinza */
+}
