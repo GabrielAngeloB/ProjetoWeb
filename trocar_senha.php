@@ -124,7 +124,7 @@ if ($resultado->num_rows > 0) {
                                     </div>
                                 </div>
                                 <ul>
-                                    <li class="alert alert-info" role="alert" style="font-size:16px; position:relative; font-style:italic; right:30px; width:97%; padding-top:5px; padding-bottom:5px;   "><span style="font-weight:bold;">Aviso:</span> Mínimo de 8 caracteres!</li>
+                                    <li class="alert alert-primary" role="alert" style="font-size:16px; position:relative; font-style:italic; right:30px; width:97%; padding-top:5px; padding-bottom:5px;   "><span style="font-weight:bold;">Aviso:</span> Mínimo de 8 caracteres!</li>
                                     
                                 </ul>
                                 <button type="submit" class="btn btn-primary d-flex mx-auto">Trocar Senha</button>
