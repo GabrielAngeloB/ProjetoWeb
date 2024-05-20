@@ -105,7 +105,7 @@ li
     padding:5px;
     border-style:solid;
     border-width: 2px;
-    border-image: linear-gradient(#05D6D9, #F907FC) 50;
+    border-image: linear-gradient(black, grey) 50;
     display:inline-block;
 }
 @media (max-width: 500px) {
@@ -115,7 +115,7 @@ li
         padding:5px;
         border-style:solid;
         border-width: 2px;
-        border-image: linear-gradient(#05D6D9, #F907FC) 50;
+        border-image: linear-gradient(black, grey) 50;
     }
 }
 @media (max-width: 768px) {
@@ -125,7 +125,7 @@ li
         padding:5px;
         border-style:solid;
         border-width: 2px;
-        border-image: linear-gradient(#05D6D9, #F907FC) 50;
+        border-image: linear-gradient(black, grey) 50;
     }
 }
 a:hover, a:visited, a:link, a:active
@@ -181,6 +181,7 @@ a:hover, a:visited, a:link, a:active
 .card:hover {
     box-shadow: 0 0px 16px 0 grey;
 }
+
 
 /* Default styles (apply to all screen sizes) */
 .col-md-6{
@@ -288,7 +289,7 @@ hr.rounded2 {
     margin-left:20px;
     border-style: solid;
     border-width: 4px;
-    border-image:linear-gradient(#05D6D9, #F907FC) 50;
+    border-image:linear-gradient(grey, black) 50;
     background-color:#9B9CA6;
 }
 
@@ -299,7 +300,28 @@ hr.rounded2 {
         margin-left:20px;
         border-style: solid;
         border-width: 4px;
-        border-image:linear-gradient(#05D6D9, #F907FC) 50;
+        border-image:linear-gradient(grey, black) 50;
+        background-color:#9B9CA6;
+    }
+}
+.responsivo2 {
+    max-width: 70%;
+    max-height:240px;
+    margin-left:20px;
+    border-style: solid;
+    border-width: 4px;
+    border-image:linear-gradient(black, grey) 50;
+    background-color:#9B9CA6;
+}
+
+@media screen and (max-width: 768px) {
+    .responsivo2 {
+        max-width: 70%;
+        max-height:100%;
+        margin-left:20px;
+        border-style: solid;
+        border-width: 4px;
+        border-image:linear-gradient(black, grey) 50;
         background-color:#9B9CA6;
     }
 }
@@ -550,7 +572,7 @@ hr.rounded2 {
 
 }
 
-@media (max-width: 768px) {
+@media (min-width:200px) and (max-width: 768px) {
     .letra2 {
         font-size: 40px;
         text-shadow: 3px 3px black;
@@ -864,7 +886,9 @@ hr.rounded2 {
     line-height: 40px;
     padding: 0 10px;
 }
-
+.dropdown-menu {
+    background-color: #DCDCDC; /* Cinza */
+}
 
 
 .searchbar:hover > .search_icon{
@@ -1209,4 +1233,107 @@ html {
     .form-control:focus {
           box-shadow: inset 0 0px 4px rgba(0, 0, 0, 0.8);
         border: 1px solid #ccc; /* Adiciona uma borda cinza */
+}
+@media (min-width:768px) and (max-width: 1000px) {
+    .lista-generos {
+       width: 80%;
+       margin-top:12%;
+    }
+}
+@media (min-width:1000px) and (max-width: 2000px) {
+    .lista-generos {
+       width: 70%;
+       margin-top:10%;
+    }
+}
+@media (min-width:200px) and (max-width: 400px) {
+    .lista-generos   {
+       width: 80%;
+       margin-top:80px;
+    }
+}
+@media (min-width:200px) and (max-width: 2000px) {
+.searchbar {
+    width:100%;
+}
+}
+
+@media (min-width:300px) and (max-width: 768px) {
+    .largura2 {
+        width: 100%
+    }
+}
+@media (min-width:768px) and (max-width: 1000px) {
+    .largura2 {
+        width: 70%
+    }
+}
+@media (min-width:1000px) and (max-width: 2000px) {
+    .largura2 {
+        width: 60%
+    }
+}
+
+@media (min-width:1000px) and (max-width: 2000px) {
+.generos {
+    display:flex;
+text-align:center;
+    margin-top:3%;
+    justify-content: center;
+    position:relative;
+     
+}
+}
+@media (min-width:300px) and (max-width: 450px) {
+.generos {
+    display:flex;
+    margin-top:3%;
+    text-align:center;
+    justify-content: center;
+    position:relative;
+     
+}
+}
+@media (min-width:451px) and (max-width: 900px) {
+.generos {
+    display:flex;
+    margin-top:3%;
+    text-align:center;
+    justify-content: center;
+    position:relative;
+     
+}
+}
+@media (min-width:901px) and (max-width: 999px) {
+.generos {
+    display:flex;
+    margin-top:3%;
+    text-align:center;
+    justify-content: center;
+    position:relative;
+     
+}
+}
+.cavalos {
+    
+    display:flex;
+    margin-left:20px;
+}
+.custom-btn {
+    color: white;
+    white-space: nowrap;
+    background-color: black;
+    font-weight: bold;
+    border: 2px solid #707070; /* Cor inicial da borda */
+    width: 145px;
+    height: 60px;
+    margin-right: 9px;
+    padding-right: 11px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s ease; /* Transição da cor da borda */
+}
+
+.custom-btn:hover {
+    border-color: white; /* Cor da borda ao passar o mouse */
 }
