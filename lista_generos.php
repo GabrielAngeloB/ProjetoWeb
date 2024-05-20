@@ -3,15 +3,11 @@ session_start();
 if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {
     session_unset();
     echo "<script>
-                alert('Esta página só pode ser acessada por usuário logado');
-                window.location.href = 'login.php';
-                </script>";
+                    alert('Esta página só pode ser acessada por usuário logado');
+                    window.location.href = 'login.php';
+                    </script>";
 }
-
 $logado = $_SESSION['login'];
-if ($_SESSION['login'] !== 'gabridestiny@hotmail.com') {
-    header("Location:index.php");
-}
 $adicionar = '';
 if ($_SESSION['login'] == 'gabridestiny@hotmail.com') {
     $adicionar = "<a class='dropdown-item' href='adicionar_jogos.php'>Adicionar Jogo</a>";
@@ -32,13 +28,32 @@ if ($resultado->num_rows > 0) {
 <html>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css2/estilos.css">
-    <title>Adicionar Jogos</title>
+    <title>Lista de Jogos</title>
     <link rel="icon" href="https://static.thenounproject.com/png/122214-200.png">
     <head>
+        <style>
+            .card:hover {
+                box-shadow: 0 0px 12px 0 black;
+            }
+            button:hover {
+    box-shadow: 0 0px 16px 0 grey;
+    font-size: 17px; 
+    border-color: grey; /* Cor inicial da borda */
+    transition: border-color 0.3s ease;
+}
+
+button:hover {
+    border-color: white; /* Cor da borda ao passar o mouse */
+}
+            button:link {
+                color:white;
+            }
+        </style>
     </head>
     <body style="background-color:#242629">
-        
+
         <nav class="navbar navbar-expand-sm" style="background-color:darkslategrey; z-index:2;">
             <div class="container-fluid">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="float:left">
@@ -78,7 +93,7 @@ if ($resultado->num_rows > 0) {
                         <div class="dropdown-menu dropdown-menu-end position-absolute" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="pagina_usuario.php?id_usuario=<?php echo $id_usuario; ?>">Ver perfil</a>
                             <a class="dropdown-item" href="editar_usuario.php">Editar perfil</a>
-                            <?php echo $adicionar ?>
+<?php echo $adicionar ?>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
                     </li>
@@ -88,67 +103,91 @@ if ($resultado->num_rows > 0) {
             </div>
         </nav>
 
-        <br>
-        <form  class="mx-auto adicjogos" action="recebe_jogos.php" enctype="multipart/form-data" method="POST">
-            <div class="form-group">
-                <label style="padding-bottom:5px;" for="nomne_jogo">Nome do jogo:</label>
-                <input type="text" class="form-control" id="nome_jogo" placeholder="Nome do jogo" name="nome_jogo" required><p></p>
-            </div>
-            <div class="form-group">
-                <label style="padding-bottom:5px;" for="publisher">Publisher do jogo:</label>
-                <input type="text" class="form-control" id="publisher" placeholder="Publisher" name="publisher" required><p></p>
-            </div>
-            <div class="form-group">
-                <label style="padding-bottom:5px;" for="email">Desenvolvedora:</label>
-                <input type="text" class="form-control" id="desenvolvedora" placeholder="Desenvolvedora" name="dev" required><p></p>
-            </div>
-            <label style="padding-bottom:5px;" for="start">Data de lancamento:</label><br>
-            <input type="date" id="start" name="data_lancamento" class="form-control" value="2018-07-22" required/>
-            <div class="form-group">
-                <label for="generos" style="padding-bottom:5px;" >Generos:</label>
-                <select multiple class="form-control select-picker" name="generos[]" id="generos" size="8" required>
-                    <option>Ação</option>
-                    <option>Aventura</option>
-                    <option>Estratégia</option>
-                    <option>RPG</option>
-                    <option>Puzzle</option>
-                    <option>Simulação</option>
-                    <option>Esporte</option>
-                    <option>Corrida</option>
-                    <option>Plataforma</option>
-                    <option>Casual</option>
-                    <option>Indie</option>
-                    <option>MMO</option>
-                    <option>MOBA</option>
-                    <option>Battle Royale</option>
-                    <option>Tower Defense</option>
-                    <option>Luta</option>
-                    <option>Esportes</option>
-                    <option>Corrida</option>
-                    <option>Terror</option>
-                    <option>Mundo Aberto</option>
-                    <option>Sobrevivência</option>
-                    <option>Roguelike</option>
-                    <option>FPS</option>
-                    <option>Multiplayer</option>
+        <div class="fadeInFromBottom">
+            <h1 class="mx-auto letra2" style="color:white; margin-top:100px; text-align:center; "><span style="background-color:#343434; padding-left:30px; padding-right:30px; border-radius:10px; text-shadow: 3px 3px black;  ">⧙ Gêneros ⧘</span></h1>
+            <div class="generos">
+                <?php
+                $genres = array(
+                    "Ação", "Aventura", "Estratégia", "RPG", "Puzzle", "Simulação", "Esporte",
+                    "Corrida", "Plataforma", "Casual", "Indie", "MMO", "MOBA", "Battle Royale",
+                    "Tower Defense", "Luta", "Esportes", "Corrida", "Terror", "Mundo Aberto",
+                    "Sobrevivência", "Roguelike", "FPS", "Multiplayer", "Atirador"
+                );
 
-                </select><p></p>
-            </div>
-            <div class="form-group">
-                <label style="padding-bottom:5px;" for="descricao">Descrição do jogo:</label>
-                <textarea class="form-control" id="descricao" rows="4" placeholder='Descricao do jogo' name="desc_jogo" required></textarea>
-            </div>
-            <div class="mb-3"> 
-                <label style="padding-bottom:5px;" for="imagem" class="form-label"> Imagem do jogo:</label> 
-                <input type="file" class="form-control" id="imagem" name="imagem" required> 
-            </div> 
-            <button style="padding-top:5px;" type="submit" class="btn btn-primary">Enviar informações</button>
+                foreach ($genres as $genre) {
+                    echo '
+            <div class="col-lg-8 col-md-9">
+            <a href="lista_jogos.php?genero=' . urlencode($genre) . '">
+								<button id="button" type="button" style="color:white; white-space: nowrap; background-color:black; font-weight:bold; border:2px solid #707070; width:145px; height:60px; margin-right:9px; padding-right:11px;" class="btn mb-2 mb-m-0 btn-primary btn-block genre-button" onclick="window.location.href=\'lista_jogos.php?genero=' . urlencode($genre) . '\'"><span style=color:white;>' . $genre . '</span>
+									<div class="icon d-flex align-items-center justify-content-center">
+										<i class="ion-ios-heart"></i>
+                                                                            </a>    
+								
+								
+           
+							
+							</div>'
+                                                        ;                                       
+                }
+                ?>
+<script>
+        var buttons = document.querySelectorAll(".genre-button");
 
-        </form>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-    </body>
+        buttons.forEach(function(button) {
+            button.addEventListener("mouseover", function() {
+                this.style.borderColor = "white";
+            });
 
+            button.addEventListener("mouseout", function() {
+                this.style.borderColor = "#707070";
+            });
+        });
+    </script>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .lista-reviews {
+            margin-top: 20px; /* Ajuste a margem superior conforme necessário */
+        }
+
+        
+        .btn-dark:hover {
+            background-color: #ffffff;
+            color: #000000;
+            border-color: #000000;
+        }
+    </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+</body>
 </html>

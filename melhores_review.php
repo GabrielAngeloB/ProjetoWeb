@@ -16,7 +16,7 @@ if ($_SESSION['login'] == 'gabridestiny@hotmail.com') {
 $logado = $_SESSION['login'];
 require('conecta.php');
 
-$limit = 10;
+$limit = 15;
 
 $sql = "SELECT * FROM games ORDER By avaliacao_media DESC";
 $resultado = $conecta->query($sql);
@@ -88,8 +88,9 @@ for ($h = 0; $h < sizeOf($id_jogo); $h++) {
 
 for ($i = 0; $i < $cont; $i++) {
     ($i % 2 == 0) ? ($fade = "fadeInFromLeft") : ($fade = "fadeInFromRight");
+    ($i % 2 == 0) ? ($resp = "responsivo") : ($resp = "responsivo2");
     if ($i == 0) {
-        $melhor1[$i] = "<div class='card mb-3 mx-auto responsivo $fade' style='margin-top:50px;'>
+        $melhor1[$i] = "<div class='card mb-3 mx-auto $resp $fade' style='margin-top:50px;'>
             <div class='row g-0'>
                 <div class='col-md-4'>
                     <a href='jogo_mostrar.php?id_jogo1=$id_jogo[$i]'>
@@ -112,7 +113,7 @@ for ($i = 0; $i < $cont; $i++) {
             </div>
         </div>";
     } else {
-        $melhor1[$i] = "<div class='card mb-3 mx-auto responsivo $fade' style='margin-top:50px;'>
+        $melhor1[$i] = "<div class='card mb-3 mx-auto $resp $fade' style='margin-top:50px;'>
             <div class='row g-0'>
                 <div class='col-md-4'>
                     <a href='jogo_mostrar.php?id_jogo1=$id_jogo[$i]'>
@@ -183,27 +184,32 @@ if ($resultado->num_rows > 0) {
                             <a class="nav-link active" style="color:white; font-size:26px; padding-right:10px; font-weight:bold;" href="reviews_usuario.php">Reviews</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link active" style="color:white; font-size:26px; padding-right:10px; font-weight:bold;" href="lista_generos.php">Generos</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link active" style="color:white; font-size:26px; font-weight:bold;" href="lista_jogos.php">Lista</a>
                         </li>
                     </ul>
                 </div>
 
-                <ul class="navbar-nav ms-auto">  <li class="nav-item">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img class="thumbnail" src="<?php echo $img_perfil; ?>" style="width:50px; height:50px; text-align:right; border-radius:50%; margin-right:7px; border: 2px solid black;">
                         </a>
-
                         <div class="dropdown-menu dropdown-menu-end position-absolute" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="pagina_usuario.php?id_usuario=<?php echo $id_usuario; ?>">Ver perfil</a>
-                            <a class="dropdown-item" href="editar_usuario.php"> Editar perfil</a>
-<?php echo $adicionar ?>
+                            <a class="dropdown-item" href="editar_usuario.php">Editar perfil</a>
+                            <?php echo $adicionar ?>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
                     </li>
                 </ul>
+
+
             </div>
         </nav>
-        <h1 class="mx-auto letra" style="color:white; margin-top:100px; text-align:center; "><span style="background-color:#343434; padding-left:30px; padding-right:30px; border-radius:10px;  ">⧙ Melhores avaliados ⧘</span></h1> 
+        <h1 class="mx-auto letra" style="color:white; margin-top:100px; text-align:center; "><span style="background-color:#343434; padding-left:30px; padding-right:30px; border-radius:10px; text-shadow: 3px 3px black;  ">⧙ Melhores avaliados ⧘</span></h1> 
 <?php
 for ($i = ($pagina - 1) * $limit; $i < min($pagina * $limit, $total_jogos); $i++) {
     echo $melhor1[$i];
@@ -244,8 +250,9 @@ if (isset($total_paginas) && $total_paginas > 1) {
 
 
         <br>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous"></script>
+         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
         <script src="javascriptsite.js"></script> 
     </body>

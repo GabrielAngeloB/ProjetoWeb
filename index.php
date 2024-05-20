@@ -32,6 +32,20 @@ if ($resultado->num_rows > 0) {
     <title>Inicio</title>
     <link rel="icon" href="https://static.thenounproject.com/png/122214-200.png">
     <head>
+        <style>
+            
+            carousel:hover {
+    box-shadow: 0 0px 16px 0 grey;
+    font-size: 17px; 
+    border-color: grey; /* Cor inicial da borda */
+    transition: border-color 0.3s ease;
+}
+
+button:hover {
+    border-color: white; /* Cor da borda ao passar o mouse */
+}
+</style>
+        
     </head>
     <body style="background-color:#242629">
         <nav class="navbar navbar-expand-sm" style="background-color:darkslategrey; z-index:2;">
@@ -57,6 +71,9 @@ if ($resultado->num_rows > 0) {
                             <a class="nav-link active" style="color:white; font-size:26px; padding-right:10px; font-weight:bold;" href="reviews_usuario.php">Reviews</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link active" style="color:white; font-size:26px; padding-right:10px; font-weight:bold;" href="lista_generos.php">Generos</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link active" style="color:white; font-size:26px; font-weight:bold;" href="lista_jogos.php">Lista</a>
                         </li>
                     </ul>
@@ -70,7 +87,7 @@ if ($resultado->num_rows > 0) {
                         <div class="dropdown-menu dropdown-menu-end position-absolute" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="pagina_usuario.php?id_usuario=<?php echo $id_usuario; ?>">Ver perfil</a>
                             <a class="dropdown-item" href="editar_usuario.php">Editar perfil</a>
-<?php echo $adicionar ?>
+                            <?php echo $adicionar ?>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
                     </li>
@@ -79,13 +96,14 @@ if ($resultado->num_rows > 0) {
 
             </div>
         </nav>
+        
         <br>
         <div class="fadeInFromBottom">
             <div class="main" style="z-index:-1; margin-top:60px;">
                 <div id="meu-carrossel" class="carousel slide carousel-fade" data-bs-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <img src="https://blog.ebaconline.com.br/blog/wp-content/uploads/2022/12/kcnb4lkkucfipej3ngqxm-scaled-e1674744655926.jpeg" height="60%" width="90%" class="d-block mx-auto"  style="border-style: solid; border-width: 4px; border-image:linear-gradient(#05D6D9, #F907FC) 50;" alt="Imagem 1">
+                            <img src="https://blog.ebaconline.com.br/blog/wp-content/uploads/2022/12/kcnb4lkkucfipej3ngqxm-scaled-e1674744655926.jpeg" height="60%" width="90%" class="d-block mx-auto"  style="border-style: solid; border-width: 4px; border-image:linear-gradient(grey, black) 50;" alt="Imagem 1">
                             <div class="carousel-caption">
                                 <h5 class="carousel-titulo" style="color:white; text-shadow: 0 0 3px #000000, 0 0 5px #000000; font-size:40px;">Dragons Dogma 2™</h5><br>
                                 <a href="cadastro.php">
@@ -94,7 +112,7 @@ if ($resultado->num_rows > 0) {
                             </div>
                         </div>
                         <div class="carousel-item">
-                            <img src="https://www.einerd.com.br/wp-content/uploads/2017/03/photodune-9235903-game-m-16x91.jpg" height="60%" width="90%" class="d-block mx-auto" style="border-style: solid; border-width: 4px; border-image:linear-gradient(#05D6D9, #F907FC) 50;" alt="Imagem 2">
+                            <img src="https://www.einerd.com.br/wp-content/uploads/2017/03/photodune-9235903-game-m-16x91.jpg" height="60%" width="90%" class="d-block mx-auto" style="border-style: solid; border-width: 4px; border-image:linear-gradient(grey, black) 50;" alt="Imagem 2">
                             <div class="carousel-caption">
                                 <h5 class="carousel-titulo" style="color:white; text-shadow: 0 0 3px #000000, 0 0 5px #000000; font-size:40px;">Dragon Age Inquisition™</h5><br>
                                 <a href="cadastro.php">
@@ -103,7 +121,7 @@ if ($resultado->num_rows > 0) {
                             </div>
                         </div>
                         <div class="carousel-item">
-                            <img src="https://i0.wp.com/jornal.usp.br/wp-content/uploads/2022/06/202205601_jogos_streaming.jpg?resize=1200%2C630&ssl=1" height="60%" width="90%" class="d-block mx-auto" style="border-style: solid; border-width: 4px; border-image:linear-gradient(#05D6D9, #F907FC) 50;" alt="Imagem 3">
+                            <img src="https://i0.wp.com/jornal.usp.br/wp-content/uploads/2022/06/202205601_jogos_streaming.jpg?resize=1200%2C630&ssl=1" height="60%" width="90%" class="d-block mx-auto" style="border-style: solid; border-width: 4px; border-image:linear-gradient(grey, black) 50;" alt="Imagem 3">
                             <div class="carousel-caption">
                                 <h5 class="carousel-titulo" style="color:white; text-shadow: 0 0 3px #000000, 0 0 5px #000000; font-size:40px;">Far cry 5™</h5><br>
                                 <a href="cadastro.php">
@@ -125,41 +143,44 @@ if ($resultado->num_rows > 0) {
                     <div class="card text-white bg-dark" id="card-foda" style="">
                         <img src="https://t.ctcdn.com.br/CeRsoL0J56PIBIDxDEIiDoPutoA=/640x360/smart/i845435.jpeg" class="card-img-top" height="210px" alt="...">
                         <div class="card-body cartao bg-dark" style="padding:10px;">
-                            <p style="text-align:justify; max-height:120px; overflow:auto;" class="card-text text-white">Desbravando selvas exuberantes, enfrentando tribos misteriosas e desvendando segredos ancestrais. Embarque em uma aventura inesquecível e viva a emoção da descoberta!</p>
+                            <p style="text-align:justify; max-height:120px; overflow:auto; display:flex; padding-right:5px;" class="card-text text-white">Desbravando selvas exuberantes, enfrentando tribos misteriosas e desvendando segredos ancestrais. Embarque em uma aventura inesquecível e viva a emoção da descoberta!</p>
                         </div>
                     </div>
                     <div class="card text-white bg-dark" id="card-foda" ">
                         <img src="https://www.mobiletime.com.br/wp-content/uploads/2023/10/jogodotigre.jpeg" height="210px" class="card-img-top" alt="...">
                         <div class="card-body cartao bg-dark" style="padding:10px;">
-                            <p style="text-align:justify; max-height:120px; overflow:auto;" class="card-text text-white">Exercite sua mente com puzzles intrigantes, desbloqueie novos níveis e celebre cada conquista. Descubra um mundo de desafios e explore o poder da lógica!</p>
+                            <p style="text-align:justify; max-height:120px; overflow:auto; display:flex; padding-right:5px;" class="card-text text-white">Exercite sua mente com puzzles intrigantes, desbloqueie novos níveis e celebre cada conquista. Descubra um mundo de desafios e explore o poder da lógica!</p>
                         </div>
                     </div>
                     <a href="https://google.com">
                         <div class="card text-white bg-dark" id="card-foda">
                             <img src="https://s2-techtudo.glbimg.com/PjUfWhWzVF0YaCtMFktp9J-Qmyg=/0x0:644x456/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2021/O/k/5MO0i7TsyygbBxZCAVwg/2013-04-16-ddtank.jpg" height="210px" class="card-img-top" alt="...">
                             <div class="card-body cartao bg-dark" style="padding:10px;">
-                                <p style="text-align:justify; max-height:120px; overflow:auto;" class="card-text text-white ">Adrenalina a mil em disputas acirradas com jogadores de todo o mundo. Suba no ranking, domine as estratégias e seja o campeão supremo!</p>
+                                <p style="text-align:justify; max-height:120px; overflow:auto; display:flex; padding-right:5px;" class="card-text text-white ">Adrenalina a mil em disputas acirradas com jogadores de todo o mundo. Suba no ranking, domine as estratégias e seja o campeão supremo!</p>
                             </div>
                     </a>
                 </div>
                 <div class="card text-white bg-dark" id="card-foda">
                     <img src="https://img.odcdn.com.br/wp-content/uploads/2023/08/baldurs-gate-3.jpg" class="card-img-top" height="210px" alt="...">
                     <div class="card-body cartao    bg-dark" style="padding:10px;">
-                        <p style="text-align:justify; max-height:120px; overflow:auto;" class="card-text b text-white customScroll">Mergulhe em universos fantásticos, explore diferentes estilos e crie suas próprias histórias. Experimente a alegria de jogar e deixe sua imaginação correr solta!</p>
+                        <p style="text-align:justify; max-height:120px; overflow:auto; display:flex; padding-right:5px;" class="card-text b text-white customScroll">Mergulhe em universos fantásticos, explore diferentes estilos e crie suas próprias histórias. Experimente a alegria de jogar e deixe sua imaginação correr solta!</p>
                     </div>
                 </div>
             </div>
         </div>
         <p></p>
     </div>
+        
+        
+        
 
 
 
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 </body>
 </html>

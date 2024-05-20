@@ -15,23 +15,62 @@ if ($_SESSION['login'] == 'gabridestiny@hotmail.com') {
 }
 
  require ('conecta.php');
+        if(!isset($_GET['id_usuario'])) {
         if (isset($_SESSION['id_usuario'])) {
             $id_usuario = $_SESSION['id_usuario'];
         }
+        }else {
+            $id_usuario = $_GET['id_usuario'];
+        }
+        if (isset($_SESSION['id_usuario'])) {
+            $id_usuario1 = $_SESSION['id_usuario'];
+        }
 
-        $sql = "SELECT img_perfil from usuario where id_usuario = $id_usuario";
+        $sql = "SELECT img_perfil from usuario where id_usuario = $id_usuario1";
         $resultado = $conecta->query($sql);
         if ($resultado->num_rows > 0) {
             while ($linha = $resultado->fetch_assoc()) {
                 $img_perfil = $linha['img_perfil'];
             }
         }
+        $sql = "SELECT nome_usuario from usuario where id_usuario = $id_usuario";
+        $resultado = $conecta->query($sql);
+        if ($resultado->num_rows > 0) {
+            while ($linha = $resultado->fetch_assoc()) {
+                $nome_usuario = $linha['nome_usuario'];   
+                
+            }
+        }else {
+            echo "<script>
+                window.location.href = 'pagina_nao_encontrada.php';
+                </script>";
+            
+        }
+        $sql = "SELECT * from usuario";
+        $resultado = $conecta->query($sql);
+        if ($resultado->num_rows > 0) {
+            while ($linha = $resultado->fetch_assoc()) {
+                $maximo_id = (int) $linha['id_usuario'];
+            }
+        }
+        $sql = "SELECT MAX(id_usuario) as id_usuario from usuario";
+        $resultado = $conecta->query($sql);
+        if ($resultado->num_rows > 0) {
+            while ($linha = $resultado->fetch_assoc()) {
+                $id_max = (int) $linha['id_usuario'];
+            }
+        }
+        if($id_usuario != $id_usuario1) {
+            $titulo = "Reviews de $nome_usuario";
+        }else {
+            $titulo = "Minhas Reviews";
+        }
 ?>
 <html>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css2/estilos.css">
-    <title>Minhas Reviews</title>
+    <title><?php echo $titulo ?></title>
     <link rel="icon" href="https://static.thenounproject.com/png/122214-200.png">
     <head>
     </head>
@@ -65,27 +104,32 @@ if ($_SESSION['login'] == 'gabridestiny@hotmail.com') {
                             <a class="nav-link active" style="color:white; font-size:26px; padding-right:10px; font-weight:bold;" href="reviews_usuario.php">Reviews</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link active" style="color:white; font-size:26px; padding-right:10px; font-weight:bold;" href="lista_generos.php">Generos</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link active" style="color:white; font-size:26px; font-weight:bold;" href="lista_jogos.php">Lista</a>
                         </li>
                     </ul>
                 </div>
 
-                <ul class="navbar-nav ms-auto">  <li class="nav-item">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img class="thumbnail" src="<?php echo $img_perfil; ?>" style="width:50px; height:50px; text-align:right; border-radius:50%; margin-right:7px; border: 2px solid black;">
                         </a>
-
                         <div class="dropdown-menu dropdown-menu-end position-absolute" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="pagina_usuario.php?id_usuario=<?php echo $id_usuario; ?>">Ver perfil</a>
-                            <a class="dropdown-item" href="editar_usuario.php"> Editar perfil</a>
+                            <a class="dropdown-item" href="editar_usuario.php">Editar perfil</a>
                             <?php echo $adicionar ?>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
                     </li>
                 </ul>
+
+
             </div>
         </nav>
-        <h1 class="mx-auto letra2" style="color:white; margin-top:100px; text-align:center; "><span style="background-color:#343434; padding-left:30px; padding-right:30px; border-radius:10px;  ">⧙ Minhas Reviews ⧘</span></h1>
+        <h1 class="mx-auto letra2" style="color:white; margin-top:100px; text-align:center; "><span style="background-color:#343434; padding-left:30px; padding-right:30px; border-radius:10px; text-shadow: 3px 3px black; ">⧙ <?php echo $titulo ?> ⧘</span></h1>
         <?php
         if (!isset($_GET['page'])) {
 
@@ -177,6 +221,11 @@ if ($_SESSION['login'] == 'gabridestiny@hotmail.com') {
                         $mensagem[$h] = "$dias[$h] dia(s) atrás!";
                     }
                 }
+            if ($id_usuario != $id_usuario1) {
+                $botao = "";
+            }else {
+                $botao = "<button style='margin-top:3px;'Onclick='return ConfirmDelete();' type='submit' name='delete' class='btn btn-danger btn-sm' style='font-size:10px; max-height:90px;'  '><span style='text-shadow: 2px 2px black; font-weight:bold; font-size:17px;'>Excluir</a></span>";
+            }
                 
 
 
@@ -190,11 +239,12 @@ echo "<div class='card mx-auto text-center balala2 fadeInFromBottom' style='marg
     <p class='card-text text-center' style='text-align:justify; margin-bottom:18px; font-size:18px; opacity:1; font-style:italic; '>''" . '' . $texto_review[$cont] . "''</p>
       <p class='card-text text-center' style='text-align:justify; margin-bottom:10px;'><span style='font-weight:bold;  font-size:17px;' </span>Postado há: " . '' . $mensagem[$cont] . "</p>
     <div style='display:flex; justify-content: center; position:relative; top:5px; '>  <a href=jogo_mostrar.php?id_jogo1=" . $id_jogo[$cont] . " class='btn btn-primary' style='margin-right:10px; margin-bottom:16px;'><span style='text-shadow: 2px 2px black; font-weight:bold; font-size:17px;'>Ir para o jogo</a></span>
+        
       <form action='deletar_comentario.php' onsubmit='return confirm('Are you sure?');' method='POST' style=''>
               <input type='hidden' name='id_review' value='$id_review[$cont]'>
               <input type='hidden' name='jogo_excluir' value='$id_jogo[$cont]'>
                <input type='hidden' name='validar' value='validar'>
-              <button style='margin-top:3px;'Onclick='return ConfirmDelete();' type='submit' name='delete' class='btn btn-danger btn-sm' style='font-size:10px; max-height:90px;'  '><span style='text-shadow: 2px 2px black; font-weight:bold; font-size:17px;'>Excluir</a></span>
+               $botao
               
             </form>
   </div>
@@ -228,7 +278,21 @@ echo "<div class='card mx-auto text-center balala2 fadeInFromBottom' style='marg
                         
                     }
                 } else {
+                    if($id_usuario != $id_usuario1) {
                     echo "<div class='card mx-auto balala' style='max-height:80%; margin-top:60px; border:4px solid black; border-radius:10; object-fit:fill;'>
+      <div class='card-body cardBackground d-flex flex-column justify-content-center align-items-center'>
+        <h2 class='card-title text-center' style='color:white; text-shadow: 1px 1px black; font-weight:bold;'>O usuário não possui reviews!</h2>
+        <p class='copy card-text text-center' style='color:white; text-shadow: 1px 1px black; font-size:18px; text-decoration:underline;'>Clique abaixo para ver os jogos cadastrados!</p>
+        <div class='d-flex justify-content-between'>
+        
+          <a href='jogos_recentes.php' class='btn btn-dark' style='margin: 0 auto; color:white; margin-right:15px; text-shadow: 1px 1px black; max-width:60%; max-height:100%; font-weight:bold;'>Jogos Recentes</a>
+            <a href='melhores_review.php' class='btn btn-dark' style='margin: 0 auto; color:white; margin-left:15px; text-shadow: 1px 1px black; max-width:60%; max-height:100%; font-weight:bold;'>Melhores Avaliados</a>
+
+</div>
+      </div>
+    </div>";
+                    }else {
+                        echo "<div class='card mx-auto balala' style='max-height:80%; margin-top:60px; border:4px solid black; border-radius:10; object-fit:fill;'>
       <div class='card-body cardBackground d-flex flex-column justify-content-center align-items-center'>
         <h2 class='card-title text-center' style='color:white; text-shadow: 1px 1px black; font-weight:bold;'>Você não possui reviews!</h2>
         <p class='copy card-text text-center' style='color:white; text-shadow: 1px 1px black; font-size:18px; text-decoration:underline;'>Clique abaixo para ver os jogos cadastrados!</p>
@@ -240,6 +304,8 @@ echo "<div class='card mx-auto text-center balala2 fadeInFromBottom' style='marg
 </div>
       </div>
     </div>";
+                        
+                    }
             
                     
                 
@@ -248,8 +314,9 @@ echo "<div class='card mx-auto text-center balala2 fadeInFromBottom' style='marg
         ?>
 
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous"></script>
+         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
     </body>
 </html>

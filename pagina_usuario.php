@@ -121,12 +121,12 @@ $sql = "SELECT * FROM usuario WHERE id_usuario = $id_usuario2";
                 </button>
 
                 <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
+                    <ul class="navbar-nav me-auto">  <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="index.php" style="color:white; font-size:26px; padding-right:10px; font-weight:bold;">Inicio</a>
                         </li>
                         <li class="nav-item dropdown" style="font-size:26px; font-weight:bold;">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><span style="color:white;">Jogos</span>
+
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="padding-right:10px;">
                                 <li><a class="dropdown-item" href="jogos_recentes.php" ">Jogos recentes</a></li>
@@ -137,24 +137,29 @@ $sql = "SELECT * FROM usuario WHERE id_usuario = $id_usuario2";
                             <a class="nav-link active" style="color:white; font-size:26px; padding-right:10px; font-weight:bold;" href="reviews_usuario.php">Reviews</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link active" style="color:white; font-size:26px; padding-right:10px; font-weight:bold;" href="lista_generos.php">Generos</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link active" style="color:white; font-size:26px; font-weight:bold;" href="lista_jogos.php">Lista</a>
                         </li>
                     </ul>
                 </div>
 
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
+                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img class="thumbnail" src="<?php echo $img_perfil2; ?>" style="width:50px; height:50px; text-align:right; border-radius:50%; margin-right:7px; border: 2px solid black;">
+                            <img class="thumbnail" src="<?php echo $img_perfil; ?>" style="width:50px; height:50px; text-align:right; border-radius:50%; margin-right:7px; border: 2px solid black;">
                         </a>
                         <div class="dropdown-menu dropdown-menu-end position-absolute" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="pagina_usuario.php?id_usuario=<?php echo $id_usuario2; ?>">Ver perfil</a>
-                            <a class="dropdown-item" href="editar_usuario.php"> Editar perfil</a>
+                            <a class="dropdown-item" href="pagina_usuario.php?id_usuario=<?php echo $id_usuario; ?>">Ver perfil</a>
+                            <a class="dropdown-item" href="editar_usuario.php">Editar perfil</a>
                             <?php echo $adicionar ?>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
                     </li>
                 </ul>
+
+
             </div>
         </nav>
 
@@ -183,7 +188,7 @@ $sql = "SELECT * FROM usuario WHERE id_usuario = $id_usuario2";
                                         <hr style="position:relative; bottom:5px;" class="rounded">
                                         <div class="form-group" style="position:relative; bottom:8px;">
                                             <label for="quant_reviews" style="font-weight:bold; font-family: 'Arial Black', Gadget, sans-serif;">Reviews:</label>
-                                            <p style="font-style:italic; font-size:17px;"><span style="text-decoration:underline; font-weight:bold;"><?php echo $quant_reviews; ?></span> review(s) feitas no momento!</p>
+                                            <p style="font-style:italic; font-size:17px;"><span style="text-decoration:underline; font-weight:bold;"><a href="reviews_usuario.php?id_usuario=<?php echo $id_usuario ?>"><?php echo $quant_reviews; ?></span></a> review(s) feitas no momento!</p>
                                             <hr style="position:relative; bottom:5px;" class="rounded">
                                             <div class="form-group" style="position:relative; bottom:8px;">
                                                 <label for="quant_reviews" style="font-weight:bold; font-family: 'Arial Black', Gadget, sans-serif;">Criação da conta:</label>
