@@ -68,14 +68,23 @@ if ($resultado->num_rows > 0) {
 
     </head>
     <body style="background-color:#242629">
-
-
-        <script>
-            function ConfirmDelete()
-            {
-                return confirm("Você tem certeza que deseja mudar seu Email/Nome ou sua foto de perfil?");
-            }
-        </script> 
+        <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Acesso Negado</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Esta página só pode ser acessada por usuário logado.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <a href="login.php" class="btn btn-primary">Login</a>
+            </div>
+        </div>
+    </div>
+</div>
 
         <nav class="navbar navbar-expand-sm" style="background-color:darkslategrey; z-index:2;">
             <div class="container-fluid">
@@ -234,57 +243,86 @@ if ($resultado->num_rows > 0) {
 
         </script>
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                var form = document.getElementById('editProfileForm');
-                var usernameInput = document.getElementById("username");
-                var emailInput = document.getElementById("email");
-                var submitButton = document.getElementById("submitButton");
+    document.addEventListener('DOMContentLoaded', function () {
+        var form = document.getElementById('editProfileForm');
+        var usernameInput = document.getElementById("username");
+        var emailInput = document.getElementById("email");
+        var submitButton = document.getElementById("submitButton");
+        var confirmButton = document.getElementById('confirmButton');
 
-                // Função para verificar se os campos estão válidos
-                function validateFields() {
-                    var username = usernameInput.value.trim();
-                    var email = emailInput.value.trim();
-                    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    var ok = true; // Variável para controlar se o formulário pode ser enviado
+        // Função para verificar se os campos estão válidos
+        function validateFields() {
+            var username = usernameInput.value.trim();
+            var email = emailInput.value.trim();
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            var ok = true; // Variável para controlar se o formulário pode ser enviado
 
-                    // Limpa mensagens de erro anteriores
-                    document.getElementById('name-error').textContent = '';
-                    document.getElementById('email-error').textContent = '';
+            // Limpa mensagens de erro anteriores
+            document.getElementById('name-error').textContent = '';
+            document.getElementById('email-error').textContent = '';
 
+            // Verifica o comprimento do nome
+            if (username.length < 4 || username.length > 20) {
+                $('#name-error').html('<div class="alert alert-danger" style="border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px; margin-bottom:5px;" role="alert">O nome de usuário deverá ter de 4 a 20 caracteres!</div>');
+                ok = false;
+            }
 
-                    // Verifica o comprimento do nome
-                    if (username.length < 4 || username.length > 20) {
-                        $('#name-error').html('<div class="alert alert-danger" style="border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px; margin-bottom:5px;" role="alert">O nome de usuário deverá ter de 4 a 20 caracteres!</div>');
-                        ok = false;
-                    }
+            // Verifica o email
+            if (!emailRegex.test(email) || email.length > 100) {
+                $('#email-error').html('<div class="alert alert-danger" style="border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px;" role="alert">Email inválido!</div>');
+                ok = false;
+            }
 
-                    // Verifica o email
-                    if (!emailRegex.test(email) || email.length > 100) {
-                        $('#email-error').html('<div class="alert alert-danger" style="border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px;" role="alert">Email inválido!</div>');
-                        ok = false;
-                    }
+            // Retorna se o formulário está válido
+            return ok;
+        }
 
-                    // Retorna se o formulário está válido
-                    return ok;
-                }
+        // Adiciona um evento de escuta para monitorar as mudanças nos campos do formulário
+        form.addEventListener('input', function () {
+            var isValid = validateFields(); // Verifica se os campos são válidos
+            submitButton.disabled = !isValid; // Desativa o botão se o formulário não for válido
+        });
 
-                // Adiciona um evento de escuta para monitorar as mudanças nos campos do formulário
-                form.addEventListener('input', function () {
-                    var isValid = validateFields(); // Verifica se os campos são válidos
-                    submitButton.disabled = !isValid; // Desativa o botão se o formulário não for válido
-                });
+        // Exibe o modal quando o botão de submit é clicado
+        submitButton.addEventListener('click', function (event) {
+            event.preventDefault(); // Impede o envio do formulário
+            $('#confirmModal').modal('show'); // Exibe o modal
+        });
 
-                // Adiciona um evento de escuta para o envio do formulário
-                form.addEventListener('submit', function (event) {
-                    var isValid = validateFields(); // Verifica se os campos são válidos
+        // Submete o formulário quando o botão de confirmação no modal é clicado
+        confirmButton.addEventListener('click', function () {
+            form.submit();
+        });
 
-                    // Se o formulário não for válido, impede o envio
-                    if (!isValid) {
-                        event.preventDefault();
-                    }
-                });
-            });
-        </script>
+        // Adiciona um evento de escuta para o envio do formulário
+        form.addEventListener('submit', function (event) {
+            var isValid = validateFields(); // Verifica se os campos são válidos
+
+            // Se o formulário não for válido, impede o envio
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLabel">Confirmar Alterações</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Você tem certeza que deseja mudar seu Email/Nome ou sua foto de perfil?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"  style="font-weight:bold;">Cancelar</button>
+                <button type="button" id="confirmButton" class="btn btn-success" style="font-weight:bold;">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
     </body>
 </html>

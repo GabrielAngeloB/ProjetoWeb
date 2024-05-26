@@ -149,6 +149,10 @@ if ($resultado->num_rows > 0) {
 <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Roguelike')">Roguelike</a></li>
 <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('FPS')">FPS</a></li>
 <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Atirador')">Atirador</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Atirador')">Atirador</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Tático')">Tático</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Aponte e Clique')">Point and Click</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Hack and Slash')">Hack and Slash</a></li>
                     </ul>
                 </div>
                 <input type="hidden" name="genero" id="genero">
@@ -218,7 +222,7 @@ if ($resultado->num_rows > 0) {
 
         $resultado = $conecta->query($sql);
         $cont = 0;
-        $por_pagina = 10;
+        $por_pagina = 15;
         $pagina = isset($_GET['pagina']) ? $_GET['pagina'] : 1;
         $inicio = ($pagina - 1) * $por_pagina;
         if ($resultado->num_rows > 0) {
@@ -348,23 +352,34 @@ if ($resultado->num_rows > 0) {
                 if ($fim == $total_paginas && $total_paginas > 9) {
                     $inicio = max(1, $fim - 9);
                 }
+$genero = "";
+if (isset($_GET["genero"])) {
+            // Obtém o valor do parâmetro GET
+            $genero = $conecta->real_escape_string($_GET["genero"]);
 
-
+            // Constrói a consulta SQL com base no parâmetro "genero"
+            $sql = "SELECT * FROM games WHERE (nome_jogo LIKE '%$pesquisa%' OR desc_jogo LIKE '%$pesquisa%' OR generos LIKE '%$pesquisa%') AND generos LIKE '%$genero%'";
+        } 
                 if ($inicio > 1) {
-                    echo "<li class='page-item style='height:40px;'><a class='custom-page-link1' style='color: white; bottom:1%;' href='lista_jogos.php?pesquisa=$pesquisa&pagina=" . ($inicio - 1) . "'>&laquo;</a></li>";
+                    echo "<li class='page-item style='height:40px;'><a class='custom-page-link1' style='color: white; bottom:1%;' href='lista_jogos.php?pesquisa=$pesquisa&genero=$genero&pagina=" . ($inicio - 1) . "'>&laquo;</a></li>";
                 }
 
 
                 for ($i = $inicio; $i <= $fim; $i++) {
                     $class = ($i == $pagina_atual) ? 'page-item active' : 'page-item';
                     $style = ($i == $pagina_atual) ? 'background-color: grey;' : '';
-                    echo "<li class='$class'><a style='font-size:30px; border: 2px solid black; color:black; border-radius:20px; margin-left:5px; padding-right:3px; padding-left:3px; $style' class='page-link' href='lista_jogos.php?pesquisa=$pesquisa&pagina=$i'>$i</a></li>";
+                    echo "<li class='$class'><a style='font-size:30px; border: 2px solid black; color:black; border-radius:20px; margin-left:5px; padding-right:3px; padding-left:3px; $style' class='page-link' href='lista_jogos.php?pesquisa=$pesquisa&genero=$genero&pagina=$i'>$i</a></li>";
                 }
 
 
                 if ($fim < $total_paginas) {
-                    echo "<li class='page-item style='height:40px;'><a class='custom-page-link2' style='color: white; bottom:1%;' href='lista_jogos.php?pesquisa=$pesquisa&pagina=" . ($fim + 1) . "'>&raquo;</a></li>";
+                    echo "<li class='page-item style='height:40px;'><a class='custom-page-link2' style='color: white; bottom:1%;' href='lista_jogos.php?pesquisa=$pesquisa&genero=$genero&pagina=" . ($fim + 1) . "'>&raquo;</a></li>";
                 }
+                else {
+            // Se o parâmetro "genero" não foi passado, executa a consulta normalmente
+            $sql = "SELECT * FROM games WHERE nome_jogo LIKE '%$pesquisa%' OR desc_jogo LIKE '%$pesquisa%' OR generos LIKE '%$pesquisa%'";
+            
+        }
 
                 echo "</ul>";
             }

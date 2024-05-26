@@ -24,11 +24,11 @@ if (isset($_POST['delete'])) {
 }
 
 if ($conf) {
-    if (isset($_SESSION['id_usuario'])) {
-        $id_usuario = $_SESSION['id_usuario'];
+    if (isset($_POST['id_usuario'])) {
+        $id_usuario = $_POST['id_usuario'];
     } else {
-        echo "Session variable not found.";
-        exit; 
+        $id_usuario = $_SESSION['id_usuario'];
+        
     }
     if (isset($_POST['validar'])) {
         $id_jogo=$_POST['jogo_excluir'];

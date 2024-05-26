@@ -1,4 +1,5 @@
 <?php
+set_time_limit(0);
 require 'vendor/autoload.php'; // Carrega o autoloader do Composer
 
 use Stichoza\GoogleTranslate\GoogleTranslate;
@@ -32,9 +33,15 @@ function validateImageUrl($url) {
     return $headers && strpos($headers[0], '200');
 }
 
+$max_attempts = 5;
+$attempt = 0;
+$delay = 300000; // 250ms
+$limit = 60; // Quantidade de jogos por requisição
+$offset = 0;
+
 while (true) {
     $json_url = 'https://api.igdb.com/v4/games';
-    $query = 'fields name, first_release_date, summary, genres.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher, cover.url, total_rating_count; where platforms = (6) & cover != null & summary != null & total_rating_count > 1; limit 50; sort total_rating_count desc;';
+    $query = "fields name, first_release_date, summary, genres.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher, cover.url, total_rating_count; where platforms = (6) & cover != null & summary != null; limit $limit; offset $offset; sort total_rating_count desc;";
 
     $ch = curl_init($json_url);
     $options = array(
@@ -56,8 +63,15 @@ while (true) {
         error_log($error_message);
         $data = [];
     } elseif ($http_code === 429) {
-        // Se atingiu o limite, espera um tempo antes de continuar
-        usleep(250000); // Espera 250 milissegundos
+        // Se atingiu o limite, aumenta o tempo de espera e tenta novamente
+        $attempt++;
+        if ($attempt >= $max_attempts) {
+            error_log('Max attempts reached. Exiting...');
+            break;
+        }
+        $delay *= 2;
+        error_log('Rate limit hit. Waiting for ' . $delay / 1000000 . ' seconds...');
+        usleep($delay);
         continue;
     } elseif ($http_code !== 200) {
         $error_message = "Request failed with HTTP code $http_code. Response: $json";
@@ -73,6 +87,9 @@ while (true) {
     }
 
     curl_close($ch);
+
+    // Adicione um log para verificar o conteúdo dos dados recebidos da API
+    error_log("Data received from API: " . print_r($data, true));
 
     if (!empty($data)) {
         foreach ($data as $game) {
@@ -115,9 +132,9 @@ while (true) {
                 $tempo = time();
                 $horarioatual = date("Y-m-d H:i:s", $tempo);
 
-                // Verifica se o jogo já existe no banco de dados com base em nome, data de lançamento e desenvolvedor
-                $stmt_check = $conn->prepare("SELECT COUNT(*) FROM games WHERE nome_jogo = ? AND data_lancamento = ? AND desenvolvedor = ?");
-                $stmt_check->bind_param("sss", $name, $release_date, $developer);
+                // Verifica se o jogo já existe no banco de dados com base em nome e data de lançamento
+                $stmt_check = $conn->prepare("SELECT COUNT(*) FROM games WHERE nome_jogo = ? AND data_lancamento = ?");
+                $stmt_check->bind_param("ss", $name, $release_date);
                 $stmt_check->execute();
                 $stmt_check->bind_result($count);
                 $stmt_check->fetch();
@@ -125,6 +142,7 @@ while (true) {
 
                 if ($count > 0) {
                     // Jogo já existe, pula para o próximo
+                    error_log("Jogo já existe: $name");
                     continue;
                 }
 
@@ -132,6 +150,7 @@ while (true) {
                 $stmt = $conn->prepare("INSERT INTO games (nome_jogo, data_lancamento, desc_jogo, generos, desenvolvedor, publisher, img_jogo, horario_postado) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
                 if (!$stmt) {
                     error_log("Prepare failed: " . $conn->error);
+                    continue;
                 }
                 $stmt->bind_param("ssssssss", $name, $release_date, $description, $genres, $developer, $publisher, $cover_url, $horarioatual);
                 if (!$stmt->execute()) {
@@ -140,14 +159,23 @@ while (true) {
                     error_log("Inserted: $name");
                 }
                 $stmt->close();
+
+                // Reseta as tentativas e delay após uma inserção bem-sucedida
+                $attempt = 0;
+                $delay = 250000; // 250ms
+            } else {
+                error_log("Jogo sem capa ou resumo: " . print_r($game, true));
             }
         }
+        // Atualiza o offset para a próxima página
+        $offset += $limit;
     } else {
         error_log("No data received from API.");
+        break; // Sai do loop se não houver dados
     }
 
     // Espera 250 milissegundos entre as requisições (4 requisições por segundo)
-    usleep(250000);
+    usleep($delay);
 }
 
 $conn->close();

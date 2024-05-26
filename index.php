@@ -24,6 +24,35 @@ if ($resultado->num_rows > 0) {
         $img_perfil = $linha['img_perfil'];
     }
 }
+$sql = "SELECT * FROM games ORDER BY avaliacao_media DESC LIMIT 3";
+$resultado = $conecta->query($sql); // Ajuste a variável $conn de acordo com sua conexão
+
+if ($resultado->num_rows > 0) {
+    $cont = 0; // Inicializar contador fora do loop
+    while ($linha = $resultado->fetch_assoc()) {
+        $link[$cont] = $linha["img_jogo"];
+        $nomejogo[$cont] = $linha["nome_jogo"];
+        $id_jogo[$cont] = $linha["id_jogo"];
+        $cont++; // Incrementar o contador a cada iteração
+    }
+} else {
+    echo "Nenhum jogo encontrado.";
+}
+
+$sql = "SELECT * FROM games ORDER By id_jogo DESC LIMIT 4";
+$resultado = $conecta->query($sql); // Ajuste a variável $conn de acordo com sua conexão
+
+if ($resultado->num_rows > 0) {
+    $cont = 0; // Inicializar contador fora do loop
+    while ($linha = $resultado->fetch_assoc()) {
+        $link1[$cont] = $linha["img_jogo"];
+        $id_jogo1[$cont] = $linha["id_jogo"];
+        $descjogo[$cont] = $linha["desc_jogo"];
+        $cont++; // Incrementar o contador a cada iteração
+    }
+} else {
+    echo "Nenhum jogo encontrado.";
+}
 ?>
 <html>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,19 +62,19 @@ if ($resultado->num_rows > 0) {
     <link rel="icon" href="https://static.thenounproject.com/png/122214-200.png">
     <head>
         <style>
-            
-            carousel:hover {
-    box-shadow: 0 0px 16px 0 grey;
-    font-size: 17px; 
-    border-color: grey; /* Cor inicial da borda */
-    transition: border-color 0.3s ease;
-}
 
-button:hover {
-    border-color: white; /* Cor da borda ao passar o mouse */
-}
-</style>
-        
+            carousel:hover {
+                box-shadow: 0 0px 16px 0 grey;
+                font-size: 17px;
+                border-color: grey; /* Cor inicial da borda */
+                transition: border-color 0.3s ease;
+            }
+
+            button:hover {
+                border-color: white; /* Cor da borda ao passar o mouse */
+            }
+        </style>
+
     </head>
     <body style="background-color:#242629">
         <nav class="navbar navbar-expand-sm" style="background-color:darkslategrey; z-index:2;">
@@ -96,35 +125,35 @@ button:hover {
 
             </div>
         </nav>
-        
+
         <br>
         <div class="fadeInFromBottom">
             <div class="main" style="z-index:-1; margin-top:60px;">
                 <div id="meu-carrossel" class="carousel slide carousel-fade" data-bs-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <img src="https://blog.ebaconline.com.br/blog/wp-content/uploads/2022/12/kcnb4lkkucfipej3ngqxm-scaled-e1674744655926.jpeg" height="60%" width="90%" class="d-block mx-auto"  style="border-style: solid; border-width: 4px; border-image:linear-gradient(grey, black) 50;" alt="Imagem 1">
+                            <img src="<?php echo $link[0] ?>" height="60%" width="90%" class="d-block mx-auto"  style="border-style: solid; border-width: 4px; border-image:linear-gradient(grey, black) 50;" alt="Imagem 1">
                             <div class="carousel-caption">
-                                <h5 class="carousel-titulo" style="color:white; text-shadow: 0 0 3px #000000, 0 0 5px #000000; font-size:40px;">Dragons Dogma 2™</h5><br>
-                                <a href="cadastro.php">
+                                <h5 class="carousel-titulo" style="color:white; text-shadow: 0 0 3px #000000, 0 0 5px #000000; font-size:40px;"><?php echo $nomejogo[0] ?>™</h5><br>
+                                <a href="jogo_mostrar.php?id_jogo1=<?php echo $id_jogo[0] ?>">
                                     <button class="btn btn-primary" >Saiba mais</button>
                                 </a>
                             </div>
                         </div>
                         <div class="carousel-item">
-                            <img src="https://www.einerd.com.br/wp-content/uploads/2017/03/photodune-9235903-game-m-16x91.jpg" height="60%" width="90%" class="d-block mx-auto" style="border-style: solid; border-width: 4px; border-image:linear-gradient(grey, black) 50;" alt="Imagem 2">
+                            <img src="<?php echo $link[1] ?>" height="60%" width="90%" class="d-block mx-auto" style="border-style: solid; border-width: 4px; border-image:linear-gradient(grey, black) 50;" alt="Imagem 2">
                             <div class="carousel-caption">
-                                <h5 class="carousel-titulo" style="color:white; text-shadow: 0 0 3px #000000, 0 0 5px #000000; font-size:40px;">Dragon Age Inquisition™</h5><br>
-                                <a href="cadastro.php">
+                                <h5 class="carousel-titulo" style="color:white; text-shadow: 0 0 3px #000000, 0 0 5px #000000; font-size:40px;"><?php echo $nomejogo[1] ?>™</h5><br>
+                                <a href="jogo_mostrar.php?id_jogo1=<?php echo $id_jogo[1] ?>">
                                     <button class="btn btn-primary" >Saiba mais</button>
                                 </a>
                             </div>
                         </div>
                         <div class="carousel-item">
-                            <img src="https://i0.wp.com/jornal.usp.br/wp-content/uploads/2022/06/202205601_jogos_streaming.jpg?resize=1200%2C630&ssl=1" height="60%" width="90%" class="d-block mx-auto" style="border-style: solid; border-width: 4px; border-image:linear-gradient(grey, black) 50;" alt="Imagem 3">
+                            <img src="<?php echo $link[2] ?>" height="60%" width="90%" class="d-block mx-auto" style="border-style: solid; border-width: 4px; border-image:linear-gradient(grey, black) 50;" alt="Imagem 3">
                             <div class="carousel-caption">
-                                <h5 class="carousel-titulo" style="color:white; text-shadow: 0 0 3px #000000, 0 0 5px #000000; font-size:40px;">Far cry 5™</h5><br>
-                                <a href="cadastro.php">
+                                <h5 class="carousel-titulo" style="color:white; text-shadow: 0 0 3px #000000, 0 0 5px #000000; font-size:40px;"><?php echo $nomejogo[2] ?>™</h5><br>
+                                <a href="jogo_mostrar.php?id_jogo1=<?php echo $id_jogo[2] ?>">
                                     <button class="btn btn-primary" >Saiba mais</button>
                                 </a>
                             </div>
@@ -140,47 +169,57 @@ button:hover {
                     </button>
                 </div><br><br>
                 <div class="justify-content-center" style="text-align:center;">
-                    <div class="card text-white bg-dark" id="card-foda" style="">
-                        <img src="https://t.ctcdn.com.br/CeRsoL0J56PIBIDxDEIiDoPutoA=/640x360/smart/i845435.jpeg" class="card-img-top" height="210px" alt="...">
-                        <div class="card-body cartao bg-dark" style="padding:10px;">
-                            <p style="text-align:justify; max-height:120px; overflow:auto; display:flex; padding-right:5px;" class="card-text text-white">Desbravando selvas exuberantes, enfrentando tribos misteriosas e desvendando segredos ancestrais. Embarque em uma aventura inesquecível e viva a emoção da descoberta!</p>
-                        </div>
-                    </div>
-                    <div class="card text-white bg-dark" id="card-foda" ">
-                        <img src="https://www.mobiletime.com.br/wp-content/uploads/2023/10/jogodotigre.jpeg" height="210px" class="card-img-top" alt="...">
-                        <div class="card-body cartao bg-dark" style="padding:10px;">
-                            <p style="text-align:justify; max-height:120px; overflow:auto; display:flex; padding-right:5px;" class="card-text text-white">Exercite sua mente com puzzles intrigantes, desbloqueie novos níveis e celebre cada conquista. Descubra um mundo de desafios e explore o poder da lógica!</p>
-                        </div>
-                    </div>
-                    <a href="https://google.com">
+                    <a href="jogo_mostrar.php?id_jogo1=<?php echo $id_jogo1[0] ?>">
                         <div class="card text-white bg-dark" id="card-foda">
-                            <img src="https://s2-techtudo.glbimg.com/PjUfWhWzVF0YaCtMFktp9J-Qmyg=/0x0:644x456/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2021/O/k/5MO0i7TsyygbBxZCAVwg/2013-04-16-ddtank.jpg" height="210px" class="card-img-top" alt="...">
+                            <img src="<?php echo $link1[0] ?>" class="card-img-top" height="210px"alt="...">
+                            </a>
                             <div class="card-body cartao bg-dark" style="padding:10px;">
-                                <p style="text-align:justify; max-height:120px; overflow:auto; display:flex; padding-right:5px;" class="card-text text-white ">Adrenalina a mil em disputas acirradas com jogadores de todo o mundo. Suba no ranking, domine as estratégias e seja o campeão supremo!</p>
+                                <p style="text-align:justify; max-height:120px; overflow:auto; display:flex; padding-right:5px;" class="card-text text-white"><?php echo $descjogo[0] ?></p>
                             </div>
-                    </a>
-                </div>
-                <div class="card text-white bg-dark" id="card-foda">
-                    <img src="https://img.odcdn.com.br/wp-content/uploads/2023/08/baldurs-gate-3.jpg" class="card-img-top" height="210px" alt="...">
-                    <div class="card-body cartao    bg-dark" style="padding:10px;">
-                        <p style="text-align:justify; max-height:120px; overflow:auto; display:flex; padding-right:5px;" class="card-text b text-white customScroll">Mergulhe em universos fantásticos, explore diferentes estilos e crie suas próprias histórias. Experimente a alegria de jogar e deixe sua imaginação correr solta!</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <p></p>
-    </div>
-        
-        
-        
+                        </div>
+
+                        <a href="jogo_mostrar.php?id_jogo1=<?php echo $id_jogo1[1] ?>">
+                            <div class="card text-white bg-dark" id="card-foda">
+                                <img src="<?php echo $link1[1] ?>"  class="card-img-top" height="210px"alt="...">
+                                </a>
+                                <div class="card-body cartao bg-dark" style="padding:10px;">
+                                    <p style="text-align:justify; max-height:120px; overflow:auto; display:flex; padding-right:5px;" class="card-text text-white"><?php echo $descjogo[1] ?></p>
+                                </div>
+                            </div>
+
+                            <a href="jogo_mostrar.php?id_jogo1=<?php echo $id_jogo1[2] ?>">
+                                <div class="card text-white bg-dark" id="card-foda">
+                                    <img src="<?php echo $link1[2] ?>" class="card-img-top" height="210px" alt="...">
+                                    </a>
+                                    <div class="card-body cartao bg-dark" style="padding:10px;">
+                                        <p style="text-align:justify; max-height:120px; overflow:auto; display:flex; padding-right:5px;" class="card-text text-white "><?php echo $descjogo[2] ?></p>
+                                    </div>
+
+                                </div>
+                                <a href="jogo_mostrar.php?id_jogo1=<?php echo $id_jogo1[3] ?>">
+                                    <div class="card text-white bg-dark" id="card-foda">
+                                        <img src="<?php echo $link1[3] ?>" class="card-img-top" height="210px" alt="...">
+                                        </a>
+                                        <div class="card-body cartao    bg-dark" style="padding:10px;">
+                                            <p style="text-align:justify; max-height:120px; overflow:auto; display:flex; padding-right:5px;" class="card-text b text-white customScroll"><?php echo $descjogo[3] ?></p>
+                                        </div>
+
+                                    </div>
+                                    </div>
+                                    </div>
+                                    <p></p>
+                                    </div>
 
 
 
 
 
-     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-</body>
-</html>
+
+
+
+                                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous"></script>
+                                    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+                                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+                                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+                                    </body>
+                                    </html>

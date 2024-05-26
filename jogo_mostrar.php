@@ -165,8 +165,10 @@ word-break: break-word; padding-right:15px;'>" . $txtreview[$index] . "</small><
   <div class='action d-flex justify-content-between mt-2 align-items-center'>";
 
         if (($currentUserId === $id_usuario[$commentIDs[$index]]) || ($currentUserEmail === "gabridestiny@hotmail.com")) {
-            $comentario[$index] .= "<form action='deletar_comentario.php' onsubmit='return confirm('Are you sure?');' method='post' style='display: inline-block;'>
+            $comentario[$index] .= "<form action='deletar_comentario.php' class='delete-form' onsubmit='return confirm('Are you sure?');' method='post' style='display: inline-block;'>
               <input type='hidden' name='id_review' value='" . $id_review[$commentIDs[$index]] . "'>
+              <input type='hidden' name='id_usuario' value='" . $id_usuario[$commentIDs[$index]] . "'>
+                  <input type='hidden' name='delete' value=''>
               <button Onclick='return ConfirmDelete();' type='submit' name='delete' class='btn btn-danger btn-sm' style='font-size: 12px;'>Excluir</button>
             </form>
             <div class='icons align-items-center' style='position:relative; bottom:3px;'>
@@ -197,7 +199,7 @@ if ($resultado->num_rows > 0) {
             $desc = $linha["desc_jogo"];
             $nomejogo = $linha["nome_jogo"];
             $id_jogo = $linha["id_jogo"];
-        if($linha["data_lancamento" == null]) {
+        if($linha["data_lancamento"] == null) {
             $data = "N/A";
         }else {
             $data = $linha["data_lancamento"];
@@ -274,12 +276,41 @@ if ($resultado->num_rows > 0) {
     <head>
     </head>
     <body style="background-color:#242629">
-        <script>
-            function ConfirmDelete()
-            {
-                return confirm("Você tem certeza que quer excluir este comentário?");
+    <!-- Modal de Confirmação -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmDeleteLabel" style="font-weight:bold;">Confirmar Exclusão</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Você tem certeza que quer excluir este comentário?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="font-weight:bold; text-shadow: 1px 1px 1px black;">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteButton" style="font-weight:bold; text-shadow: 1px 1px 1px black;">Excluir</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', (event) => {
+    let deleteForms = document.querySelectorAll('.delete-form');
+    deleteForms.forEach((form) => {
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            let modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+            let confirmButton = document.getElementById('confirmDeleteButton');
+            confirmButton.onclick = function() {
+                form.submit();
             }
-        </script> 
+            modal.show();
+        });
+    });
+});
+</script>
 
         <div style="overflow-x: hidden;">
 
@@ -338,7 +369,18 @@ if ($resultado->num_rows > 0) {
 
                     <div class="card-body" style="background: #E8E8E8; border:5px solid; border-image-slice: 1; border-width:5px; border-left:0px; border-right:0px; border-bottom:0px; border-image-source: linear-gradient(to right, darkslategrey, black);">
                         <h5 class="card-title d-flex justify-content-center" style="font-weight: bold"><?php echo $nomejogo . ' | ' . $data ?></h5>
-                        <p class="card-text" style="text-align:justify;"><?php echo $desc ?><br><p><span style="font-weight:bold">Generos: </span><?php echo $generos . "." ?><br><span style="font-weight:bold">Desenvolvedora e Publisher: </span><?php echo $dev . ", " . $publisher . "."; ?><br><span style="font-weight:bold">Postado há: </span><?php echo $mensagem[0]; ?><p class="rating-box mx-auto" style='display:flex; justify-content:center; font-size:20px;'>Nota média: <?php echo"<span class=' mx-auto' style='text-decoration: underline; color:white; display:flex; justify-content:center; font-size:20px; background-color:#1B1212; padding-left:3px; padding-right:3px; border-radius:20%;'>$media" ?></p>
+<p class="card-text" style="text-align:justify;">
+    <?php echo $desc; ?><br>
+    <span style="font-weight:bold">Generos: </span><?php echo $generos . "."; ?><br>
+    <span style="font-weight:bold;">Desenvolvedora e Publisher: </span><?php echo $dev . ", " . $publisher . "."; ?><br>
+    <span style="font-weight:bold">Postado há: </span><?php echo $mensagem[0]; ?>
+</p>
+<p class="rating-box mx-auto" style="display:flex; justify-content:center; font-size:19.2px;">
+    Nota média: 
+    <span class="mx-auto" style="text-decoration: underline; color:white; background-color:#1B1212; padding-left:3px;  border-radius:20%; white-space: nowrap;">
+        <?php echo $media; ?>
+    </span>
+</p>
                     </div>
                 </div>
                 <div class="col-lg-7 col-md-8 col-sm-12 col-12 col review123" style="max-width: 75%; margin-top:35px;">
@@ -428,17 +470,53 @@ if ($totalComentarios > $comentariosPorPagina) {
         </div>
 
     </div><br>
+    
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmação de Exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Você tem certeza que quer excluir este comentário?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
 
 
 
+    
 
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>    <script src="javascriptsite.js"></script> 
-</body>
+<script>
+    // Variáveis globais para armazenar os valores do formulário de exclusão
+    let deleteForm;
+    let deleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+
+    function openDeleteModal(form) {
+        deleteForm = form; // Armazena o formulário atual para posterior submissão
+        deleteModal.show(); // Mostra o modal de confirmação
+    }
+
+    document.getElementById('confirmDeleteButton').addEventListener('click', function () {
+        if (deleteForm) {
+            deleteForm.submit(); // Submete o formulário armazenado
+        }
+    });
+</script>
+
+    </body>
 </html>
 <?php $conecta->close(); ?>

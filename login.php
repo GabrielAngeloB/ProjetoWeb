@@ -56,13 +56,16 @@ if (isset($_SESSION['erro']) and $_SESSION['erro']) {
                             <a class="nav-link active" style="color:white; font-size:26px; padding-right:10px; font-weight:bold;" href="reviews_usuario.php">Reviews</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link active" style="color:white; font-size:26px; padding-right:10px; font-weight:bold;" href="lista_generos.php">Generos</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link active" style="color:white; font-size:26px; font-weight:bold;" href="lista_jogos.php">Lista</a>
                         </li>
                     </ul>
                 </div>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="cadastro.php" style="color:lightblue; font-size:20px; text-align:right; text-shadow: 1px 1px #000000;">Cadastrar-se</a>
+                        <a class="nav-link active" aria-current="page" href="cadastro.php" style="color:lightblue; font-size:20px; text-align:right; text-shadow: 1px 1px #000000; font-weight:bold;">Cadastrar-se</a>
                     </li>
                 </ul>
             </div>
@@ -85,9 +88,10 @@ if (isset($_SESSION['erro']) and $_SESSION['erro']) {
                             session_destroy();
                             ?>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                        
+                        <button type="submit" class="btn btn-primary w-100" style="margin-top:10px;">Entrar</button>
                     </form>
-                    <a class="d-flex justify-content-center" style="color:blue;" href="#">Esqueci minha senha</a>
+                    <p>
                 </div>
             </div>
         </div>

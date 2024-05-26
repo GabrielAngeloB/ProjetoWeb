@@ -44,7 +44,8 @@ if ($resultado->num_rows > 0) {
                 </button>
 
                 <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
-                    <ul class="navbar-nav me-auto">  <li class="nav-item">
+                    <ul class="navbar-nav me-auto">  
+                        <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="index.php" style="color:white; font-size:26px; padding-right:10px; font-weight:bold;">Inicio</a>
                         </li>
                         <li class="nav-item dropdown" style="font-size:26px; font-weight:bold;">
@@ -93,7 +94,7 @@ if ($resultado->num_rows > 0) {
                             <h5 class="card-title " style="font-weight:bold; text-align:center;">Segurança</h5>
                         </div>
                         <div class="card-body" style="background-color:gainsboro">
-                            <form action="recebe_trocar_senha.php" method="POST">
+                            <form id="trocaSenhaForm" action="recebe_trocar_senha.php" method="POST">
                                 <div class="form-group">
                                     <label for="current_password">Senha Atual:</label>
                                     <div class="input-group">
@@ -129,13 +130,31 @@ if ($resultado->num_rows > 0) {
                                     </div>
                                 </div>
                                 <ul>
-                                    <li class="alert alert-primary" role="alert" style="font-size:16px; position:relative; font-style:italic; right:30px; width:97%; padding-top:5px; padding-bottom:5px;   "><span style="font-weight:bold;">Aviso:</span> Mínimo de 8 caracteres!</li>
+                                    <li class="alert alert-primary" role="alert" style="font-size:16px; position:relative; font-style:italic; right:30px; width:97%; padding-top:5px; padding-bottom:5px;"><span style="font-weight:bold;">Aviso:</span> Mínimo de 8 caracteres!</li>
                                     
                                 </ul>
-                                <button type="submit" class="btn btn-primary d-flex mx-auto">Trocar Senha</button>
-
+                                <button type="button" class="btn btn-primary d-flex mx-auto" data-bs-toggle="modal" data-bs-target="#confirmModal">Trocar Senha</button>
                             </form>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmModalLabel">Confirmar Troca de Senha</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Tem certeza de que deseja trocar sua senha?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-success" onclick="document.getElementById('trocaSenhaForm').submit();">Confirmar</button>
                     </div>
                 </div>
             </div>
@@ -174,7 +193,5 @@ if ($resultado->num_rows > 0) {
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
     </body>
 </html>

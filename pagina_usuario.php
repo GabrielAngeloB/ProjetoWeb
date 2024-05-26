@@ -13,6 +13,7 @@ if ($_SESSION['login'] == 'gabridestiny@hotmail.com') {
     $adicionar = "<a class='dropdown-item' href='adicionar_jogos.php'>Adicionar Jogo</a>";
 }
 require('conecta.php');
+if (isset($_GET['id_usuario']) && isset($_SESSION['id_usuario'])) {
 if (isset($_GET['id_usuario'])) {
     $id_usuario2 = $_SESSION['id_usuario'];
     $id_usuario = $_GET['id_usuario'];
@@ -74,6 +75,9 @@ $sql = "SELECT * FROM usuario WHERE id_usuario = $id_usuario2";
 
         }
     }
+}else {
+    header('location:pagina_nao_encontrada.php');
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -148,10 +152,10 @@ $sql = "SELECT * FROM usuario WHERE id_usuario = $id_usuario2";
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img class="thumbnail" src="<?php echo $img_perfil; ?>" style="width:50px; height:50px; text-align:right; border-radius:50%; margin-right:7px; border: 2px solid black;">
+                            <img class="thumbnail" src="<?php echo $img_perfil2; ?>" style="width:50px; height:50px; text-align:right; border-radius:50%; margin-right:7px; border: 2px solid black;">
                         </a>
                         <div class="dropdown-menu dropdown-menu-end position-absolute" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="pagina_usuario.php?id_usuario=<?php echo $id_usuario; ?>">Ver perfil</a>
+                            <a class="dropdown-item" href="pagina_usuario.php?id_usuario=<?php echo $id_usuario2; ?>">Ver perfil</a>
                             <a class="dropdown-item" href="editar_usuario.php">Editar perfil</a>
                             <?php echo $adicionar ?>
                             <a class="dropdown-item" href="logout.php">Logout</a>

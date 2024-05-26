@@ -39,7 +39,7 @@ if ($resultado->num_rows > 0) {
             }
             button:hover {
     box-shadow: 0 0px 16px 0 grey;
-    font-size: 17px; 
+    font-size: 16.5px; 
     border-color: grey; /* Cor inicial da borda */
     transition: border-color 0.3s ease;
 }
@@ -108,17 +108,17 @@ button:hover {
             <div class="generos">
                 <?php
                 $genres = array(
-                    "Ação", "Aventura", "Estratégia", "RPG", "Puzzle", "Simulação", "Esporte",
+                    "Ação", "Aventura", "Estratégia", "RPG", "Quebra-Cabeça", "Simulação", "Esporte",
                     "Corrida", "Plataforma", "Casual", "Indie", "MMO", "MOBA", "Battle Royale",
                     "Tower Defense", "Luta", "Esportes", "Corrida", "Terror", "Mundo Aberto",
-                    "Sobrevivência", "Roguelike", "FPS", "Multiplayer", "Atirador"
+                    "Sobrevivência", "Roguelike", "FPS", "Multiplayer", "Atirador", "Tático", "Aponte e Clique", "Hack and Slash"
                 );
 
                 foreach ($genres as $genre) {
                     echo '
             <div class="col-lg-8 col-md-9">
             <a href="lista_jogos.php?genero=' . urlencode($genre) . '">
-								<button id="button" type="button" style="color:white; white-space: nowrap; background-color:black; font-weight:bold; border:2px solid #707070; width:145px; height:60px; margin-right:9px; padding-right:11px;" class="btn mb-2 mb-m-0 btn-primary btn-block genre-button" onclick="window.location.href=\'lista_jogos.php?genero=' . urlencode($genre) . '\'"><span style=color:white;>' . $genre . '</span>
+								<button id="button" type="button" style="color:white; white-space: nowrap; background-color:black; font-weight:bold; border:2px solid #707070; width:145px; height:60px; margin-right:9px; padding-right:11px; " class="btn mb-2 mb-m-0 btn-primary btn-block genre-button" onclick="window.location.href=\'lista_jogos.php?genero=' . urlencode($genre) . '\'"><span style=color:white;>' . $genre . '</span>
 									<div class="icon d-flex align-items-center justify-content-center">
 										<i class="ion-ios-heart"></i>
                                                                             </a>    
