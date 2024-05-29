@@ -167,7 +167,7 @@ for ($i = 0; $i < sizeOf($id_jogo); $i++) {
                 <div class='col-md-8 d-flex'>
                     <div class='card-body' style='background-color:#9B9CA6; max-height:220px; overflow:auto;'>
                         <h5 class='card-title container-fluid' style='font-weight:bold; font-size:23px; text-align:center; text-decoration:underline;'>$nomejogo[$i]</h5>
-                        <p class='card-text container-fluid' style='flex-grow: 1;object-fit:fill; text-align:justify;'>$desc[$i]<br><span style='font-weight:bold'>Gêneros</span>: $generos[$i].<br> <span style='font-weight:bold'>Postado há</span>: $mensagem[$i]</p>
+                        <p class='card-text container-fluid' style='flex-grow: 1;object-fit:fill; text-align:justify;'>$desc[$i]<br><span style='font-weight:bold'>Gêneros</span>: $generos[$i].<br> <span style='font-weight:bold'>Postado</span>: $mensagem[$i]</p>
                         <p class='rating-box mx-auto' style='display:flex; justify-content:center; font-size:20px; max-width:180px; border:2px solid gainsboro;  background-color:black;'>Nota média: <span class='mx-auto' style=' text-decoration: underline; color:white; display:flex; justify-content:center; font-size:20px; background-color:black; padding-left:3px; padding-right:1px; border-radius:20%; text-decoration:underline; '>$media[$i]</span></p>
                         <p style='display:flex; justify-content:right; overflow:auto;' class='card-text container-fluid'><small class='text-body-secondary' style='display:flex; justify-content:flex-end'>
                             <form action='jogo_mostrar.php' method='get'>
@@ -190,7 +190,7 @@ for ($i = 0; $i < sizeOf($id_jogo); $i++) {
                 <div class='col-md-8 d-flex'>
                     <div class='card-body' style='background-color:#9B9CA6; max-height:220px; overflow:auto;'>
                         <h5 class='card-title container-fluid' style='font-weight:bold; font-size:23px; text-align:center; text-decoration:underline;'>$nomejogo[$i]</h5>
-                        <p class='card-text container-fluid' style='flex-grow: 1;object-fit:fill; text-align:justify;'>$desc[$i]<br><span style='font-weight:bold'>Gêneros</span>: $generos[$i].<br> <span style='font-weight:bold'>Postado há</span>: $mensagem[$i]</p>
+                        <p class='card-text container-fluid' style='flex-grow: 1;object-fit:fill; text-align:justify;'>$desc[$i]<br><span style='font-weight:bold'>Gêneros</span>: $generos[$i].<br> <span style='font-weight:bold'>Postado</span>: $mensagem[$i]</p>
                         <p class='rating-box mx-auto' style='display:flex; justify-content:center; font-size:20px; max-width:180px; border:2px solid gainsboro;  background-color:black;'>Nota média: <span class='mx-auto' style='text-decoration: underline; color:white; display:flex; justify-content:center; font-size:20px; background-color:black; padding-left:3px; padding-right:1px; border-radius:20%;'>" . $media[$i] . "<span></p></h5>
                         <p style='display:flex; justify-content:right; overflow:auto;' class='card-text container-fluid'><small class='text-body-secondary' style='display:flex; justify-content:flex-end'>
                             <form action='jogo_mostrar.php' method='get'>

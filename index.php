@@ -159,7 +159,7 @@ if ($resultado->num_rows > 0) {
         <div id="meu-carrossel" class="carousel slide carousel-fade" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="<?php echo $link[0] ?>" height="60%" width="90%" class="d-block mx-auto" style="border-style: solid; object-fit:fill; border-width: 4px; border-image:linear-gradient(grey, black) 50;" alt="Imagem 1">
+                    <img src="<?php echo $link[0] ?>" height="60%" width="90%" class="d-block mx-auto" style="border-style: solid; object-fit:fill; border-width: 4px; border-image:linear-gradient(grey, black) 50;" loading='lazy' alt="Imagem 1">
                     <div class="carousel-caption">
                         <h5 class="carousel-titulo destaque" style="top:13px; position:relative; font-size:45px;"><?php echo $nomejogo[0] ?>™</h5><br>
 
@@ -172,7 +172,7 @@ if ($resultado->num_rows > 0) {
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="<?php echo $link[1] ?>" height="60%" width="90%" class="d-block mx-auto" style="border-style: solid; object-fit:fill; border-width: 4px; border-image:linear-gradient(grey, black) 50;" alt="Imagem 1">
+                    <img src="<?php echo $link[1] ?>" height="60%" width="90%" class="d-block mx-auto" style="border-style: solid; object-fit:fill; border-width: 4px; border-image:linear-gradient(grey, black) 50;" loading='lazy' alt="Imagem 1">
                     <div class="carousel-caption">
                         <h5 class="carousel-titulo destaque" style="top:13px; position:relative; font-size:45px;"><?php echo $nomejogo[1] ?>™</h5><br>
 
@@ -185,7 +185,7 @@ if ($resultado->num_rows > 0) {
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="<?php echo $link[2] ?>" height="60%" width="90%" class="d-block mx-auto" style="border-style: solid; object-fit:fill; border-width: 4px; border-image:linear-gradient(grey, black) 50;" alt="Imagem 1">
+                    <img src="<?php echo $link[2] ?>" height="60%" width="90%" class="d-block mx-auto" style="border-style: solid; object-fit:fill; border-width: 4px; border-image:linear-gradient(grey, black) 50;" loading='lazy' alt="Imagem 1">
                     <div class="carousel-caption">
                         <h5 class="carousel-titulo destaque" style="top:13px; position:relative; font-size:45px;"><?php echo $nomejogo[2] ?>™</h5><br>
 
@@ -214,7 +214,7 @@ if ($resultado->num_rows > 0) {
                 <div class="justify-content-center" style="text-align:center;">
                     <a href="jogo_mostrar.php?id_jogo1=<?php echo $id_jogo1[0] ?>">
                         <div class="card text-white bg-dark" id="card-foda">
-                            <img src="<?php echo $link1[0] ?>" class="card-img-top" height="210px"alt="...">
+                            <img src="<?php echo $link1[0] ?>" class="card-img-top" height="210px" loading='lazy' alt="...">
                             </a>
                             <div class="card-body cartao bg-dark" style="padding:10px;">
                                 <p style="text-align:justify; max-height:120px; overflow:auto; display:flex; padding-right:5px;" class="card-text text-white"><?php echo $descjogo[0] ?></p>
@@ -223,7 +223,7 @@ if ($resultado->num_rows > 0) {
 
                         <a href="jogo_mostrar.php?id_jogo1=<?php echo $id_jogo1[1] ?>">
                             <div class="card text-white bg-dark" id="card-foda">
-                                <img src="<?php echo $link1[1] ?>"  class="card-img-top" height="210px"alt="...">
+                                <img src="<?php echo $link1[1] ?>"  class="card-img-top" height="210px" loading='lazy' alt="...">
                                 </a>
                                 <div class="card-body cartao bg-dark" style="padding:10px;">
                                     <p style="text-align:justify; max-height:120px; overflow:auto; display:flex; padding-right:5px;" class="card-text text-white"><?php echo $descjogo[1] ?></p>
@@ -232,7 +232,7 @@ if ($resultado->num_rows > 0) {
 
                             <a href="jogo_mostrar.php?id_jogo1=<?php echo $id_jogo1[2] ?>">
                                 <div class="card text-white bg-dark" id="card-foda">
-                                    <img src="<?php echo $link1[2] ?>" class="card-img-top" height="210px" alt="...">
+                                    <img src="<?php echo $link1[2] ?>" class="card-img-top" height="210px" loading='lazy' alt="...">
                                     </a>
                                     <div class="card-body cartao bg-dark" style="padding:10px;">
                                         <p style="text-align:justify; max-height:120px; overflow:auto; display:flex; padding-right:5px;" class="card-text text-white "><?php echo $descjogo[2] ?></p>
@@ -241,7 +241,7 @@ if ($resultado->num_rows > 0) {
                                 </div>
                                 <a href="jogo_mostrar.php?id_jogo1=<?php echo $id_jogo1[3] ?>">
                                     <div class="card text-white bg-dark" id="card-foda">
-                                        <img src="<?php echo $link1[3] ?>" class="card-img-top" height="210px" alt="...">
+                                        <img src="<?php echo $link1[3] ?>" class="card-img-top" height="210px" loading='lazy' alt="...">
                                         </a>
                                         <div class="card-body cartao    bg-dark" style="padding:10px;">
                                             <p style="text-align:justify; max-height:120px; overflow:auto; display:flex; padding-right:5px;" class="card-text b text-white customScroll"><?php echo $descjogo[3] ?></p>
@@ -251,7 +251,7 @@ if ($resultado->num_rows > 0) {
                                     </div>
                                     <a href="jogo_mostrar.php?id_jogo1=<?php echo $id_jogo1[4] ?>">
                             <div class="card text-white bg-dark" id="card-foda">
-                                <img src="<?php echo $link1[4] ?>"  class="card-img-top" height="210px"alt="...">
+                                <img src="<?php echo $link1[4] ?>"  class="card-img-top" height="210px" loading='lazy' alt="...">
                                 </a>
                                 <div class="card-body cartao bg-dark" style="padding:10px;">
                                     <p style="text-align:justify; max-height:120px; overflow:auto; display:flex; padding-right:5px;" class="card-text text-white"><?php echo $descjogo[4] ?></p>
@@ -259,7 +259,7 @@ if ($resultado->num_rows > 0) {
                             </div>
                                         <a href="jogo_mostrar.php?id_jogo1=<?php echo $id_jogo1[5] ?>">
                             <div class="card text-white bg-dark" id="card-foda">
-                                <img src="<?php echo $link1[5] ?>"  class="card-img-top" height="210px"alt="...">
+                                <img src="<?php echo $link1[5] ?>"  class="card-img-top" height="210px" loading='lazy' alt="...">
                                 </a>
                                 <div class="card-body cartao bg-dark" style="padding:10px;">
                                     <p style="text-align:justify; max-height:120px; overflow:auto; display:flex; padding-right:5px;" class="card-text text-white"><?php echo $descjogo[5] ?></p>
@@ -268,7 +268,7 @@ if ($resultado->num_rows > 0) {
 
                                             <a href="jogo_mostrar.php?id_jogo1=<?php echo $id_jogo1[6] ?>">
                             <div class="card text-white bg-dark" id="card-foda">
-                                <img src="<?php echo $link1[6] ?>"  class="card-img-top" height="210px"alt="...">
+                                <img src="<?php echo $link1[6] ?>"  class="card-img-top" height="210px" loading='lazy' alt="...">
                                 </a>
                                 <div class="card-body cartao bg-dark" style="padding:10px;">
                                     <p style="text-align:justify; max-height:120px; overflow:auto; display:flex; padding-right:5px;" class="card-text text-white"><?php echo $descjogo[6] ?></p>
@@ -277,7 +277,7 @@ if ($resultado->num_rows > 0) {
 
                                                 <a href="jogo_mostrar.php?id_jogo1=<?php echo $id_jogo1[7] ?>">
                             <div class="card text-white bg-dark" id="card-foda">
-                                <img src="<?php echo $link1[7] ?>"  class="card-img-top" height="210px"alt="...">
+                                <img src="<?php echo $link1[7] ?>"  class="card-img-top" height="210px" loading='lazy' alt="...">
                                 </a>
                                 <div class="card-body cartao bg-dark" style="padding:10px;">
                                     <p style="text-align:justify; max-height:120px; overflow:auto; display:flex; padding-right:5px;" class="card-text text-white"><?php echo $descjogo[7] ?></p>
@@ -290,9 +290,9 @@ if ($resultado->num_rows > 0) {
                                     <p></p>
                                     </div>
 
-                                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous"></script>
-                                    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-                                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-                                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+                                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous" defer></script>
+                                    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous" async></script>
+                                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" defer></script>
+                                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous" defer></script>
                                     </body>
                                     </html>

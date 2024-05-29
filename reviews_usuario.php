@@ -44,13 +44,7 @@ if ($resultado->num_rows > 0) {
                 window.location.href = 'pagina_nao_encontrada.php';
                 </script>";
 }
-$sql = "SELECT * from usuario";
-$resultado = $conecta->query($sql);
-if ($resultado->num_rows > 0) {
-    while ($linha = $resultado->fetch_assoc()) {
-        $maximo_id = (int) $linha['id_usuario'];
-    }
-}
+
 $sql = "SELECT MAX(id_usuario) as id_usuario from usuario";
 $resultado = $conecta->query($sql);
 if ($resultado->num_rows > 0) {
@@ -213,7 +207,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     $texto_review[] = $row['texto_review'];
                     $id_review[] = $row['id_review'];
                     $review = "positiva";
-                    $sql2 = "SELECT * FROM games WHERE id_jogo='$id_jogo[$cont]'";
+                    $sql2 = "SELECT nome_jogo, imagem_artwork FROM games WHERE id_jogo='$id_jogo[$cont]'";
                     $resultado = $conecta->query($sql2);
                     if ($resultado->num_rows > 0) {
                         while ($linha = $resultado->fetch_assoc()) {
@@ -233,10 +227,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
                             }
                         }
                     }
-
-
-
-
                     for ($h = 0; $h < sizeOf($id_jogo); $h++) {
 
                         $sql2 = "SELECT horario_review FROM reviews WHERE id_usuario = '$id_usuario' and id_jogo='$id_jogo[$h]'";
@@ -248,9 +238,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
                         } else {
                             
                         }
-                        
-
-
                         $currentTimeUnix = time();
 
                         $timeDiffSeconds[$h] = $currentTimeUnix - $postedTimeUnix[$h];
@@ -291,10 +278,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
   </div>
   
   
-  <div class='card-body cardBackground2' style='text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white; background-image: url(" . $link[$cont] . "'>
+  <div loading='lazy' class='card-body cardBackground2' style='text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white; background-image: url(" . $link[$cont] . "'>
     <h5 class='card-title' style='font-weight:bold;'>Review " . "$review" . " | Nota: <span style='border:1px solid black; padding-left:3px; color:white; background-color:black; padding-right:3px; text-decoration:underline; border-radius:4px; text-shadow: none; '>" . $avaliacao_usuario[$cont] . "</span> </h5><p></p>
     <p class='card-text text-center' style='text-align:justify; margin-bottom:18px; font-size:18px; opacity:1; font-style:italic; '>''" . '' . $texto_review[$cont] . "''</p>
-      <p class='card-text text-center' style='text-align:justify; margin-bottom:10px;'><span style='font-weight:bold;  font-size:17px;' </span>Postado há: " . '' . $mensagem[$cont] . "</p>
+      <p class='card-text text-center' style='text-align:justify; margin-bottom:10px;'><span style='font-weight:bold;  font-size:17px;' </span>Postado: " . '' . $mensagem[$cont] . "</p>
     <div style='display:flex; justify-content: center; position:relative; top:5px; '>  <a href=jogo_mostrar.php?id_jogo1=" . $id_jogo[$cont] . " class='btn btn-primary' style='margin-right:10px; margin-bottom:16px;'><span style='text-shadow: 2px 2px black; font-weight:bold; font-size:17px;'>Ir para o jogo</a></span>
         
       <form action='deletar_comentario.php' method='POST' style=''>
@@ -385,9 +372,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous" assync></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous" defer></script>
     </body>
 </html>
