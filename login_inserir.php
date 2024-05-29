@@ -17,7 +17,9 @@ function verificarDados($email, $senhalogin) {
             }
             $_SESSION['login'] = $email;
             $_SESSION['senha'] = $senhalogin;
-            header('location:index.php');
+            echo "<script> 
+                window.location.href = 'index.php';
+            </script>";
             $erro = false;
         } else {
             $erro = true;

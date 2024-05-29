@@ -76,7 +76,9 @@ $sql = "SELECT * FROM usuario WHERE id_usuario = $id_usuario2";
         }
     }
 }else {
-    header('location:pagina_nao_encontrada.php');
+    echo "<script>
+                window.location.href = 'pagina_nao_encontrada.php';
+                </script>";
 }
 ?>
 <!DOCTYPE html>
@@ -174,7 +176,7 @@ $sql = "SELECT * FROM usuario WHERE id_usuario = $id_usuario2";
                     <div class="card-body" style="background-color: #989898">
                         <div class="container mt-2" style="width:100%;">
                             <h1 class="mb-4 letrafoda" style="text-align:center; font-weight:bold; text-shadow: -1px 0 darkslategrey, 0 1px darkslategrey, 1px 0 darkslategrey, 0 -1px darkslategrey;">
-                                <span style="border:2px solid black; padding-right:9px; padding-left:9px; border-radius:10px; background-color:black; color:white">Perfil do Usuário</span>
+                                <span style="border:2px solid black; padding-right:9px; padding-left:9px; border-radius:10px; background-color:black; margin:auto; font-family:monospace; color:white">Perfil do Usuário</span>
                             </h1>
                             <div class="card mb-4">
                                 <div class="card-body card-inner cartel" style="text-align:center; background-color:#D0D0D0 ">

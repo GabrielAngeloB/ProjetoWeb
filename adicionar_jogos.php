@@ -10,7 +10,9 @@ if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true
 
 $logado = $_SESSION['login'];
 if ($_SESSION['login'] !== 'gabridestiny@hotmail.com') {
-    header("Location:index.php");
+    echo "<script>
+                window.location.href = 'index.php';
+                </script>";
 }
 $adicionar = '';
 if ($_SESSION['login'] == 'gabridestiny@hotmail.com') {
@@ -38,7 +40,7 @@ if ($resultado->num_rows > 0) {
     <head>
     </head>
     <body style="background-color:#242629">
-        
+
         <nav class="navbar navbar-expand-sm" style="background-color:darkslategrey; z-index:2;">
             <div class="container-fluid">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="float:left">
@@ -107,32 +109,32 @@ if ($resultado->num_rows > 0) {
             <div class="form-group">
                 <label for="generos" style="padding-bottom:5px;" >Generos:</label>
                 <select multiple class="form-control select-picker" name="generos[]" id="generos" size="8" required>
-                    <option>Ação</option>
-                    <option>Aventura</option>
-                    <option>Estratégia</option>
+                    <option>MOBA</option>
+                    <option>Point-and-click</option>
+                    <option>Luta</option>
+                    <option>Shooter</option>
+                    <option>Música</option>
+                    <option>Plataforma</option>
+                    <option>Quebra-Cabeça</option>
+                    <option>Corrida</option>
+                    <option>Estratégia em tempo Real</option>
                     <option>RPG</option>
-                    <option>Puzzle</option>
                     <option>Simulação</option>
                     <option>Esporte</option>
-                    <option>Corrida</option>
-                    <option>Plataforma</option>
-                    <option>Casual</option>
+                    <option>Estratégia</option>
+                    <option>Estratégia em turnos</option>
+                    <option>Tático</option>
+                    <option>Hack and slash/Beat 'em up</option>
+                    <option>Quiz/Trivia</option>
+                    <option>Pinball</option>
+                    <option>Aventura</option>
                     <option>Indie</option>
-                    <option>MMO</option>
-                    <option>MOBA</option>
-                    <option>Battle Royale</option>
-                    <option>Tower Defense</option>
-                    <option>Luta</option>
-                    <option>Esportes</option>
-                    <option>Corrida</option>
-                    <option>Terror</option>
-                    <option>Mundo Aberto</option>
-                    <option>Sobrevivência</option>
-                    <option>Roguelike</option>
-                    <option>FPS</option>
-                    <option>Multiplayer</option>
+                    <option>Arcade</option>
+                    <option>Visual Novel</option>
+                    <option>Jogo de carta/tabuleiro</option>
+                </select>
+                <p></p>
 
-                </select><p></p>
             </div>
             <div class="form-group">
                 <label style="padding-bottom:5px;" for="descricao">Descrição do jogo:</label>

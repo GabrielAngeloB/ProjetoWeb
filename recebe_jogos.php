@@ -73,7 +73,9 @@
         }
 
         adicionarJogo($nome_jogo, $publisher, $dev, $data_jogo, $generos, $desc_jogo, $img_jogo);
-        header('Location:jogos_recentes.php');
+        echo "<script>
+                window.location.href = 'jogos_recentes.php';
+                </script>";
         ?>
     </body>
 </html>

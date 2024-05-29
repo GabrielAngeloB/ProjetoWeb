@@ -19,7 +19,7 @@ $resultado2 = $conecta->query($tenta_achar2);
 if ($resultado2->num_rows > 0) {
     echo "<script> 
                 alert('Você já possui 1 review neste jogo!');
-                window.location.href = 'index.php';
+                window.location.href = 'jogo_mostrar.php?id_jogo1=$id_jogo';
             </script>";
     $naotem = false;
 }
@@ -116,7 +116,9 @@ if ($naotem) {
             echo $review123;
         }
         
-        header('Location:jogo_mostrar.php?id_jogo1=' . $id_jogo);
+        echo "<script>
+         window.location.href = 'jogo_mostrar.php?id_jogo1=$id_jogo';
+      </script>";
     }
 }
 

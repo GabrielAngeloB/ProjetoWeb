@@ -91,7 +91,9 @@ if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] === 0 && $_
 
 if ($conecta->query($sql2) === TRUE) {
     $_SESSION['login'] = $email;
-    header('Location: editar_usuario.php');
+    echo "<script>
+                window.location.href = 'editar_usuario.php';
+                </script>";
 } else {
     echo "Erro na atualização do registro: " . $conecta->error . "<br>";
 }
@@ -106,12 +108,16 @@ if ($conecta->query($sql2) === TRUE) {
 // Executa a consulta SQL para atualizar o registro no banco de dados
 if ($conecta->query($sql2) === TRUE) {
     $_SESSION['login'] = $email;
-    header('Location: editar_usuario.php');
+    echo "<script>
+                window.location.href = 'editar_usuario.php';
+                </script>";
 } else {
     echo "Erro na atualização do registro: " . $conecta->error . "<br>";
 }
     }else {
-        header('Location: editar_usuario.php');
+        echo "<script>
+                window.location.href = 'editar_usuario.php';
+                </script>";
     }
     }
             

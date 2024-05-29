@@ -3,9 +3,9 @@ session_start();
 if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {
     session_unset();
     echo "<script>
-                    alert('Esta página só pode ser acessada por usuário logado');
-                    window.location.href = 'login.php';
-                    </script>";
+            alert('Esta página só pode ser acessada por usuário logado');
+            window.location.href = 'login.php';
+          </script>";
 }
 $logado = $_SESSION['login'];
 $adicionar = '';
@@ -13,106 +13,122 @@ if ($_SESSION['login'] == 'gabridestiny@hotmail.com') {
     $adicionar = "<a class='dropdown-item' href='adicionar_jogos.php'>Adicionar Jogo</a>";
 }
 require ('conecta.php');
+
 if (isset($_SESSION['id_usuario'])) {
     $id_usuario = $_SESSION['id_usuario'];
 }
 
-$sql = "SELECT img_perfil from usuario where id_usuario = $id_usuario";
-$resultado = $conecta->query($sql);
+$stmt = $conecta->prepare("SELECT img_perfil FROM usuario WHERE id_usuario = ?");
+$stmt->bind_param("i", $id_usuario);
+$stmt->execute();
+$resultado = $stmt->get_result();
 if ($resultado->num_rows > 0) {
     while ($linha = $resultado->fetch_assoc()) {
         $img_perfil = $linha['img_perfil'];
     }
 }
+$stmt->close();
+
+$pesquisa = isset($_GET["pesquisa"]) ? $_GET["pesquisa"] : "";
+$genero = isset($_GET["genero"]) ? $conecta->real_escape_string($_GET["genero"]) : "";
+
+if ($genero) {
+    $count_sql = "SELECT COUNT(*) AS total FROM games 
+                  WHERE (nome_jogo LIKE '%$pesquisa%' OR desc_jogo LIKE '%$pesquisa%' OR generos LIKE '%$pesquisa%') 
+                  AND generos LIKE '%$genero%'";
+} else {
+    $count_sql = "SELECT COUNT(*) AS total FROM games 
+                  WHERE nome_jogo LIKE '%$pesquisa%' OR desc_jogo LIKE '%$pesquisa%' OR generos LIKE '%$pesquisa%'";
+}
+$resultado = $conecta->query($count_sql);
+
+$quant_resultado = 0;
+if ($resultado) {
+    $linha = $resultado->fetch_assoc();
+    $quant_resultado = (int) $linha['total'];
+}
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css2/estilos.css">
     <title>Lista de Jogos</title>
     <link rel="icon" href="https://static.thenounproject.com/png/122214-200.png">
-    <head>
-        <style>
-            .card:hover {
-                box-shadow: 0 0px 12px 0 black;
-            }
-            .dropdown-toggle:hover {
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-                transition: box-shadow 0.3s ease-in-out;
-            }
-
-            /* Torna a animação do dropdown mais fluida */
-            .dropdown-menu {
-                transition: opacity 0.3s ease-in-out;
-            }
-        </style>
-        <script>
-            function selecionarGenero(genero) {
-        document.getElementById('genero').value = genero;
-        document.getElementById('formulario').submit();
-    }
+    <style>
+        .card:hover {
+            box-shadow: 0 0px 12px 0 black;
+        }
+        .dropdown-toggle:hover {
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            transition: box-shadow 0.3s ease-in-out;
+        }
+        .dropdown-menu {
+            transition: opacity 0.3s ease-in-out;
+        }
+    </style>
+    <script>
+        function selecionarGenero(genero) {
+            document.getElementById('genero').value = genero;
+            document.getElementById('formulario').submit();
+        }
     </script>
-    </head>
-    <body style="background-color:#242629">
-
-        <nav class="navbar navbar-expand-sm" style="background-color:darkslategrey; z-index:2;">
-            <div class="container-fluid">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="float:left">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
-                    <ul class="navbar-nav me-auto">  <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="index.php" style="color:white; font-size:26px; padding-right:10px; font-weight:bold;">Inicio</a>
-                        </li>
-                        <li class="nav-item dropdown" style="font-size:26px; font-weight:bold;">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><span style="color:white;">Jogos</span>
-
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="padding-right:10px;">
-                                <li><a class="dropdown-item" href="jogos_recentes.php" ">Jogos recentes</a></li>
-                                <li><a class="dropdown-item" href="melhores_review.php">Melhores Avaliados</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" style="color:white; font-size:26px; padding-right:10px; font-weight:bold;" href="reviews_usuario.php">Reviews</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" style="color:white; font-size:26px; padding-right:10px; font-weight:bold;" href="lista_generos.php">Generos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" style="color:white; font-size:26px; font-weight:bold;" href="lista_jogos.php">Lista</a>
-                        </li>
+</head>
+<body style="background-color:#242629">
+<nav class="navbar navbar-expand-sm" style="background-color:darkslategrey; z-index:2;">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="float:left">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="index.php" style="color:white; font-size:26px; padding-right:10px; font-weight:bold;">Inicio</a>
+                </li>
+                <li class="nav-item dropdown" style="font-size:26px; font-weight:bold;">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><span style="color:white;">Jogos</span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="padding-right:10px;">
+                        <li><a class="dropdown-item" href="jogos_recentes.php">Jogos recentes</a></li>
+                        <li><a class="dropdown-item" href="melhores_review.php">Melhores Avaliados</a></li>
                     </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" style="color:white; font-size:26px; padding-right:10px; font-weight:bold;" href="reviews_usuario.php">Reviews</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" style="color:white; font-size:26px; padding-right:10px; font-weight:bold;" href="lista_generos.php">Generos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" style="color:white; font-size:26px; font-weight:bold;" href="lista_jogos.php">Lista</a>
+                </li>
+            </ul>
+        </div>
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img class="thumbnail" src="<?php echo $img_perfil; ?>" style="width:50px; height:50px; text-align:right; border-radius:50%; margin-right:7px; border: 2px solid black;">
+                </a>
+                <div class="dropdown-menu dropdown-menu-end position-absolute" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="pagina_usuario.php?id_usuario=<?php echo $id_usuario; ?>">Ver perfil</a>
+                    <a class="dropdown-item" href="editar_usuario.php">Editar perfil</a>
+                    <?php echo $adicionar ?>
+                    <a class="dropdown-item" href="logout.php">Logout</a>
                 </div>
-
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img class="thumbnail" src="<?php echo $img_perfil; ?>" style="width:50px; height:50px; text-align:right; border-radius:50%; margin-right:7px; border: 2px solid black;">
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end position-absolute" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="pagina_usuario.php?id_usuario=<?php echo $id_usuario; ?>">Ver perfil</a>
-                            <a class="dropdown-item" href="editar_usuario.php">Editar perfil</a>
-                            <?php echo $adicionar ?>
-                            <a class="dropdown-item" href="logout.php">Logout</a>
-                        </div>
-                    </li>
-                </ul>
-
-
-            </div>
-        </nav>
-        <form method="GET" id="formulario">
+            </li>
+        </ul>
+    </div>
+</nav>
+<form method="GET" id="formulario">
     <div class="container">
         <div class="row">
             <div class="col-md-6">
                 <!-- Barra de pesquisa principal -->
                 <div class="d-flex justify-content-center">
                     <div class="searchbar">
-                        <input class="search_input" style="background-color:#353b48" type="text" size="80%" name="pesquisa" placeholder="Pesquisar...">
-                        <!-- Adicione um evento de clique para chamar a função submitForm() -->
+                        <input class="search_input" style="background-color:#353b48" type="text" size="80%" name="pesquisa" value="<?php echo $pesquisa ?>" placeholder="Pesquisar...">
                         <a href="#" class="search_icon" onclick="submitForm();"><i class="fas fa-search"></i></a>
                     </div>
                 </div>
@@ -120,67 +136,73 @@ if ($resultado->num_rows > 0) {
             <div class="col-md-6">
                 <!-- Dropdown de seleção de gênero -->
                 <div class="dropdown d-flex justify-content-center" style="margin-bottom: 20px; position:relative; bottom:6px;">
-                    <button class="btn btn-secondary dropdown-toggle genero-btn" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #2c3e50; color: white; opacity: 0.8; ">
+                    <button class="btn btn-secondary dropdown-toggle genero-btn" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #2c3e50; color: white; opacity: 0.8;">
                         Selecionar gênero
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background-color: #2c3e50; border: none;">
-                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Ação')">Ação</a></li>
-                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Ação')">Ação</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Aventura')">Aventura</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Estratégia')">Estratégia</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('RPG')">RPG</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Puzzle')">Puzzle</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Simulação')">Simulação</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Esporte')">Esporte</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Corrida')">Corrida</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Plataforma')">Plataforma</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Casual')">Casual</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Indie')">Indie</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('MMO')">MMO</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('MOBA')">MOBA</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Battle Royale')">Battle Royale</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Tower Defense')">Tower Defense</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Luta')">Luta</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Esportes')">Esportes</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Corrida')">Corrida</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Terror')">Terror</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Mundo Aberto')">Mundo Aberto</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Sobrevivência')">Sobrevivência</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Roguelike')">Roguelike</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('FPS')">FPS</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Atirador')">Atirador</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Atirador')">Atirador</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Tático')">Tático</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Aponte e Clique')">Point and Click</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Hack and Slash')">Hack and Slash</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('MOBA')">MOBA</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Point-and-click')">Point-and-click</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Luta')">Luta</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Shooter')">Shooter</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Música')">Música</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Plataforma')">Plataforma</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Quebra-Cabeça')">Quebra-Cabeça</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Corrida')">Corrida</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Estratégia em tempo Real')">Estratégia em tempo Real</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('RPG')">RPG</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Simulação')">Simulação</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Esporte')">Esporte</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Estratégia')">Estratégia</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Estratégia em turnos')">Estratégia em turnos</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Tático')">Tático</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Hack and slash/Beat \'em up')">Hack and slash/Beat 'em up</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Quiz/Trivia')">Quiz/Trivia</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Pinball')">Pinball</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Aventura')">Aventura</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Indie')">Indie</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Arcade')">Arcade</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Visual Novel')">Visual Novel</a></li>
+                        <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Jogo de carta/tabuleiro')">Jogo de carta/tabuleiro</a></li>
                     </ul>
                 </div>
-                <input type="hidden" name="genero" id="genero">
+                <?php if ($pesquisa != "" || $genero != ""): ?>
+                    <?php if ($quant_resultado > 0): ?>
+                        <p style="color:white; font-size:25px; text-align:center; font-weight:bold;font-style:italic;">
+                            Sua pesquisa retornou <span style="text-decoration:underline"><?php echo $quant_resultado ?></span> resultado(s)
+                        </p>
+                    <?php else: ?>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <p style="color:white; font-size:25px; text-align:center; font-weight:bold;font-style:italic;">
+                        Temos atualmente <span style="text-decoration:underline"><?php echo $quant_resultado ?></span> jogos registrados
+                    </p>
+                <?php endif; ?>
+                        <input type="hidden" name="genero" id="genero">
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</form>
+        </form>
 
-<script>
-    function submitForm() {
-        // Verifica se algum gênero foi selecionado
-        var generoSelecionado = document.getElementById('genero').value;
+        <script>
+            function submitForm() {
+                // Verifica se algum gênero foi selecionado
+                var generoSelecionado = document.getElementById('genero').value;
 
-        // Se nenhum gênero foi selecionado, define o valor do campo de gênero como nulo
-        if (!generoSelecionado) {
-            document.getElementById('genero').value = "";
-        }
+                // Se nenhum gênero foi selecionado, define o valor do campo de gênero como nulo
+                if (!generoSelecionado) {
+                    document.getElementById('genero').value = "";
+                }
 
-        // Envia o formulário
-        document.getElementById('formulario').submit();
-    }
+                // Envia o formulário
+                document.getElementById('formulario').submit();
+            }
 
-    function selecionarGenero(genero) {
-        document.getElementById('genero').value = genero;
-        var generoBtn = document.querySelector('.genero-btn');
-        generoBtn.innerText = genero;
-    }
-</script>
+            function selecionarGenero(genero) {
+                document.getElementById('genero').value = genero;
+                var generoBtn = document.querySelector('.genero-btn');
+                generoBtn.innerText = genero;
+            }
+        </script>
 
 
 
@@ -204,22 +226,24 @@ if ($resultado->num_rows > 0) {
             $pesquisa = "";
         }
 
-        require('conecta.php');
 
         $pesquisa = $conecta->real_escape_string($pesquisa);
 
-// Verifica se o parâmetro GET "genero" foi passado na URL
-        if (isset($_GET["genero"])) {
-            // Obtém o valor do parâmetro GET
-            $genero = $conecta->real_escape_string($_GET["genero"]);
+if (isset($_GET["genero"])) {
+    $genero = $conecta->real_escape_string($_GET["genero"]);
 
-            // Constrói a consulta SQL com base no parâmetro "genero"
-            $sql = "SELECT * FROM games WHERE (nome_jogo LIKE '%$pesquisa%' OR desc_jogo LIKE '%$pesquisa%' OR generos LIKE '%$pesquisa%') AND generos LIKE '%$genero%'";
-        } else {
-            // Se o parâmetro "genero" não foi passado, executa a consulta normalmente
-            $sql = "SELECT * FROM games WHERE nome_jogo LIKE '%$pesquisa%' OR desc_jogo LIKE '%$pesquisa%' OR generos LIKE '%$pesquisa%'";
-        }
+    $sql = "SELECT img_jogo, generos, desc_jogo, nome_jogo, id_jogo, horario_postado, avaliacao_media FROM games WHERE (nome_jogo LIKE '%$pesquisa%' OR desc_jogo LIKE '%$pesquisa%' OR generos LIKE '%$pesquisa%') AND generos LIKE '%$genero%' order by id_jogo ASC";
 
+    $stmt = $conecta->prepare($sql);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+} else {
+     $sql = "SELECT img_jogo, generos, desc_jogo, nome_jogo, id_jogo, horario_postado, avaliacao_media FROM games WHERE nome_jogo LIKE '%$pesquisa%' OR desc_jogo LIKE '%$pesquisa%' OR generos LIKE '%$pesquisa%' order by id_jogo ASC";
+
+    $stmt = $conecta->prepare($sql);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+}
         $resultado = $conecta->query($sql);
         $cont = 0;
         $por_pagina = 15;
@@ -246,35 +270,24 @@ if ($resultado->num_rows > 0) {
                     $horario_jogo[$cont] = $linha['horario_postado'];
                     $avaliacao_media[$cont] = $linha['avaliacao_media'];
                     $cont += 1;
-                    for ($h = 0; $h < sizeOf($id_jogo); $h++) {
+                    $postedTimeUnix = strtotime($linha['horario_postado']);
+        $currentTimeUnix = time();
+        $timeDiffSeconds = $currentTimeUnix - $postedTimeUnix;
 
-                        $sql2 = "SELECT horario_postado FROM games WHERE id_jogo = '$id_jogo[$h]'";
-                        $result = $conecta->query($sql2);
-                        if ($result->num_rows > 0) {
-                            date_default_timezone_set('America/Sao_Paulo');
-                            $row = $result->fetch_assoc();
-                            $postedTimeUnix[$h] = strtotime($row['horario_postado']);
-                        }
+        $minutos = floor($timeDiffSeconds / 60);
+        $horas = floor($minutos / 60);
+        $dias = floor($horas / 24);
 
-
-                        $currentTimeUnix = time();
-
-                        $timeDiffSeconds[$h] = $currentTimeUnix - $postedTimeUnix[$h];
-
-                        $minutos[$h] = floor($timeDiffSeconds[$h] / 60);
-                        $horas[$h] = floor($minutos[$h] / 60);
-                        $dias[$h] = floor($horas[$h] / 24);
-
-                        if ($minutos[$h] < 1) {
-                            $mensagem[$h] = "agora!";
-                        } else if ($minutos[$h] < 60) {
-                            $mensagem[$h] = "$minutos[$h] minuto(s) atrás!";
-                        } else if ($horas[$h] < 24) {
-                            $mensagem[$h] = "$horas[$h] hora(s) atrás!";
-                        } else {
-                            $mensagem[$h] = "$dias[$h] dia(s) atrás!";
-                        }
-                    }
+        if ($minutos < 1) {
+            $mensagem[] = "agora!";
+        } else if ($minutos < 60) {
+            $mensagem[] = "$minutos minuto(s) atrás!";
+        } else if ($horas < 24) {
+            $mensagem[] = "$horas hora(s) atrás!";
+        } else {
+            $mensagem[] = "$dias dia(s) atrás!";
+        }
+    
                     for ($j = 0; $j < sizeOf($id_jogo); $j++) {
                         ($j % 2 == 0) ? ($fade = "fadeInFromRight") : ($fade = "fadeInFromLeft");
                         if ($j == 0 and $cont > 0) {
@@ -282,18 +295,18 @@ if ($resultado->num_rows > 0) {
   <div class='row g-0'>
     <div class='col-md-4'>
     <a href='jogo_mostrar.php?id_jogo1=$id_jogo[$j]'>
-      <img src='" . "$link[$j]" . "' class='img-fluid imagem1' style='width:100%; height:100%; max-height:220px; object-fit: fill;'alt='...'>
+      <img src='" . "$link[$j]" . "' loading='lazy' class='img-fluid imagem1' style='width:100%; height:100%; max-height:220px; object-fit: fill;'alt='...' >
     </a>
 </div>
     <div class='col-md-8 d-flex'>
       <div class='card-body' style='background-color:#9B9CA6; max-height:220px; overflow:auto;'>
         <h5 class='card-title container-fluid' style='font-weight:bold; font-size:23px; text-align:center; text-decoration:underline;'>$nomejogo[$j]</h5>
          <p class='card-text container-fluid' style='flex-grow: 1;object-fit:fill; text-align:justify;'>$desc[$j]<br><span style='font-weight:bold'>Generos</span>: $generos[$j].<br> <span style='font-weight:bold'>Postado há</span>: $mensagem[$j]</p>
-        <p class='rating-box mx-auto' style='display:flex; justify-content:center; font-size:20px;'>Nota média: <span class='mx-auto' style=' text-decoration: underline; color:white; display:flex; justify-content:center; font-size:20px; background-color:#1B1212; padding-left:3px; padding-right:1px; border-radius:20%; text-decoration:underline; '>" . $avaliacao_media[$j] . "</span></p></h5>
+        <p class='rating-box mx-auto' style='display:flex; justify-content:center; max-width:180px; font-size:20px; border:2px solid gainsboro;  background-color:black;'>Nota média: <span class='mx-auto' style=' text-decoration: underline; color:white; display:flex; justify-content:center; font-size:20px; background-color:black; padding-left:3px; padding-right:1px; border-radius:20%; text-decoration:underline; '>" . $avaliacao_media[$j] . "</span></p></h5>
         <p style='display:flex; justify-content:right; overflow:auto;' class='card-text container-fluid'><small class='text-body-secondary' style='display:flex; justify-content:flex-end'>
                 <form action='jogo_mostrar.php' method='get'>
   <input type='hidden' name='id_jogo1' value='$id_jogo[$j]'>
-  <button type='submit' class='btn btn-primary mx-auto vermais' style='font-weight:bold; font-style:italic;  text-shadow: 2px 2px #000; font-size:18px; margin:-13px;'>Ver detalhes</button>
+  <button type='submit' class='btn btn-primary mx-auto vermais' style='font-weight:bold; font-style:italic;  text-shadow: 2px 2px #000; font-size:18px; margin:-13px; background-color:darkslategrey; border:1px solid darkslategrey;'>Ver detalhes</button>
 </form></small></p>
       </div>
     </div>
@@ -304,7 +317,7 @@ if ($resultado->num_rows > 0) {
   <div class='row g-0'>
     <div class='col-md-4'>
     <a href='jogo_mostrar.php?id_jogo1=$id_jogo[$j]'>
-      <img src='" . "$link[$j]" . "' class='img-fluid imagem1' style='width:100%; height:100%; max-height:220px; object-fit: fill;'alt='...'>
+      <img src='" . "$link[$j]" . "' loading='lazy' class='img-fluid imagem1' style='width:100%; height:100%; max-height:220px; object-fit: fill;'alt='...'>
     </a>
 </div>
     <div class='col-md-8 d-flex'>
@@ -312,12 +325,12 @@ if ($resultado->num_rows > 0) {
         <h5 class='card-title container-fluid' style='font-weight:bold; font-size:23px; text-align:center; text-decoration:underline;' >$nomejogo[$j]</h5>
         <p class='card-text container-fluid' style='flex-grow: 1;object-fit:fill; text-align:justify;'>$desc[$j]<br><span style='font-weight:bold'>Generos:</span> $generos[$j].<br> <span style='font-weight:bold'>Postado há</span>: $mensagem[$j]</p>
             
-        <p class='rating-box mx-auto' style='display:flex; justify-content:center; font-size:20px;'>Nota média: <span class='mx-auto' style='text-decoration: underline; color:white; display:flex; justify-content:center; font-size:20px; background-color:#1B1212; padding-left:3px; padding-right:1px; border-radius:20%;'>" . $avaliacao_media[$j] . "<span></p></h5>
+        <p class='rating-box mx-auto' style='display:flex; justify-content:center; font-size:20px; max-width:180px; border:2px solid gainsboro;  background-color:black;'>Nota média: <span class='mx-auto' style='text-decoration: underline; color:white; display:flex; justify-content:center; font-size:20px; background-color:black; padding-left:3px; padding-right:1px; border-radius:20%;'>" . $avaliacao_media[$j] . "<span></p></h5>
             
         <p style='display:flex; justify-content:right; overflow:auto;' class='card-text container-fluid'><small class='text-body-secondary' style='display:flex; justify-content:flex-end'>
                 <form action='jogo_mostrar.php' method='get'>
   <input type='hidden' name='id_jogo1' value='$id_jogo[$j]'>
-  <button type='submit' class='btn btn-primary mx-auto vermais' style='font-weight:bold; font-style:italic;  text-shadow: 2px 2px #000; font-size:18px; margin:-13px;'>Ver detalhes</button>
+  <button type='submit' class='btn btn-primary mx-auto vermais' style='font-weight:bold; font-style:italic;  text-shadow: 2px 2px #000; font-size:18px; margin:-13px; background-color:darkslategrey; border:1px solid darkslategrey;'>Ver detalhes</button>
 </form></small></p>
       </div>
     </div>
@@ -352,14 +365,14 @@ if ($resultado->num_rows > 0) {
                 if ($fim == $total_paginas && $total_paginas > 9) {
                     $inicio = max(1, $fim - 9);
                 }
-$genero = "";
-if (isset($_GET["genero"])) {
-            // Obtém o valor do parâmetro GET
-            $genero = $conecta->real_escape_string($_GET["genero"]);
+                $genero = "";
+                if (isset($_GET["genero"])) {
+                    // Obtém o valor do parâmetro GET
+                    $genero = $conecta->real_escape_string($_GET["genero"]);
 
-            // Constrói a consulta SQL com base no parâmetro "genero"
-            $sql = "SELECT * FROM games WHERE (nome_jogo LIKE '%$pesquisa%' OR desc_jogo LIKE '%$pesquisa%' OR generos LIKE '%$pesquisa%') AND generos LIKE '%$genero%'";
-        } 
+                    // Constrói a consulta SQL com base no parâmetro "genero"
+                    $sql = "SELECT * FROM games WHERE (nome_jogo LIKE '%$pesquisa%' OR desc_jogo LIKE '%$pesquisa%' OR generos LIKE '%$pesquisa%') AND generos LIKE '%$genero%'";
+                }
                 if ($inicio > 1) {
                     echo "<li class='page-item style='height:40px;'><a class='custom-page-link1' style='color: white; bottom:1%;' href='lista_jogos.php?pesquisa=$pesquisa&genero=$genero&pagina=" . ($inicio - 1) . "'>&laquo;</a></li>";
                 }
@@ -374,12 +387,10 @@ if (isset($_GET["genero"])) {
 
                 if ($fim < $total_paginas) {
                     echo "<li class='page-item style='height:40px;'><a class='custom-page-link2' style='color: white; bottom:1%;' href='lista_jogos.php?pesquisa=$pesquisa&genero=$genero&pagina=" . ($fim + 1) . "'>&raquo;</a></li>";
+                } else {
+                    // Se o parâmetro "genero" não foi passado, executa a consulta normalmente
+                    $sql = "SELECT * FROM games WHERE nome_jogo LIKE '%$pesquisa%' OR desc_jogo LIKE '%$pesquisa%' OR generos LIKE '%$pesquisa%'";
                 }
-                else {
-            // Se o parâmetro "genero" não foi passado, executa a consulta normalmente
-            $sql = "SELECT * FROM games WHERE nome_jogo LIKE '%$pesquisa%' OR desc_jogo LIKE '%$pesquisa%' OR generos LIKE '%$pesquisa%'";
-            
-        }
 
                 echo "</ul>";
             }
@@ -388,13 +399,13 @@ if (isset($_GET["genero"])) {
         }
 
         if (isset($nada)) {
-            echo "<div style='text-align:center; margin-top:3%; margin-left:4%;'  id='demoFont'>Desculpe :( <br><p></p> Sua pesquisa retornou 0 resultados.</div> ";
+            echo "<br><br><div style='text-align:center; margin-top:3%; margin-left:4%;'  id='demoFont'>Desculpe :( <br><p></p> Sua pesquisa retornou 0 resultados.</div> ";
             unset($nada);
         }
         ?>
-<br>
+        <br>
 
-         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>

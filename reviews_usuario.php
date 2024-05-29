@@ -66,6 +66,7 @@ if ($id_usuario != $id_usuario1) {
 ?>
 <html>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css2/estilos.css">
     <title><?php echo $titulo ?></title>
@@ -76,16 +77,18 @@ if ($id_usuario != $id_usuario1) {
         <script>
 document.addEventListener('DOMContentLoaded', (event) => {
     let reviewIdToDelete = null;
+    let jogoIdToDelete = null;
 
     // Triggered when the modal is about to be shown
     $('#confirmDeleteModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget); // Button that triggered the modal
         reviewIdToDelete = button.data('review-id'); // Extract info from data-* attributes
+        jogoIdToDelete = button.data('jogo-id'); // Extract info from data-* attributes
     });
 
     // When the confirm delete button is clicked in the modal
     document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
-        if (reviewIdToDelete !== null) {
+        if (reviewIdToDelete !== null && jogoIdToDelete !== null) {
             // Create a form element dynamically
             var form = document.createElement("form");
             form.setAttribute("method", "post");
@@ -97,6 +100,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
             idReviewInput.setAttribute("name", "id_review");
             idReviewInput.setAttribute("value", reviewIdToDelete);
 
+            var jogoIdInput = document.createElement("input");
+            jogoIdInput.setAttribute("type", "hidden");
+            jogoIdInput.setAttribute("name", "jogo_excluir");
+            jogoIdInput.setAttribute("value", jogoIdToDelete);
+
+            var validarInput = document.createElement("input");
+            validarInput.setAttribute("type", "hidden");
+            validarInput.setAttribute("name", "validar");
+            validarInput.setAttribute("value", "validar");
+
             var deleteInput = document.createElement("input");
             deleteInput.setAttribute("type", "hidden");
             deleteInput.setAttribute("name", "delete");
@@ -104,6 +117,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
             // Append inputs to the form
             form.appendChild(idReviewInput);
+            form.appendChild(jogoIdInput);
+            form.appendChild(validarInput);
             form.appendChild(deleteInput);
 
             // Append form to the body
@@ -115,6 +130,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 });
 </script>
+
+
+        
 
 
         <nav class="navbar navbar-expand-sm" style="background-color:darkslategrey; z-index:2;">
@@ -165,7 +183,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
             </div>
         </nav>
-        <h1 class="mx-auto letra2" style="color:white; margin-top:100px; text-align:center; "><span style="background-color:#343434; padding-left:30px; padding-right:30px; border-radius:10px; text-shadow: 3px 3px black; "><?php echo $titulo ?></span></h1>
+        <h1 class="mx-auto letra" style="color:white; margin-top:100px; text-align:center; "><span style="background-color:#343434; padding-left:30px; padding-right:30px; border-radius:10px; text-shadow: 3px 3px black; font-family:monospace; "> ⚡︎ ︎<?php echo $titulo ?> ⚡︎ </span></h1>
             <?php
             if (!isset($_GET['page'])) {
 
@@ -174,7 +192,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
                 $page_number = $_GET['page'];
             }
-            $limit = 3;
+            $limit = 10;
             $initial_page = ($page_number - 1) * $limit;
             $getQuery = "SELECT * from reviews where id_usuario=$id_usuario";
 
@@ -200,7 +218,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     if ($resultado->num_rows > 0) {
                         while ($linha = $resultado->fetch_assoc()) {
                             $nome_jogo[] = $linha['nome_jogo'];
-                            $link[] = $linha['img_jogo'];
+                            $link[] = $linha['imagem_artwork'];
                         }
                     }
                     $sql3 = "SELECT avaliacao_total FROM avaliacao WHERE id_jogo='$id_jogo[$cont]' and id_usuario=$id_usuario";
@@ -230,7 +248,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                         } else {
                             
                         }
-
+                        
 
 
                         $currentTimeUnix = time();
@@ -254,10 +272,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     if ($id_usuario != $id_usuario1) {
                         $botao = "";
                     } else {
-                        $botao = "<button type='button' class='btn btn-danger btn-sm' data-bs-toggle='modal' data-bs-target='#confirmDeleteModal' data-review-id='$id_review[$cont]' style='font-size:10px; max-height:90px;'>
-                <span style='text-shadow: 2px 2px black; font-weight:bold; font-size:17px;'>Excluir</span>
-              </button>";
+                        $botao = "<button type='button' class='btn btn-danger btn-sm' data-bs-toggle='modal' data-bs-target='#confirmDeleteModal' data-review-id='$id_review[$cont]' data-jogo-id='$id_jogo[$cont]' style='padding-top:7px; padding-bottom:5px; font-size:10px; max-height:90px;'>
+    <span style='text-shadow: 2px 2px black; font-weight:bold; font-size:17px;'>Excluir</span>
+</button>";
+
                     }
+                    ?>
+                        
+
+<?php
+
 
 
 
@@ -266,15 +290,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
     " . $nome_jogo[$cont] . "
   </div>
   
+  
   <div class='card-body cardBackground2' style='text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white; background-image: url(" . $link[$cont] . "'>
-    <h5 class='card-title' style='font-weight:bold;'>Review " . "$review" . " | Nota: <span style='border:1px solid black; padding-left:3px; color:white; background-color:#1B1212; padding-right:3px; text-decoration:underline; border-radius:4px; text-shadow: none; '>" . $avaliacao_usuario[$cont] . "</span> </h5><p></p>
+    <h5 class='card-title' style='font-weight:bold;'>Review " . "$review" . " | Nota: <span style='border:1px solid black; padding-left:3px; color:white; background-color:black; padding-right:3px; text-decoration:underline; border-radius:4px; text-shadow: none; '>" . $avaliacao_usuario[$cont] . "</span> </h5><p></p>
     <p class='card-text text-center' style='text-align:justify; margin-bottom:18px; font-size:18px; opacity:1; font-style:italic; '>''" . '' . $texto_review[$cont] . "''</p>
       <p class='card-text text-center' style='text-align:justify; margin-bottom:10px;'><span style='font-weight:bold;  font-size:17px;' </span>Postado há: " . '' . $mensagem[$cont] . "</p>
     <div style='display:flex; justify-content: center; position:relative; top:5px; '>  <a href=jogo_mostrar.php?id_jogo1=" . $id_jogo[$cont] . " class='btn btn-primary' style='margin-right:10px; margin-bottom:16px;'><span style='text-shadow: 2px 2px black; font-weight:bold; font-size:17px;'>Ir para o jogo</a></span>
         
-      <form action='deletar_comentario.php' onsubmit='return confirm('Are you sure?');' method='POST' style=''>
+      <form action='deletar_comentario.php' method='POST' style=''>
               <input type='hidden' name='id_review' value='$id_review[$cont]'>
+                  
               <input type='hidden' name='jogo_excluir' value='$id_jogo[$cont]'>
+                  
                <input type='hidden' name='validar' value='validar'>
                $botao
               

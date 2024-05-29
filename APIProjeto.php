@@ -7,41 +7,51 @@ use Stichoza\GoogleTranslate\GoogleTranslate;
 $key = 'Bearer qrmdc86d684n39ccrmjny54ihzbmt8'; // seu token de acesso IGDB
 $client_id = 'w1yfl91psnoxxgbns5ig6909yb25yx'; // seu ID de cliente IGDB
 
-$servername = "localhost"; // nome do servidor do banco de dados
-$username = "root"; // nome de usuário do banco de dados
-$password = ""; // senha do banco de dados
-$dbname = "db_review"; // nome do banco de dados
-
-// Cria a conexão
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Verifica a conexão
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+require('conecta.php');
 
 header('Content-Type: text/html; charset=utf-8');
+$tr = new GoogleTranslate('pt-br'); // Traduzir para português do Brasil
 
-$tr = new GoogleTranslate('pt'); // Traduzir para português
+// Mapeamento dos gêneros
+$genres_map = [
+    "MOBA" => "MOBA",
+    "Point-and-click" => "Point-and-click",
+    "Fighting" => "Luta",
+    "Shooter" => "Shooter",
+    "Music" => "Música",
+    "Platform" => "Plataforma",
+    "Puzzle" => "Quebra-Cabeça",
+    "Racing" => "Corrida",
+    "Real Time Strategy (RTS)" => "Estratégia em tempo Real",
+    "Role-playing (RPG)" => "RPG",
+    "Simulator" => "Simulação",
+    "Sport" => "Esporte",
+    "Strategy" => "Estratégia",
+    "Turn-based strategy (TBS)" => "Estratégia em turnos",
+    "Tactical" => "Tático",
+    "Hack and slash/Beat 'em up" => "Hack and slash/Beat 'em up",
+    "Quiz/Trivia" => "Quiz/Trivia",
+    "Pinball" => "Pinball",
+    "Adventure" => "Aventura",
+    "Indie" => "Indie",
+    "Arcade" => "Arcade",
+    "Visual Novel" => "Visual Novel",
+    "Card & Board Game" => "Jogo de carta/tabuleiro"
+];
 
 function formatDate($timestamp) {
     return date('Y-m-d', $timestamp);
 }
 
-function validateImageUrl($url) {
-    $headers = @get_headers($url);
-    return $headers && strpos($headers[0], '200');
-}
-
 $max_attempts = 5;
 $attempt = 0;
-$delay = 300000; // 250ms
+$delay = 300000; // 300ms
 $limit = 60; // Quantidade de jogos por requisição
 $offset = 0;
 
 while (true) {
     $json_url = 'https://api.igdb.com/v4/games';
-    $query = "fields name, first_release_date, summary, genres.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher, cover.url, total_rating_count; where platforms = (6) & cover != null & summary != null; limit $limit; offset $offset; sort total_rating_count desc;";
+    $query = "fields name, first_release_date, summary, genres.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher, cover.url, artworks.url, total_rating_count; where platforms = (6) & cover != null & summary != null; limit $limit; offset $offset; sort total_rating_count desc;";
 
     $ch = curl_init($json_url);
     $options = array(
@@ -100,11 +110,11 @@ while (true) {
                 $developer = "N/A";
                 $publisher = "N/A";
 
-                // Traduzindo os gêneros antes de inserir no banco de dados
+                // Traduzindo os gêneros com base no mapeamento
                 $genres = [];
                 if (isset($game['genres'])) {
                     foreach ($game['genres'] as $genre) {
-                        $translated_genre = $tr->translate($genre['name']);
+                        $translated_genre = $genres_map[$genre['name']] ?? $genre['name'];
                         $genres[] = $translated_genre;
                     }
                 }
@@ -123,9 +133,14 @@ while (true) {
 
                 // Melhorar a qualidade da imagem de capa
                 $cover_url = str_replace('t_thumb', 't_cover_big_2x', $game['cover']['url']);
-                if (!validateImageUrl($cover_url)) {
-                    // Caso a URL de alta qualidade não seja válida, usa a URL original
-                    $cover_url = str_replace('t_thumb', 't_cover_big', $game['cover']['url']);
+                
+                // Obter a melhor qualidade da artwork ou usar a cover em 1080p se não existir artwork
+                $artwork_url = null;
+                if (isset($game['artworks']) && count($game['artworks']) > 0) {
+                    $artwork_url_1080p = str_replace('t_thumb', 't_1080p', $game['artworks'][0]['url']);
+                    $artwork_url = $artwork_url_1080p ?: str_replace('t_thumb', 't_cover_big_2x', $game['cover']['url']);
+                } else {
+                    $artwork_url = str_replace('t_thumb', 't_cover_big_2x', $game['cover']['url']);
                 }
 
                 date_default_timezone_set('America/Sao_Paulo');
@@ -133,7 +148,7 @@ while (true) {
                 $horarioatual = date("Y-m-d H:i:s", $tempo);
 
                 // Verifica se o jogo já existe no banco de dados com base em nome e data de lançamento
-                $stmt_check = $conn->prepare("SELECT COUNT(*) FROM games WHERE nome_jogo = ? AND data_lancamento = ?");
+                $stmt_check = $conecta->prepare("SELECT COUNT(*) FROM games WHERE nome_jogo = ? AND data_lancamento = ?");
                 $stmt_check->bind_param("ss", $name, $release_date);
                 $stmt_check->execute();
                 $stmt_check->bind_result($count);
@@ -147,12 +162,12 @@ while (true) {
                 }
 
                 // Preparar e executar a inserção no banco de dados
-                $stmt = $conn->prepare("INSERT INTO games (nome_jogo, data_lancamento, desc_jogo, generos, desenvolvedor, publisher, img_jogo, horario_postado) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt = $conecta->prepare("INSERT INTO games (nome_jogo, data_lancamento, desc_jogo, generos, desenvolvedor, publisher, img_jogo, imagem_artwork, horario_postado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 if (!$stmt) {
-                    error_log("Prepare failed: " . $conn->error);
+                    error_log("Prepare failed: " . $conecta->error);
                     continue;
                 }
-                $stmt->bind_param("ssssssss", $name, $release_date, $description, $genres, $developer, $publisher, $cover_url, $horarioatual);
+                $stmt->bind_param("sssssssss", $name, $release_date, $description, $genres, $developer, $publisher, $cover_url, $artwork_url, $horarioatual);
                 if (!$stmt->execute()) {
                     error_log("Execute failed: " . $stmt->error);
                 } else {
@@ -178,4 +193,5 @@ while (true) {
     usleep($delay);
 }
 
-$conn->close();
+$conecta->close();
+?>

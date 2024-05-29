@@ -29,7 +29,9 @@ if (isset($_GET['id_jogo1'])) {
         exit;
     }
 } else {
-    header('Location:pagina_nao_encontrada.php');
+     echo "<script>
+                window.location.href = 'pagina_nao_encontrada.php';
+                </script>";
     exit;
 }
 
@@ -46,7 +48,9 @@ $totalPaginas = ceil($totalComentarios / $comentariosPorPagina);
 $paginaAtual = isset($_GET['pagina']) ? $_GET['pagina'] : 1;
 
 if ($paginaAtual > $totalPaginas || $paginaAtual <= 0) {
-    header('Location:pagina_nao_encontrada.php');
+     echo "<script>
+                window.location.href = 'pagina_nao_encontrada.php';
+                </script>";
     exit;
 }
 $id_usuario = array();
@@ -159,7 +163,7 @@ word-break: break-word; padding-right:15px;'>" . $txtreview[$index] . "</small><
 
     </div>
 
-    <p class='' style='text-align:right; position:relative; border:2px solid white; top:10px; font-weight:bold; text-decoration:italic; color:white; display:flex; justify-content:center; font-size:20px; background-color:#1B1212; padding-left:3px; padding-right:3px; border-radius:20%;'>" . $nota_review[$index] . "</p>
+    <p class='' style='text-align:right; position:relative; border:2px solid white; top:10px; font-weight:bold; text-decoration:italic; color:white; display:flex; justify-content:center; font-size:20px; background-color:#1B1212; padding-left:3px; padding-right:4px; border-radius:20%;'>" . $nota_review[$index] . "</p>
   </div>
 
   <div class='action d-flex justify-content-between mt-2 align-items-center'>";
@@ -220,7 +224,7 @@ while ($row = mysqli_fetch_array($result)) {
     $media = (int) $row['AVG(avaliacao_total)'];
 }
 if ($media == NULL) {
-    $media = 0;
+    $media = "N/A";
 }
 for ($h = 0; $h < 1; $h++) {
 
@@ -363,39 +367,40 @@ document.addEventListener('DOMContentLoaded', (event) => {
             </div>
         </nav>
             <br>
-            <div class="row fadeInFromBottom" style="margin-top:30px;">
+            <div class="row fadeInFromBottom" style="margin-top:30px; z-index:1">
                 <div class="col-md-6 col-lg-4 ; card bordas float-start centralizar" style="max-width: 80%; width: 500px; padding: 0; overflow: auto;">
-                    <img src="<?php echo $link ?>" class="img-fluid imagem-f" alt="..." >
+                    <img src="<?php echo $link ?>" class="img-fluid imagem-f" style="max-height:360px";alt="..." >
 
                     <div class="card-body" style="background: #E8E8E8; border:5px solid; border-image-slice: 1; border-width:5px; border-left:0px; border-right:0px; border-bottom:0px; border-image-source: linear-gradient(to right, darkslategrey, black);">
                         <h5 class="card-title d-flex justify-content-center" style="font-weight: bold"><?php echo $nomejogo . ' | ' . $data ?></h5>
 <p class="card-text" style="text-align:justify;">
     <?php echo $desc; ?><br>
     <span style="font-weight:bold">Generos: </span><?php echo $generos . "."; ?><br>
-    <span style="font-weight:bold;">Desenvolvedora e Publisher: </span><?php echo $dev . ", " . $publisher . "."; ?><br>
+    <span style="font-weight:bold;">Desenvolvedora</span><?php echo ": ".$dev; ?><br>
+    <span style="font-weight:bold;">Publisher: </span><?php echo $publisher . "."; ?><br>
     <span style="font-weight:bold">Postado há: </span><?php echo $mensagem[0]; ?>
 </p>
-<p class="rating-box mx-auto" style="display:flex; justify-content:center; font-size:19.2px;">
+<p class="rating-box mx-auto" style=" max-width:180px; display:flex; justify-content:center; background-color:black; border:2px solid grey; font-size:19.2px;">
     Nota média: 
-    <span class="mx-auto" style="text-decoration: underline; color:white; background-color:#1B1212; padding-left:3px;  border-radius:20%; white-space: nowrap;">
+    <span class="mx-auto" style="text-decoration: underline; color:white; background-color:black; padding-left:3px;  border-radius:20%; white-space: nowrap;">
         <?php echo $media; ?>
     </span>
 </p>
                     </div>
                 </div>
                 <div class="col-lg-7 col-md-8 col-sm-12 col-12 col review123" style="max-width: 75%; margin-top:35px;">
-                    <form action="recebe_review.php" method='POST' class="textoreview">
+                    <form accept-charset="UTF-8" action="recebe_review.php" method='POST' class="textoreview">
                         <div>
                             <label for="vaso" class="form-label" style='color:white; '>Review do jogo: </label>
                             <textarea rows="5" class="form-control mb-2" required id="vaso" name="review" placeholder="Escreva sua review:" style="background: #D8D8D8; border:5px solid; border-image-slice: 1;border-width:5px; border-image-source: linear-gradient(to left, darkslategrey, black);display:flex; margin-right:100%;" maxlength="3000" required></textarea>
                         </div>
                         <div class="mb-3 col-sm">
                             <label for="reviewScore" class="form-label" style='color:white;'>Nota do jogo: </label>
-                            <input type="number" class="form-control" id="reviewScore" name="nota_review" min="0" max="100" placeholder="Digite sua nota para o jogo" required>
+                            <input type="number" class="form-control" id="reviewScore" name="nota_review" min="0" max="100" placeholder="Digite sua nota para o jogo (0 a 100)" required>
                         </div>
                         <input type="hidden" name="id_jogo1" value="<?php echo $id_jogo; ?>" required>
                         <input type="hidden" name="id_usuario" value="<?php echo $id_usuario; ?>" required>
-                        <button type="submit" class="btn btn-primary botaosub" >Enviar</button>
+                        <button type="submit" class="btn btn-primary botaosub" style="font-weight:bold;" >Enviar</button>
                     </form>
 
                     </form>
@@ -415,7 +420,7 @@ for ($i = $indiceInicial; $i <= $indiceFinal; $i++) {
     } else {
         echo '<div class="cartao-review" style=" display: flex; justify-content: center; align-items: center; height: 150px; background-color: #333; color: white; border-radius: 10px; ">
                   <div style="text-align: center;">
-                      <h1>Este jogo não contém reviews.<br> seja o primeiro!</h1>
+                      <h1 style="font-family:monospace; text-shadow: 2px 2px black;">Este jogo não contém reviews.<br> Seja o primeiro!</h1>
                   </div>
               </div>';
     }
@@ -471,7 +476,7 @@ if ($totalComentarios > $comentariosPorPagina) {
 
     </div><br>
     
-    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

@@ -2,7 +2,9 @@
 session_start();
 
 function redirect($DoDie = true) {
-    header('location:index.php');
+    echo "<script>
+                window.location.href = 'index.php';
+                </script>";
     if ($DoDie)
         die();
 }
@@ -96,8 +98,7 @@ if (isset($_SESSION['erro1']) and $_SESSION['erro1']) {
                         </div>
                         <?php
                         echo $erro;
-                        session_unset();
-                        session_destroy();
+                        unset($_SESSION['erro1']);
                         ?>
                         <div class="mb-3">
                             <button type="submit" class="btn btn-primary w-100 value=submit">Cadastrar</button>

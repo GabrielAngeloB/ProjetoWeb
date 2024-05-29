@@ -1,7 +1,9 @@
 <?php
 session_start();
 function redirect($DoDie = true) {
-    header('location:index.php');
+    echo "<script>
+                window.location.href = 'index.php';
+                </script>";
     if ($DoDie)
         die();
 }
@@ -84,8 +86,7 @@ if (isset($_SESSION['erro']) and $_SESSION['erro']) {
                             <input type="password" class="form-control" name="senha" placeholder="Digite sua senha" required>
                             <?php
                             echo $erro;
-                            session_unset();
-                            session_destroy();
+                            unset($_SESSION['erro']);
                             ?>
                         </div>
                         

@@ -38,15 +38,15 @@ if ($resultado->num_rows > 0) {
                 box-shadow: 0 0px 12px 0 black;
             }
             button:hover {
-    box-shadow: 0 0px 16px 0 grey;
-    font-size: 16.5px; 
-    border-color: grey; /* Cor inicial da borda */
-    transition: border-color 0.3s ease;
-}
+                box-shadow: 0 0px 16px 0 grey;
+                font-size: 16.5px;
+                border-color: grey; /* Cor inicial da borda */
+                transition: border-color 0.3s ease;
+            }
 
-button:hover {
-    border-color: white; /* Cor da borda ao passar o mouse */
-}
+            button:hover {
+                border-color: white; /* Cor da borda ao passar o mouse */
+            }
             button:link {
                 color:white;
             }
@@ -93,7 +93,7 @@ button:hover {
                         <div class="dropdown-menu dropdown-menu-end position-absolute" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="pagina_usuario.php?id_usuario=<?php echo $id_usuario; ?>">Ver perfil</a>
                             <a class="dropdown-item" href="editar_usuario.php">Editar perfil</a>
-<?php echo $adicionar ?>
+                            <?php echo $adicionar ?>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
                     </li>
@@ -103,22 +103,24 @@ button:hover {
             </div>
         </nav>
 
-        <div class="fadeInFromBottom">
-            <h1 class="mx-auto letra2" style="color:white; margin-top:100px; text-align:center; "><span style="background-color:#343434; padding-left:30px; padding-right:30px; border-radius:10px; text-shadow: 3px 3px black;  ">⧙ Gêneros ⧘</span></h1>
+        
+            <h1 class="mx-auto letra2" style="color:white; margin-top:100px; text-align:center; "><span style="background-color:#343434; padding-left:30px; padding-right:30px; border-radius:10px; text-shadow: 3px 3px black; font-family:monospace;"> ⚡︎ Gêneros ⚡︎ </span></h1>
+            <div class="fadeInFromBottom">
             <div class="generos">
                 <?php
                 $genres = array(
-                    "Ação", "Aventura", "Estratégia", "RPG", "Quebra-Cabeça", "Simulação", "Esporte",
-                    "Corrida", "Plataforma", "Casual", "Indie", "MMO", "MOBA", "Battle Royale",
-                    "Tower Defense", "Luta", "Esportes", "Corrida", "Terror", "Mundo Aberto",
-                    "Sobrevivência", "Roguelike", "FPS", "Multiplayer", "Atirador", "Tático", "Aponte e Clique", "Hack and Slash"
+                    "MOBA", "Point-and-click", "Luta", "Shooter", "Música", "Plataforma",
+                    "Quebra-Cabeça", "Corrida", "RPG", "Simulação",
+                    "Esporte", "Estratégia", "Tático", "Hack and slash",
+                    "Quiz/Trivia", "Pinball", "Aventura", "Indie", "Arcade", "Visual Novel",
+                    "Estratégia em turnos", "Estratégia em tempo real", "Jogo de carta/tabuleiro"
                 );
 
                 foreach ($genres as $genre) {
                     echo '
             <div class="col-lg-8 col-md-9">
             <a href="lista_jogos.php?genero=' . urlencode($genre) . '">
-								<button id="button" type="button" style="color:white; white-space: nowrap; background-color:black; font-weight:bold; border:2px solid #707070; width:145px; height:60px; margin-right:9px; padding-right:11px; " class="btn mb-2 mb-m-0 btn-primary btn-block genre-button" onclick="window.location.href=\'lista_jogos.php?genero=' . urlencode($genre) . '\'"><span style=color:white;>' . $genre . '</span>
+								<button id="button" type="button" style="color:white; white-space: nowrap; background-color:black; font-family:fantasy; font-weight:bold; border:2px solid #707070; width:225px; height:60px; margin-right:9px; padding-right:11px; " class="btn mb-2 mb-m-0 btn-primary btn-block genre-button" onclick="window.location.href=\'lista_jogos.php?genero=' . urlencode($genre) . '\'"><span style=color:white;>' . $genre . '</span>
 									<div class="icon d-flex align-items-center justify-content-center">
 										<i class="ion-ios-heart"></i>
                                                                             </a>    
@@ -127,22 +129,22 @@ button:hover {
            
 							
 							</div>'
-                                                        ;                                       
+                    ;
                 }
                 ?>
-<script>
-        var buttons = document.querySelectorAll(".genre-button");
+                <script>
+                    var buttons = document.querySelectorAll(".genre-button");
 
-        buttons.forEach(function(button) {
-            button.addEventListener("mouseover", function() {
-                this.style.borderColor = "white";
-            });
+                    buttons.forEach(function (button) {
+                        button.addEventListener("mouseover", function () {
+                            this.style.borderColor = "white";
+                        });
 
-            button.addEventListener("mouseout", function() {
-                this.style.borderColor = "#707070";
-            });
-        });
-    </script>
+                        button.addEventListener("mouseout", function () {
+                            this.style.borderColor = "#707070";
+                        });
+                    });
+                </script>
             </div>
         </div>
     </div>
@@ -152,7 +154,7 @@ button:hover {
             margin-top: 20px; /* Ajuste a margem superior conforme necessário */
         }
 
-        
+
         .btn-dark:hover {
             background-color: #ffffff;
             color: #000000;

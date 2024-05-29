@@ -19,7 +19,9 @@ $id_review = $_POST['id_review'];
 if (isset($_POST['delete'])) {
     $conf = true;
 } else {
-    header("Location: jogos_recentes.php");
+    echo "<script>
+                window.location.href = 'jogos_recentes.php';
+                </script>";
     exit; 
 }
 
@@ -36,7 +38,7 @@ if ($conf) {
         if (isset($_SESSION['id_jogo'])) {
             $id_jogo = $_SESSION['id_jogo'];
         } else {
-            
+            $id_jogo = $_POST['jogo_excluir'];
         }
     }
 
@@ -81,7 +83,10 @@ if ($conf) {
     }
 
     
-    header('Location: jogo_mostrar.php?id_jogo1=' . $id_jogo);
+    echo "<script>
+         window.location.href = 'jogo_mostrar.php?id_jogo1=$id_jogo';
+      </script>";
+
     exit; 
     unset($_POST['validar']);
 }

@@ -49,7 +49,9 @@
                     if ($conecta->query($sql) === TRUE) {
                         $login = $emailcad;
                         $senha = $senhacad;
-                        header('location:login.php');
+                        echo "<script>
+                window.location.href = 'login.php';
+                </script>";
                         $ok = true;
                         
                     } else {
