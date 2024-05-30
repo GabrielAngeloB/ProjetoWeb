@@ -61,8 +61,8 @@
 
                     $horarioatual = date("Y-m-d H:i:s", $tempo);
 
-                    $sql = "INSERT INTO games (desenvolvedor, publisher, data_lancamento, nome_jogo, desc_jogo, img_jogo, generos, horario_postado)
-                   VALUES ('$dev', '$publisher', '$data_jogo', '$nome_jogo', '$desc_jogo', '$linkImagem', '$generostotal', '$horarioatual')";
+                    $sql = "INSERT INTO games (desenvolvedor, publisher, data_lancamento, nome_jogo, desc_jogo, img_jogo, generos, horario_postado, imagem_artwork)
+                   VALUES ('$dev', '$publisher', '$data_jogo', '$nome_jogo', '$desc_jogo', '$linkImagem', '$generostotal', '$horarioatual', '$linkImagem')";
                     if ($conecta->query($sql) === TRUE) {
                         
                     } else {

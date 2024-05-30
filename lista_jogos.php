@@ -326,45 +326,42 @@ $genero = isset($_GET["genero"]) ? $conecta->real_escape_string($_GET["genero"])
         }
         ?>
         <div style="text-align:center;">
-            <ul class="pagination justify-content-center">
-                <?php
-                // Query to get total number of games
-                // Calculate total number of pages
-                
-                $total_paginas = ceil($total_jogos / $por_pagina);
-                if ($total_paginas > 1) {
-                // Number of visible links
-                $max_links = 10;
+    <ul class="pagination justify-content-center">
+        <?php
+        // Número total de páginas
+        $total_paginas = ceil($total_jogos / $por_pagina);
 
-                // Calculate the start and end of the range of pages to be displayed
-                $start = max(1, $pagina - floor($max_links / 2));
-                $end = min($total_paginas, $start + $max_links - 1);
+        if ($total_paginas > 1) {
+            // Número de links visíveis
+            $max_links = 10;
 
-                // Adjust the range if the number of links exceeds the total pages
-                if ($end - $start + 1 < $max_links) {
-                    $start = max(1, $end - $max_links + 1);
-                }
+            // Calcular o início e o fim da faixa de páginas a serem exibidas
+            $start = max(1, $pagina - floor($max_links / 2));
+            $end = min($total_paginas, $start + $max_links - 1);
 
-                // Display "Previous" link if applicable
-                if ($pagina > 1) {
-                    echo '<li class="page-item"><a class="custom-page-link2" style="color: white; bottom:1%;" href="?pagina=' . ($pagina - 1) . '">&laquo;</a></li>';
-                }
+            // Ajustar a faixa se o número de links exceder o total de páginas
+            if ($end - $start + 1 < $max_links) {
+                $start = max(1, $end - $max_links + 1);
+            }
 
-                // Display the page numbers
-                for ($i = $start; $i <= $end; $i++) {
-                    $active = ($i == $pagina) ? 'active' : '';
-                    $background = ($i == $pagina) ? '#343a40' : '#f8f9fa'; // cinza claro para não ativo
-                    echo '<li class="page-item"><a class="page-link ' . $active . '" style="font-size:30px; border: 2px solid black; color:black; border-radius:20px; margin-left:5px; padding-right:3px; padding-left:3px; background-color: ' . $background . ';" href="?pagina=' . $i . '">' . $i . '</a></li>';
-                }
+            // Link "Anterior" se aplicável
+            if ($pagina > 1) {
+                echo '<li class="page-item"><a class="custom-page-link2" style="color: white; bottom:1%;" href="?pagina=' . ($pagina - 1) . '&pesquisa=' . urlencode($pesquisa) . '&genero=' . urlencode($genero) . '">&laquo;</a></li>';
+            }
 
-                // Display "Next" link if applicable
-                if ($pagina < $total_paginas) {
-                    echo '<li class="page-item"><a class="custom-page-link2" style="color: white; bottom:1%;" href="?pagina=' . ($pagina + 1) . '">&raquo;</a></li>';
-                }
-                }
-                ?>
-            </ul>
-        </div>
+            // Exibir os números das páginas
+            for ($i = $start; $i <= $end; $i++) {
+                $active = ($i == $pagina) ? 'active' : '';
+                $background = ($i == $pagina) ? '#343a40' : '#f8f9fa'; // cinza claro para não ativo
+                echo '<li class="page-item"><a class="page-link ' . $active . '" style="font-size:30px; border: 2px solid black; color:black; border-radius:20px; margin-left:5px; padding-right:3px; padding-left:3px; background-color: ' . $background . ';" href="?pagina=' . $i . '&pesquisa=' . urlencode($pesquisa) . '&genero=' . urlencode($genero) . '">' . $i . '</a></li>';
+            }
+
+            // Link "Próximo" se aplicável
+            if ($pagina < $total_paginas) {
+                echo '<li class="page-item"><a class="custom-page-link2" style="color: white; bottom:1%;" href="?pagina=' . ($pagina + 1) . '&pesquisa=' . urlencode($pesquisa) . '&genero=' . urlencode($genero) . '">&raquo;</a></li>';
+            }
+        }
+        ?>
     </ul>
 </div>
 <?php
