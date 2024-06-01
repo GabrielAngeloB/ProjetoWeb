@@ -12,6 +12,11 @@ $generos = $_POST['generos'];
 $desc_jogo = $_POST['desc_jogo'];
 $img_jogo = $_FILES['imagem'];
 require ('conecta.php');
+if ($_SESSION['login'] !== 'gabridestiny@hotmail.com') {
+    echo "<script>
+                window.location.href = 'index.php';
+                </script>";
+}
 
 function adicionarJogo($nome_jogo, $publisher, $dev, $data_jogo, $generos, $desc_jogo, $img_jogo, $conecta) {
 

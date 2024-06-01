@@ -6,10 +6,14 @@ if (isset($_SESSION['id_usuario'])) {
     $id_usuario = $_SESSION['id_usuario'];
 }
 
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $senha_atual = $_POST['current_password'];
     $senha_nova = $_POST['new_password'];
     $confirmar_senha_nova = $_POST['confirm_new_password'];
+    
+     
 
     if (strlen($senha_atual) < 8 || strlen($senha_nova) < 8 || strlen($confirmar_senha_nova) < 8) {
         echo "<script>

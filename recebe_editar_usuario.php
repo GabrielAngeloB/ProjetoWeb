@@ -6,11 +6,20 @@ require('conecta.php');
     if (isset($_SESSION['id_usuario'])) {
         $id_usuario = $_SESSION['id_usuario'];
     }
+     if (!isset($_POST['username']) && !isset($_POST['email']) && 
+    (!isset($_FILES['profile_pic']) || $_FILES['profile_pic']['error'] !== UPLOAD_ERR_OK)) {
+    echo "<script>
+            window.location.href = 'editar_usuario.php';
+          </script>";
+    exit;
+}
 
     $nome = $_POST['username'];
     $email = $_POST['email'];
     $img_perfil = $_FILES['profile_pic'];
     $ok = true;
+    
+   
 
     $tenta_achar = "SELECT * FROM usuario WHERE email='$email' or nome_usuario='$nome' AND id_usuario <> '$id_usuario'";
     $resultado = $conecta->query($tenta_achar);

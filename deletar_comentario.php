@@ -12,9 +12,16 @@ if ((!isset($_SESSION['login']) || !isset($_SESSION['senha']))) {
 }
 
 require('conecta.php');
-
+if (!isset($_POST['id_review'])) {
+    echo "<script>
+                window.location.href = 'jogos_recentes.php';
+                </script>";
+    exit; 
+}
 $logado = $_SESSION['login'];
 $id_review = $_POST['id_review'];
+
+
 
 if (isset($_POST['delete'])) {
     $conf = true;

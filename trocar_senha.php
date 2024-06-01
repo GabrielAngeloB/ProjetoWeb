@@ -185,6 +185,11 @@ if ($resultado->num_rows > 0) {
                         $input.addClass('valid-input');
                     }
                 });
+
+                // Evento para submeter o formulário quando o botão "Confirmar" no modal for clicado
+                $('#confirmButton').on('click', function() {
+                    $('#trocaSenhaForm').submit();
+                });
             });
         </script>
 

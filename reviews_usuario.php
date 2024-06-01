@@ -215,7 +215,7 @@ $getQuery = "
     JOIN games g ON r.id_jogo = g.id_jogo
     LEFT JOIN avaliacao a ON r.id_jogo = a.id_jogo AND r.id_usuario = a.id_usuario
     WHERE r.id_usuario = $id_usuario
-    ORDER BY r.total_reviews DESC
+    ORDER BY r.id_review DESC
     LIMIT $initial_page, $limit
 ";
 

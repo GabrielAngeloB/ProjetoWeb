@@ -172,7 +172,7 @@ word-break: break-word; padding-right:15px;'>" . $txtreview[$index] . "</small><
               <input type='hidden' name='id_review' value='" . $id_review[$commentIDs[$index]] . "'>
               <input type='hidden' name='id_usuario' value='" . $id_usuario[$commentIDs[$index]] . "'>
                   <input type='hidden' name='delete' value=''>
-              <button Onclick='return ConfirmDelete();' type='submit' name='delete' class='btn btn-danger btn-sm' style='font-size: 12px;'>Excluir</button>
+              <button Onclick='return ConfirmDelete();' type='submit' name='delete' class='btn btn-danger btn-sm' style='font-size: 12px; font-weight:bold;'>Excluir</button>
             </form>
             <div class='icons align-items-center' style='position:relative; bottom:3px;'>
         <p style='text-align:left'><span style='font-weight:bold;'> Postado</span>: $mensagem[$index]</p> 
@@ -363,9 +363,9 @@ if ($resultado->num_rows > 0) {
                             <span style="font-weight:bold;">Publisher: </span><?php echo $publisher . "."; ?><br>
                             <span style="font-weight:bold">Postado: </span><?php echo $mensagem; ?>
                         </p>
-                        <p class="rating-box mx-auto" style=" max-width:180px; display:flex; justify-content:center; background-color:black; border:2px solid grey; font-size:19.2px;">
+                        <p class="rating-box mx-auto" style=" max-width:185px; display:flex; justify-content:center; background-color:black; border:2px solid grey; font-size:20px;">
                             Nota média: 
-                            <span class="mx-auto" style="text-decoration: underline; color:white; background-color:black; padding-left:3px;  border-radius:20%; white-space: nowrap;">
+                            <span class="mx-auto" style="text-decoration: underline; font-size:20px; color:white; background-color:black; padding-left:3px;  border-radius:20%; white-space: nowrap;">
                                 <?php echo $media; ?>
                             </span>
                         </p>
@@ -476,12 +476,6 @@ if ($resultado->num_rows > 0) {
             </div>
         </div>
     </div>
-
-
-
-
-
-
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous"></script>
