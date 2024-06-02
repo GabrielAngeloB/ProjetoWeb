@@ -33,6 +33,7 @@ if ($resultado->num_rows > 0) {
         $link[$cont] = $linha["imagem_artwork"];
         $nomejogo[$cont] = $linha["nome_jogo"];
         $id_jogo[$cont] = $linha["id_jogo"];
+        $link_pequeno[$cont] = $linha["img_jogo"];
         $media[$cont] = $linha["avaliacao_media"];
         $cont++; // Incrementar o contador a cada iteração
     }
@@ -55,6 +56,8 @@ if ($resultado->num_rows > 0) {
 } else {
     echo "Nenhum jogo encontrado.";
 }
+
+
 ?>
 <html>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
@@ -89,6 +92,47 @@ if ($resultado->num_rows > 0) {
             button:link {
                 color:white;
             }
+            
+            .carousel-titulo {
+            top: 13px;
+            position: relative;
+            font-size: 50px;
+        }
+        
+        
+        @media (max-width: 1900px) {
+            .carousel-titulo {
+                font-size: 55px;
+            }
+        }
+        @media (max-width: 1200px) {
+            .carousel-titulo {
+                font-size: 50px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .carousel-titulo {
+                font-size: 48px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .carousel-titulo {
+                font-size: 44px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .carousel-titulo {
+                font-size: 40px;
+            }
+        }
+        @media (max-width: 390px) {
+            .carousel-titulo {
+                font-size: 35px;
+            }
+        }
         </style>
         </style>
 
@@ -159,9 +203,9 @@ if ($resultado->num_rows > 0) {
         <div id="meu-carrossel" class="carousel slide carousel-fade" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="<?php echo $link[0] ?>" height="60%" width="90%" class="d-block mx-auto" style="border-style: solid; object-fit:fill; border-width: 4px; border-image:linear-gradient(grey, black) 50;" loading='lazy' alt="Imagem 1">
+                    <img src="<?php echo $link[0]; ?>" data-artwork="<?php echo $link[0]; ?>" data-jogo="<?php echo $link_pequeno[0]; ?>" height="60%" width="90%" class="d-block mx-auto carousel-image" style="border-style: solid; object-fit:fill; border-width: 4px; border-image:linear-gradient(grey, black) 50;" loading='lazy' alt="Imagem <?php echo 0 + 1; ?>">
                     <div class="carousel-caption">
-                        <h5 class="carousel-titulo destaque" style="top:13px; position:relative; font-size:45px;"><?php echo $nomejogo[0] ?>™</h5><br>
+                        <h5 class="carousel-titulo destaque" style="top:13px; position:relative; "><?php echo $nomejogo[0] ?>™</h5><br>
 
                         <p class="rating-box gold mx-auto" style="display:flex; justify-content:center; font-size:30px; max-width:90px;">
                             <span class="mx-auto" style="padding-left:3px; border-radius:20%; white-space: nowrap;">
@@ -172,9 +216,9 @@ if ($resultado->num_rows > 0) {
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="<?php echo $link[1] ?>" height="60%" width="90%" class="d-block mx-auto" style="border-style: solid; object-fit:fill; border-width: 4px; border-image:linear-gradient(grey, black) 50;" loading='lazy' alt="Imagem 1">
+                    <img src="<?php echo $link[1]; ?>" data-artwork="<?php echo $link[1]; ?>" data-jogo="<?php echo $link_pequeno[1]; ?>" height="60%" width="90%" class="d-block mx-auto carousel-image" style="border-style: solid; object-fit:fill; border-width: 4px; border-image:linear-gradient(grey, black) 50;" loading='lazy' alt="Imagem <?php echo 1 + 1; ?>">
                     <div class="carousel-caption">
-                        <h5 class="carousel-titulo destaque" style="top:13px; position:relative; font-size:45px;"><?php echo $nomejogo[1] ?>™</h5><br>
+                        <h5 class="carousel-titulo destaque" style="top:13px; position:relative; "><?php echo $nomejogo[1] ?>™</h5><br>
 
                         <p class="rating-box silver mx-auto" style="display:flex; justify-content:center; font-size:30px; max-width:90px;">
                             <span class="mx-auto" style="padding-left:3px; border-radius:20%; white-space: nowrap;">
@@ -185,9 +229,9 @@ if ($resultado->num_rows > 0) {
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="<?php echo $link[2] ?>" height="60%" width="90%" class="d-block mx-auto" style="border-style: solid; object-fit:fill; border-width: 4px; border-image:linear-gradient(grey, black) 50;" loading='lazy' alt="Imagem 1">
+                    <img src="<?php echo $link[2]; ?>" data-artwork="<?php echo $link[2]; ?>" data-jogo="<?php echo $link_pequeno[2]; ?>" height="60%" width="90%" class="d-block mx-auto carousel-image" style="border-style: solid; object-fit:fill; border-width: 4px; border-image:linear-gradient(grey, black) 50;" loading='lazy' alt="Imagem <?php echo 2 + 1; ?>">
                     <div class="carousel-caption">
-                        <h5 class="carousel-titulo destaque" style="top:13px; position:relative; font-size:45px;"><?php echo $nomejogo[2] ?>™</h5><br>
+                        <h5 class="carousel-titulo destaque" style="top:13px; position:relative;"><?php echo $nomejogo[2] ?>™</h5><br>
 
                         <p class="rating-box bronze mx-auto" style="display:flex; justify-content:center; font-size:30px; max-width:90px;">
                             <span class="mx-auto" style="padding-left:3px; border-radius:20%; white-space: nowrap;">
@@ -198,6 +242,25 @@ if ($resultado->num_rows > 0) {
                     </div>
                 </div>
             </div>
+            <script>
+function updateImageSources() {
+    var width = window.innerWidth;
+    var images = document.querySelectorAll('.carousel-image');
+    
+    images.forEach(function(img) {
+        var artworkSrc = img.getAttribute('data-artwork');
+        var jogoSrc = img.getAttribute('data-jogo');
+        if (width < 650) {
+            img.setAttribute('src', jogoSrc);
+        } else {
+            img.setAttribute('src', artworkSrc);
+        }
+    });
+}
+
+window.addEventListener('resize', updateImageSources);
+window.addEventListener('load', updateImageSources);
+</script>
             
 
 
@@ -289,6 +352,8 @@ if ($resultado->num_rows > 0) {
                                     </div>
                                     <p></p>
                                     </div>
+        
+        
 
                                     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous" defer></script>
                                     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous" async></script>
