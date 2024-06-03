@@ -1357,10 +1357,54 @@ text-align:center;
 
 .saiba-mais-btn:hover {
     box-shadow: 0 0px 16px 0 grey;
-    border-color: grey; /* Cor inicial da borda */
+    border-color: grey;
     transition: border-color 0.3s ease;
 }
 .destaque {
     color: white;
     text-shadow: 0 0 5px #000000, 0 0 10px #000000, 0 0 15px #000000;
+}
+
+
+/* Fonte personalizada */
+/* Fonte personalizada */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* Estilos para o SweetAlert2 */
+.custom-swal-popup {
+    font-family: 'Roboto', sans-serif !important;
+}
+
+/* Estilos padrão para SweetAlert2 */
+.swal2-container .swal2-popup {
+    padding-bottom:30px;
+}
+
+.swal2-title {
+    font-size: 1.75em; /* Tamanho padrão da fonte do título */
+}
+
+.swal2-content {
+    font-size: 1.25em; /* Tamanho padrão da fonte do conteúdo */
+}
+
+.swal2-confirm {
+    width: auto; /* Largura padrão do botão de confirmação */
+    font-size: 1em; /* Tamanho padrão da fonte do botão */
+}
+
+@media screen and (min-width:300px) and (max-width: 768px) {
+    .swal2-container .swal2-popup {
+        width: 90% !important; 
+    }
+    .swal2-title {
+        font-size: 1.5em !important; /* Ajusta o tamanho da fonte do título */
+    }
+    .swal2-content {
+        font-size: 1em !important; /* Ajusta o tamanho da fonte do conteúdo */
+    }
+    .swal2-confirm {
+        width: 100% !important; /* Botão de confirmação ocupa toda a largura */
+        font-size: 1em !important; /* Ajusta o tamanho da fonte do botão */
+    }
 }

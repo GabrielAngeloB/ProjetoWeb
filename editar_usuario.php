@@ -1,10 +1,15 @@
 <?php
+
 session_start();
+?>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<?php
+
 if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {
     session_unset();
-    echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
-    . "<link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>"
-    . "<link href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' rel='stylesheet'>";
+    echo "<link href='css2/estilos.css' type='text/css' rel='stylesheet'> "
+    . "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
+    . "<link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>"; // Adiciona o link para o CSS customizado
     echo "<script>
             document.addEventListener('DOMContentLoaded', function() {
                 // Altera o background da página
@@ -24,17 +29,8 @@ if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true
                 });
             });
           </script>";
-    echo "<style>
-            .custom-swal-popup {
-                font-family: 'Poppins', sans-serif !important;
-               /* Adiciona espaçamento entre as letras */
-            }
-            
-          </style>";
     exit; // Certifique-se de parar a execução do script após redirecionar
 }
-
-
 
 if (isset($_SESSION['erroinfo']) and $_SESSION['erroinfo']) {
     $erro = "<div class='alert alert-danger' role='alert' style=' border: 1px solid red; margin-top:13px; font-weight:bold; padding-top:3px; padding-bottom:3px;'> Email ou usuário já existem!

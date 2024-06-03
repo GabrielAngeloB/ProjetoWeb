@@ -1,10 +1,15 @@
 <?php
+
 session_start();
+?>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<?php
+
 if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {
     session_unset();
-    echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
-    . "<link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>"
-    . "<link href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' rel='stylesheet'>";
+    echo "<link href='css2/estilos.css' type='text/css' rel='stylesheet'> "
+    . "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
+    . "<link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>"; // Adiciona o link para o CSS customizado
     echo "<script>
             document.addEventListener('DOMContentLoaded', function() {
                 // Altera o background da página
@@ -18,21 +23,12 @@ if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true
                     customClass: {
                         popup: 'custom-swal-popup'
                     },
-                    allowOutsideClick: false
+                    allowOutsideClick: false // Evita fechar ao clicar fora do alerta
                 }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'login.php';
-                    }
+                    window.location.href = 'login.php';
                 });
             });
           </script>";
-    echo "<style>
-            .custom-swal-popup {
-                font-family: 'Poppins', sans-serif !important;
-               /* Adiciona espaçamento entre as letras */
-            }
-            
-          </style>";
     exit; // Certifique-se de parar a execução do script após redirecionar
 }
 require('conecta.php');
@@ -54,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Verificar tamanho das senhas
     if (strlen($senha_atual) < 8 || strlen($senha_nova) < 8 || strlen($confirmar_senha_nova) < 8) {
-        echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
+        echo " <link href='css2/estilos.css' type='text/css' rel='stylesheet'> <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
         . "<link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>"
         . "<link href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' rel='stylesheet'>";
         echo "<script>
@@ -88,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Verificar se as novas senhas coincidem
     if ($senha_nova !== $confirmar_senha_nova) {
-        echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
+        echo " <link href='css2/estilos.css' type='text/css' rel='stylesheet'> <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
         . "<link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>"
         . "<link href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' rel='stylesheet'>";
         echo "<script>
@@ -127,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $senha_nova_hashed = md5($senha_nova);
         $sql2 = "UPDATE usuario SET senha = '$senha_nova_hashed' WHERE id_usuario = $id_usuario";
         if ($conecta->query($sql2) === TRUE) {
-            echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
+            echo " <link href='css2/estilos.css' type='text/css' rel='stylesheet'> <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
             . "<link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>"
             . "<link href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' rel='stylesheet'>";
             echo "<script>
@@ -157,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             
                   </style>";
         } else {
-            echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
+            echo " <link href='css2/estilos.css' type='text/css' rel='stylesheet'> <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
             . "<link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>"
             . "<link href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' rel='stylesheet'>";
             echo "<script>
@@ -188,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                   </style>";
         }
     } else {
-        echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
+        echo " <link href='css2/estilos.css' type='text/css' rel='stylesheet'> <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
         . "<link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>"
         . "<link href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' rel='stylesheet'>";
         echo "<script>
