@@ -2,10 +2,36 @@
 session_start();
 if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {
     session_unset();
+    echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
+    . "<link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>"
+    . "<link href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' rel='stylesheet'>";
     echo "<script>
-            alert('Esta página só pode ser acessada por usuário logado');
-            window.location.href = 'login.php';
+            document.addEventListener('DOMContentLoaded', function() {
+                // Altera o background da página
+                document.body.style.backgroundColor = '#37363d';
+                
+                Swal.fire({
+                    title: 'Erro!',
+                    text: 'Esta página só pode ser acessada por usuário logado!',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        popup: 'custom-swal-popup'
+                    },
+                    allowOutsideClick: false // Evita fechar ao clicar fora do alerta
+                }).then((result) => {
+                    window.location.href = 'login.php';
+                });
+            });
           </script>";
+    echo "<style>
+            .custom-swal-popup {
+                font-family: 'Poppins', sans-serif !important;
+               /* Adiciona espaçamento entre as letras */
+            }
+            
+          </style>";
+    exit; // Certifique-se de parar a execução do script após redirecionar
 }
 $logado = $_SESSION['login'];
 $adicionar = '';

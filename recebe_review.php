@@ -2,6 +2,40 @@
 session_start();
 require('conecta.php');
 $naotem = true;
+if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {
+    session_unset();
+    echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
+    . "<link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>"
+    . "<link href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' rel='stylesheet'>";
+    echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Altera o background da página
+                document.body.style.backgroundColor = '#37363d';
+                
+                Swal.fire({
+                    title: 'Erro!',
+                    text: 'Esta página só pode ser acessada por usuário logado!',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        popup: 'custom-swal-popup'
+                    },
+                    allowOutsideClick: false // Evita fechar ao clicar fora do alerta
+                }).then((result) => {
+                    window.location.href = 'login.php';
+                });
+            });
+          </script>";
+    echo "<style>
+            .custom-swal-popup {
+                font-family: 'Poppins', sans-serif !important;
+               /* Adiciona espaçamento entre as letras */
+            }
+            
+          </style>";
+    exit; // Certifique-se de parar a execução do script após redirecionar
+}
+
 
 if (!isset($_SESSION['id_usuario']) || !isset($_SESSION['id_jogo']) || !isset($_POST['review'])) {
     echo "<script>
@@ -23,10 +57,33 @@ $tenta_achar2->execute();
 $resultado2 = $tenta_achar2->get_result();
 
 if ($resultado2->num_rows > 0) {
-    echo "<script> 
-            alert('Você já possui 1 review neste jogo!');
-            window.location.href = 'jogo_mostrar.php?id_jogo1=$id_jogo';
+    echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
+    . "<link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>"
+    . "<link href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' rel='stylesheet'>";
+    echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    title: 'Erro!',
+                    text: 'Você já possui 1 review neste jogo!',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        popup: 'custom-swal-popup'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'jogo_mostrar.php?id_jogo1=$id_jogo';
+                    }
+                });
+            });
           </script>";
+    echo "<style>
+            .custom-swal-popup {
+                font-family: 'Poppins', sans-serif !important;
+               /* Adiciona espaçamento entre as letras */
+            }
+            
+          </style>";
     $naotem = false;
 }
 

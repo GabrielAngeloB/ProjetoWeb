@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+
 // Verifica se os campos 'nome' e 'senha' estão definidos
 if (!isset($_POST['nome']) || !isset($_POST['senha'])) {
     echo "<script>
