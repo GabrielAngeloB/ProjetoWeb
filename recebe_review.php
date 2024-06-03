@@ -62,6 +62,8 @@ if ($resultado2->num_rows > 0) {
     . "<link href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' rel='stylesheet'>";
     echo "<script>
             document.addEventListener('DOMContentLoaded', function() {
+                document.body.style.backgroundColor = '#37363d';
+                
                 Swal.fire({
                     title: 'Erro!',
                     text: 'Você já possui 1 review neste jogo!',
@@ -69,7 +71,8 @@ if ($resultado2->num_rows > 0) {
                     confirmButtonText: 'OK',
                     customClass: {
                         popup: 'custom-swal-popup'
-                    }
+                    },
+                    allowOutsideClick: false
                 }).then((result) => {
                     if (result.isConfirmed) {
                         window.location.href = 'jogo_mostrar.php?id_jogo1=$id_jogo';
