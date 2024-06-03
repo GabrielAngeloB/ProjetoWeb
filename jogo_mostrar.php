@@ -38,6 +38,10 @@ if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true
           </style>";
     exit; // Certifique-se de parar a execução do script após redirecionar
 }
+$adicionar = '';
+if ($_SESSION['login'] == 'gabridestiny@hotmail.com') {
+    $adicionar = "<a class='dropdown-item' href='adicionar_jogos.php'>Adicionar Jogo</a>";
+}
 
 if (isset($_GET['id_jogo1'])) {
     $id_jogo1 = $_GET['id_jogo1'];
