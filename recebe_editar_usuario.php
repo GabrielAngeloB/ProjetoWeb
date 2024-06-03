@@ -32,8 +32,6 @@ if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true
     exit; // Certifique-se de parar a execução do script após redirecionar
 }
 
-
-session_start();
 require('conecta.php');
 
     if (isset($_SESSION['id_usuario'])) {
@@ -133,9 +131,35 @@ if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] === 0 && $_
 
 if ($conecta->query($sql2) === TRUE) {
     $_SESSION['login'] = $email;
-    echo "<script>
-                window.location.href = 'editar_usuario.php';
-                </script>";
+    echo " <link href='css2/estilos.css' type='text/css' rel='stylesheet'> <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
+            . "<link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>"
+            . "<link href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' rel='stylesheet'>";
+            echo "<script>
+                    window.onload = function() {
+                        document.body.style.backgroundColor = '#37363d';
+                        Swal.fire({
+                            title: 'Sucesso!',
+                            text: 'Dados alterados com sucesso!',
+                            icon: 'success',
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                popup: 'custom-swal-popup'
+                            },
+                            allowOutsideClick: false
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = 'editar_usuario.php';
+                            }
+                        });
+                    }
+                  </script>";
+            echo "<style>
+                    .custom-swal-popup {
+                        font-family: 'Poppins', sans-serif !important;
+               /* Adiciona espaçamento entre as letras */
+            }
+            
+                  </style>";
 } else {
     echo "Erro na atualização do registro: " . $conecta->error . "<br>";
 }
@@ -146,13 +170,41 @@ if ($conecta->query($sql2) === TRUE) {
     }
     if (strlen($nome) > 4 and strlen($nome)< 20) {
     $sql2 = "UPDATE usuario SET email ='$email', nome_usuario = '$nome' WHERE id_usuario = $id_usuario";
+    
+    
 
-// Executa a consulta SQL para atualizar o registro no banco de dados
+
 if ($conecta->query($sql2) === TRUE) {
     $_SESSION['login'] = $email;
-    echo "<script>
-                window.location.href = 'editar_usuario.php';
-                </script>";
+    echo " <link href='css2/estilos.css' type='text/css' rel='stylesheet'> <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
+            . "<link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>"
+            . "<link href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' rel='stylesheet'>";
+            echo "<script>
+                    window.onload = function() {
+                        document.body.style.backgroundColor = '#37363d';
+                        Swal.fire({
+                            title: 'Sucesso!',
+                            text: 'Dados alterados com sucesso!',
+                            icon: 'success',
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                popup: 'custom-swal-popup'
+                            },
+                            allowOutsideClick: false
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = 'editar_usuario.php';
+                            }
+                        });
+                    }
+                  </script>";
+            echo "<style>
+                    .custom-swal-popup {
+                        font-family: 'Poppins', sans-serif !important;
+               /* Adiciona espaçamento entre as letras */
+            }
+            
+                  </style>";
 } else {
     echo "Erro na atualização do registro: " . $conecta->error . "<br>";
 }

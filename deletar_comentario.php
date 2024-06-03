@@ -112,11 +112,37 @@ if ($conf) {
             echo "Erro ao atualizar a avaliação média do jogo: " . $conecta->error . "<br>";
         }
     }
+    echo " <link href='css2/estilos.css' type='text/css' rel='stylesheet'> <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
+            . "<link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>"
+            . "<link href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' rel='stylesheet'>";
+            echo "<script>
+                    window.onload = function() {
+                        document.body.style.backgroundColor = '#37363d';
+                        Swal.fire({
+                            title: 'Sucesso!',
+                            text: 'Review excluida com sucesso!',
+                            icon: 'success',
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                popup: 'custom-swal-popup'
+                            },
+                            allowOutsideClick: false
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = 'jogo_mostrar.php?id_jogo1=$id_jogo';
+                            }
+                        });
+                    }
+                  </script>";
+            echo "<style>
+                    .custom-swal-popup {
+                        font-family: 'Poppins', sans-serif !important;
+               /* Adiciona espaçamento entre as letras */
+            }
+            
+                  </style>";
 
     
-    echo "<script>
-         window.location.href = 'jogo_mostrar.php?id_jogo1=$id_jogo';
-      </script>";
 
     exit; 
     unset($_POST['validar']);

@@ -339,7 +339,7 @@ if ($resultado->num_rows > 0) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Você tem certeza que deseja mudar seu Email/Nome ou sua foto de perfil?
+                Você tem certeza que deseja alterar seus dados?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"  style="font-weight:bold;">Cancelar</button>

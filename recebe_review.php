@@ -116,10 +116,36 @@ if ($naotem) {
         $sql = $conecta->prepare("UPDATE games SET avaliacao_media = (SELECT AVG(avaliacao_total) FROM avaliacao WHERE id_jogo = ?) WHERE id_jogo = ?");
         $sql->bind_param("ii", $id_jogo, $id_jogo);
         $sql->execute();
-
-        echo "<script>
-                window.location.href = 'jogo_mostrar.php?id_jogo1=$id_jogo';
-              </script>";
+        
+        echo " <link href='css2/estilos.css' type='text/css' rel='stylesheet'> <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
+            . "<link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>"
+            . "<link href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' rel='stylesheet'>";
+            echo "<script>
+                    window.onload = function() {
+                        document.body.style.backgroundColor = '#37363d';
+                        Swal.fire({
+                            title: 'Sucesso!',
+                            text: 'Review postada com sucesso!',
+                            icon: 'success',
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                popup: 'custom-swal-popup'
+                            },
+                            allowOutsideClick: false
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = 'editar_usuario.php';
+                            }
+                        });
+                    }
+                  </script>";
+            echo "<style>
+                    .custom-swal-popup {
+                        font-family: 'Poppins', sans-serif !important;
+               /* Adiciona espaçamento entre as letras */
+            }
+            
+                  </style>";
     }
 }
 
