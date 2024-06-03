@@ -401,8 +401,11 @@ if ($resultado->num_rows > 0) {
                             <textarea rows="5" class="form-control mb-2" required id="vaso" name="review" placeholder="Escreva sua review:" style="background: #D8D8D8; border:5px solid; border-image-slice: 1;border-width:5px; border-image-source: linear-gradient(to left, darkslategrey, black);display:flex; margin-right:100%;" maxlength="3000" required></textarea>
                         </div>
                         <div class="mb-3 col-sm">
-                            <label for="reviewScore" class="form-label" style='color:white;'>Nota do jogo: </label>
-                            <input type="number" class="form-control" id="reviewScore" name="nota_review" min="0" max="100" placeholder="Digite sua nota para o jogo (0 a 100)" required>
+                            <label for="reviewScore" class="form-label" style='color:white; '>Nota do jogo: </label>
+                            <input type="number" class="form-control" id="reviewScore" name="nota_review" min="0" max="100" style='border:5px solid;
+                                border-image-slice: 1;
+                                border-width:5px;
+                                border-image-source: linear-gradient(to left, darkslategrey, black);'placeholder="Digite sua nota para o jogo (0 a 100)" required>
                         </div>
                         <input type="hidden" name="id_jogo1" value="<?php echo $id_jogo; ?>" required>
                         <input type="hidden" name="id_usuario" value="<?php echo $id_usuario; ?>" required>
