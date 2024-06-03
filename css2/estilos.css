@@ -951,17 +951,17 @@ hr.rounded2 {
 }
 @media (min-width:200px) and (max-width: 400px) {
     .letrafoda {
-        font-size:23px;
+        font-size:21px;
     }
 }
 @media (min-width:401px) and (max-width: 600px) {
     .letrafoda {
-        font-size:35px;
+        font-size:30px;
     }
 }
 @media (min-width:601px) and (max-width: 600px) {
     .letrafoda {
-        font-size:35px;
+        font-size:30px;
     }
 }
 @media (min-width:200px) and (max-height: 600px) {
