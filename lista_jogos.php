@@ -23,10 +23,21 @@ if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true
                     customClass: {
                         popup: 'custom-swal-popup'
                     },
-                    allowOutsideClick: false // Evita fechar ao clicar fora do alerta
+                    allowOutsideClick: false, // Evita fechar ao clicar fora do alerta
+                    timer: 3000,
+                    timerProgressBar: true
                 }).then((result) => {
                     window.location.href = 'login.php';
                 });
+
+                // Caso o SweetAlert2 seja fechado pelo temporizador, redirecionar para a página de login
+                Swal.getTimerLeft();
+                const timerInterval = setInterval(() => {
+                    if (Swal.getTimerLeft() <= 0) {
+                        clearInterval(timerInterval);
+                        window.location.href = 'login.php';
+                    }
+                }, 100);
             });
           </script>";
     exit; // Certifique-se de parar a execução do script após redirecionar
@@ -187,7 +198,7 @@ $genero = isset($_GET["genero"]) ? $conecta->real_escape_string($_GET["genero"])
 <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Romance')">Romance</a></li>
 <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Ação')">Ação</a></li>
 <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Fantasia')">Fantasia</a></li>
-<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Ficção Científica')">Ficção Científica</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Ficção científica')">Ficção científica</a></li>
 <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Terror')">Terror</a></li>
 <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Suspense')">Suspense</a></li>
 <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Sobrevivência')">Sobrevivência</a></li>

@@ -23,10 +23,21 @@ if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true
                     customClass: {
                         popup: 'custom-swal-popup'
                     },
-                    allowOutsideClick: false // Evita fechar ao clicar fora do alerta
+                    allowOutsideClick: false, // Evita fechar ao clicar fora do alerta
+                    timer: 3000,
+                    timerProgressBar: true
                 }).then((result) => {
                     window.location.href = 'login.php';
                 });
+
+                // Caso o SweetAlert2 seja fechado pelo temporizador, redirecionar para a página de login
+                Swal.getTimerLeft();
+                const timerInterval = setInterval(() => {
+                    if (Swal.getTimerLeft() <= 0) {
+                        clearInterval(timerInterval);
+                        window.location.href = 'login.php';
+                    }
+                }, 100);
             });
           </script>";
     exit; // Certifique-se de parar a execução do script após redirecionar
@@ -171,7 +182,7 @@ $genres = array(
     "Romance",
     "Ação",
     "Fantasia",
-    "Ficção Científica",
+    "Ficção científica",
     "Terror",
     "Suspense",
     "Sobrevivência",
@@ -226,32 +237,6 @@ $genres = array(
             border-color: #000000;
         }
     </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

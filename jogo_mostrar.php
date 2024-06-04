@@ -26,10 +26,21 @@ if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true
                     customClass: {
                         popup: 'custom-swal-popup'
                     },
-                    allowOutsideClick: false // Evita fechar ao clicar fora do alerta
+                    allowOutsideClick: false, // Evita fechar ao clicar fora do alerta
+                    timer: 3000,
+                    timerProgressBar: true
                 }).then((result) => {
                     window.location.href = 'login.php';
                 });
+
+                // Caso o SweetAlert2 seja fechado pelo temporizador, redirecionar para a página de login
+                Swal.getTimerLeft();
+                const timerInterval = setInterval(() => {
+                    if (Swal.getTimerLeft() <= 0) {
+                        clearInterval(timerInterval);
+                        window.location.href = 'login.php';
+                    }
+                }, 100);
             });
           </script>";
     exit; // Certifique-se de parar a execução do script após redirecionar
@@ -194,6 +205,7 @@ word-break: break-word; padding-right:15px;'>" . $txtreview[$index] . "</small><
             $comentario[$index] .= "<form action='deletar_comentario.php' class='delete-form' onsubmit='return confirm('Are you sure?');' method='post' style='display: inline-block;'>
               <input type='hidden' name='id_review' value='" . $id_review[$commentIDs[$index]] . "'>
               <input type='hidden' name='id_usuario' value='" . $id_usuario[$commentIDs[$index]] . "'>
+                  <input type='hidden' name='id_jogo1' value='" . $id_jogo1 . "'>
                   <input type='hidden' name='delete' value=''>
               <button Onclick='return ConfirmDelete();' type='submit' name='delete' class='btn btn-danger btn-sm' style='font-size: 12px; font-weight:bold;'>Excluir</button>
             </form>
@@ -259,7 +271,6 @@ $indiceFinal = min($indiceInicial + $comentariosPorPagina - 1, $totalComentarios
             }
             $dev = $linha["desenvolvedor"];
             $publisher = $linha["publisher"];
-            $_SESSION['id_jogo'] = $linha["id_jogo"];
         } 
     }
 

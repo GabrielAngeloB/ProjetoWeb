@@ -50,61 +50,75 @@ function inserirDados($nomecad, $emailcad, $senhacad) {
                     VALUES ('$nomecad', '$emailcad', '" . md5($senhacad) . "', '$horarioatual')";
             
             if ($conecta->query($sql) === TRUE) {
-                echo " <link href='css2/estilos.css' type='text/css' rel='stylesheet'> <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
-            . "<link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>"
-            . "<link href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' rel='stylesheet'>";
-            echo "<script>
-                    window.onload = function() {
-                        document.body.style.backgroundColor = '#37363d';
-                        Swal.fire({
-                            title: 'Sucesso!',
-                            text: 'Cadastro realizado com sucesso!',
-                            icon: 'success',
-                            confirmButtonText: 'OK',
-                            customClass: {
-                                popup: 'custom-swal-popup'
-                            },
-                            allowOutsideClick: false
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = 'login.php';
-                            }
-                        });
-                    }
-                  </script>";
-            echo "<style>
-                    .custom-swal-popup {
-                        font-family: 'Poppins', sans-serif !important;
-               /* Adiciona espaçamento entre as letras */
-            }
-            
-                  </style>";
+                echo "<link href='css2/estilos.css' type='text/css' rel='stylesheet'>
+      <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>
+      <link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>
+      <link href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' rel='stylesheet'>";
+
+echo "<script>
+        window.onload = function() {
+            document.body.style.backgroundColor = '#37363d';
+            Swal.fire({
+                title: 'Sucesso!',
+                text: 'Cadastro realizado com sucesso!',
+                icon: 'success',
+                confirmButtonText: 'OK',
+                customClass: {
+                    popup: 'custom-swal-popup'
+                },
+                allowOutsideClick: false,
+                timer: 3000,
+                timerProgressBar: true
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.timer) {
+                    window.location.href = 'login.php';
+                } else if (result.isConfirmed) {
+                    window.location.href = 'login.php';
+                }
+            });
+        }
+      </script>";
+
+echo "<style>
+        .custom-swal-popup {
+            font-family: 'Poppins', sans-serif !important;
+        }
+      </style>";
+
                 
                 $ok = true;
             } else {
-                echo "<link href='css2/estilos.css' type='text/css' rel='stylesheet'> "
-    . "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
-    . "<link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>"; // Adiciona o link para o CSS customizado
-    echo "<script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Altera o background da página
-                document.body.style.backgroundColor = '#37363d';
-                
-                Swal.fire({
-                    title: 'Erro!',
-                    text: 'Algo deu errado!',
-                    icon: 'error',
-                    confirmButtonText: 'OK',
-                    customClass: {
-                        popup: 'custom-swal-popup'
-                    },
-                    allowOutsideClick: false // Evita fechar ao clicar fora do alerta
-                }).then((result) => {
+                echo "<link href='css2/estilos.css' type='text/css' rel='stylesheet'>
+      <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>
+      <link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>
+      <link href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' rel='stylesheet'>";
+
+echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.style.backgroundColor = '#37363d';
+
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Algo deu errado!',
+                icon: 'error',
+                confirmButtonText: 'OK',
+                customClass: {
+                    popup: 'custom-swal-popup'
+                },
+                allowOutsideClick: false,
+                timer: 3000,
+                timerProgressBar: true
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.timer) {
                     window.location.href = 'cadastro.php';
-                });
+                } else if (result.isConfirmed) {
+                    window.location.href = 'cadastro.php';
+                }
             });
-          </script>";
-    exit; // Certifique-se de parar a execução do script após redirecionar
+        });
+      </script>";
+
+exit; // Certifique-se de parar a execução do script após redirecionar
                 $ok = false;
             }
         }

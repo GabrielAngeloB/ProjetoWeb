@@ -24,10 +24,21 @@ if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true
                     customClass: {
                         popup: 'custom-swal-popup'
                     },
-                    allowOutsideClick: false // Evita fechar ao clicar fora do alerta
+                    allowOutsideClick: false, // Evita fechar ao clicar fora do alerta
+                    timer: 3000,
+                    timerProgressBar: true
                 }).then((result) => {
                     window.location.href = 'login.php';
                 });
+
+                // Caso o SweetAlert2 seja fechado pelo temporizador, redirecionar para a página de login
+                Swal.getTimerLeft();
+                const timerInterval = setInterval(() => {
+                    if (Swal.getTimerLeft() <= 0) {
+                        clearInterval(timerInterval);
+                        window.location.href = 'login.php';
+                    }
+                }, 100);
             });
           </script>";
     exit; // Certifique-se de parar a execução do script após redirecionar
@@ -42,7 +53,7 @@ if (!isset($_SESSION['id_usuario']) || !isset($_SESSION['id_jogo']) || !isset($_
 }
 
 $id_usuario = $_SESSION['id_usuario'];
-$id_jogo = $_SESSION['id_jogo'];
+$id_jogo = $_POST['id_jogo1'];
 
 $review = $_POST['review'];
 $notareview = $_POST['nota_review'];
@@ -117,35 +128,49 @@ if ($naotem) {
         $sql->bind_param("ii", $id_jogo, $id_jogo);
         $sql->execute();
         
-        echo " <link href='css2/estilos.css' type='text/css' rel='stylesheet'> <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
-            . "<link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>"
-            . "<link href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' rel='stylesheet'>";
-            echo "<script>
-                    window.onload = function() {
-                        document.body.style.backgroundColor = '#37363d';
-                        Swal.fire({
-                            title: 'Sucesso!',
-                            text: 'Review postada com sucesso!',
-                            icon: 'success',
-                            confirmButtonText: 'OK',
-                            customClass: {
-                                popup: 'custom-swal-popup'
-                            },
-                            allowOutsideClick: false
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = 'editar_usuario.php';
-                            }
-                        });
-                    }
-                  </script>";
-            echo "<style>
-                    .custom-swal-popup {
-                        font-family: 'Poppins', sans-serif !important;
-               /* Adiciona espaçamento entre as letras */
-            }
-            
-                  </style>";
+       echo " <link href='css2/estilos.css' type='text/css' rel='stylesheet'> 
+       <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>
+       <link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>
+       <link href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' rel='stylesheet'>";
+
+echo "<link href='css2/estilos.css' type='text/css' rel='stylesheet'>"
+    . "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js'></script>"
+    . "<link href='https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css' rel='stylesheet'>"
+    . "<link href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' rel='stylesheet'>";
+
+echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Altera o background da página
+            document.body.style.backgroundColor = '#37363d';
+
+            Swal.fire({
+                title: 'Sucesso!',
+                text: 'Review postada com sucesso!',
+                icon: 'success',
+                confirmButtonText: 'OK',
+                customClass: {
+                    popup: 'custom-swal-popup'
+                },
+                allowOutsideClick: false, // Evita fechar ao clicar fora do alerta
+                timer: 3000,
+                timerProgressBar: true
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.timer) {
+                    window.location.href = 'jogo_mostrar.php?id_jogo1=$id_jogo';
+                } else {
+                    window.location.href = 'jogo_mostrar.php?id_jogo1=$id_jogo';
+                }
+            });
+        });
+      </script>";
+
+echo "<style>
+        .custom-swal-popup {
+            font-family: 'Poppins', sans-serif !important;
+        }
+      </style>";
+
+
     }
 }
 
