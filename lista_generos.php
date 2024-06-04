@@ -131,14 +131,55 @@ if ($resultado->num_rows > 0) {
             <h1 class="mx-auto letra2" style="color:white; margin-top:100px; text-align:center; "><span style="background-color:#343434; padding-left:30px; padding-right:30px; border-radius:10px; text-shadow: 3px 3px black; font-family:monospace;"> ⚡︎ Gêneros ⚡︎ </span></h1>
             <div class="fadeInFromBottom">
             <div class="generos">
-                <?php
-                $genres = array(
-                    "MOBA", "Point-and-click", "Luta", "Shooter", "Música", "Plataforma",
-                    "Quebra-Cabeça", "Corrida", "RPG", "Simulação",
-                    "Esporte", "Estratégia", "Tático", "Hack and slash",
-                    "Quiz/Trivia", "Pinball", "Aventura", "Indie", "Arcade", "Visual Novel",
-                    "Estratégia em turnos", "Estratégia em tempo real", "Jogo de carta/tabuleiro"
-                );
+               <?php
+$genres = array(
+    "MOBA",
+    "Point-and-click",
+    "Luta",
+    "Shooter",
+    "Música",
+    "Plataforma",
+    "Quebra-Cabeça",
+    "Corrida",
+    "RPG",
+    "Simulação",
+    "Esporte",
+    "Estratégia",
+    "Tático",
+    "Hack and slash",
+    "Quiz/Trivia",
+    "Pinball",
+    "Aventura",
+    "Indie",
+    "Arcade",
+    "Visual Novel",
+    "Estratégia em turnos",
+    "Estratégia em tempo real",
+    "Jogo de carta/tabuleiro",
+    "Negócios",
+    "Drama",
+    "Não-Ficção",
+    "Sandbox",
+    "Educacional",
+    "Crianças",
+    "Mundo Aberto",
+    "Guerra",
+    "Jogar com amigos",
+    "Exploração",
+    "Erótico",
+    "Mistério",
+    "Romance",
+    "Ação",
+    "Fantasia",
+    "Ficção Científica",
+    "Terror",
+    "Suspense",
+    "Sobrevivência",
+    "Histórico",
+    "Furtividade",
+    "Comédia"
+);
+
 
                 foreach ($genres as $genre) {
                     echo '

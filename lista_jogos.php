@@ -150,28 +150,51 @@ $genero = isset($_GET["genero"]) ? $conecta->real_escape_string($_GET["genero"])
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background-color: #2c3e50; border: none;">
                                 <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('MOBA')">MOBA</a></li>
-                                <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Point-and-click')">Point-and-click</a></li>
-                                <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Luta')">Luta</a></li>
-                                <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Shooter')">Shooter</a></li>
-                                <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Música')">Música</a></li>
-                                <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Plataforma')">Plataforma</a></li>
-                                <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Quebra-Cabeça')">Quebra-Cabeça</a></li>
-                                <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Corrida')">Corrida</a></li>
-                                <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Estratégia em tempo Real')">Estratégia em tempo Real</a></li>
-                                <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('RPG')">RPG</a></li>
-                                <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Simulação')">Simulação</a></li>
-                                <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Esporte')">Esporte</a></li>
-                                <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Estratégia')">Estratégia</a></li>
-                                <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Estratégia em turnos')">Estratégia em turnos</a></li>
-                                <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Tático')">Tático</a></li>
-                                <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Hack and slash/Beat \'em up')">Hack and slash/Beat 'em up</a></li>
-                                <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Quiz/Trivia')">Quiz/Trivia</a></li>
-                                <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Pinball')">Pinball</a></li>
-                                <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Aventura')">Aventura</a></li>
-                                <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Indie')">Indie</a></li>
-                                <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Arcade')">Arcade</a></li>
-                                <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Visual Novel')">Visual Novel</a></li>
-                                <li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Jogo de carta/tabuleiro')">Jogo de carta/tabuleiro</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Point-and-click')">Point-and-click</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Luta')">Luta</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Shooter')">Shooter</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Música')">Música</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Plataforma')">Plataforma</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Quebra-Cabeça')">Quebra-Cabeça</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Corrida')">Corrida</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Estratégia em tempo Real')">Estratégia em tempo Real</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('RPG')">RPG</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Simulação')">Simulação</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Esporte')">Esporte</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Estratégia')">Estratégia</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Estratégia em turnos')">Estratégia em turnos</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Tático')">Tático</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Hack and slash')">Hack and slash</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Quiz/Trivia')">Quiz/Trivia</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Pinball')">Pinball</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Aventura')">Aventura</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Indie')">Indie</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Arcade')">Arcade</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Visual Novel')">Visual Novel</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Jogo de carta/tabuleiro')">Jogo de carta/tabuleiro</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Negócios')">Negócios</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Drama')">Drama</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Não-Ficção')">Não-Ficção</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Sandbox')">Sandbox</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Educacional')">Educacional</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Crianças')">Crianças</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Mundo Aberto')">Mundo Aberto</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Guerra')">Guerra</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Jogar com amigos')">Jogar com amigos</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Exploração')">Exploração</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Erótico')">Erótico</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Mistério')">Mistério</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Romance')">Romance</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Ação')">Ação</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Fantasia')">Fantasia</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Ficção Científica')">Ficção Científica</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Terror')">Terror</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Suspense')">Suspense</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Sobrevivência')">Sobrevivência</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Histórico')">Histórico</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Furtividade')">Furtividade</a></li>
+<li><a class="dropdown-item" href="#" style="color: white;" onclick="selecionarGenero('Comédia')">Comédia</a></li>
+
                             </ul>
                         </div>
                         <?php
