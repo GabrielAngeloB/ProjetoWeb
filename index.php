@@ -374,13 +374,13 @@ if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true
                                             </div>
 
                                             <a href="jogo_mostrar.php?id_jogo1=<?php echo $id_jogo1[7] ?>">
-                                                <div class="card text-white bg-dark" id="card-foda" style="width:290px;">
-                                                    <img src="<?php echo $link1[7] ?>"  class="card-img-top" height="210px" loading='lazy' alt="...">
-                                                    </a>
-                                                    <div class="card-body cartao bg-dark" style="padding:10px;">
-                                                        <p style="text-align:justify; max-height:120px; overflow:auto; display:flex; padding-right:5px;" class="card-text text-white"><?php echo $descjogo[7] ?></p>
-                                                    </div>
+                                            <div class="card text-white bg-dark" id="card-foda" style="width:290px;">
+                                                <img src="<?php echo $link1[7] ?>"  class="card-img-top" height="210px" loading='lazy' alt="...">
+                                                </a>
+                                                <div class="card-body cartao bg-dark" style="padding:10px;">
+                                                    <p style="text-align:justify; max-height:140px; overflow:auto; display:flex; padding-right:5px;" class="card-text text-white"><?php echo $descjogo[7] ?></p>
                                                 </div>
+                                            </div>
 
 
                                                 </div>
