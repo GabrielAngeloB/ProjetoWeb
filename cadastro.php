@@ -75,8 +75,8 @@ if (isset($_SESSION['erro1']) and $_SESSION['erro1']) {
                 </ul>
             </div>
         </nav>
-
-        <div class="container d-flex justify-content-center align-items-center vh-100" style="margin-top:50% 50%; z-index:-1;">
+        <div class="fadeInFromBottom">
+        <div class="container d-flex justify-content-center align-items-center vh-100 " style="margin-top:50% 50%; z-index:-1;">
             <div class="card shadow-sm" style="max-width: 400px;">
                 <div class="card-body" style="background: linear-gradient(rgba(107,107,107,0.3921848568528974) 100%, rgba(1,1,1,1) 50%);">
                     <h3 class="card-title text-center mb-4">Cadastro</h3>
@@ -106,6 +106,7 @@ if (isset($_SESSION['erro1']) and $_SESSION['erro1']) {
                     </form>
                 </div>
             </div>
+        </div>
         </div>
 
          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwmRWzUGE9VNw6aJfwdgnvwTbkKcwQzT5nlwGkE2riVVkJRLaXvBVbvTqQ8PwHd" crossorigin="anonymous"></script>
